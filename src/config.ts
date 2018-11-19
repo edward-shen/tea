@@ -13,6 +13,14 @@ const CONFIG_FILENAME = 'config.toml';
  * load the config file, then it will exit.
  */
 function loadConfig(): Config {
+
+  if (process.env.TEA_USERNAME && process.env.TEA_PASSWORD) {
+    return {
+      username: process.env.TEA_USERNAME,
+      password: process.env.TEA_PASSWORD
+    };
+  }
+
   let config: string;
 
   // Attempt to load from config file.
