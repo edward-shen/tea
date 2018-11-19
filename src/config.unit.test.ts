@@ -1,6 +1,6 @@
 import loadConfig from './config';
 
-jest.mock('./config');``
+jest.mock('fs');
 
 describe('loading environment variables', () => {
 
