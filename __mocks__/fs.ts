@@ -1,17 +1,18 @@
-function mock_readFileSync(path, encoding) {
-  return `username = "fileuser"\npassword = "filepass"\n`;
-}
 
-function mock_existsSync(path) {
+function existsSync(path) {
   return true;
 }
 
-function mock_writeFileSync(path) {
+function readFileSync(path, encoding) {
+  return `username = "fileuser"\npassword = "filepass"\n`;
+}
+
+function writeFileSync(path) {
 
 }
 
-export default {
-  existsSync: mock_existsSync,
-  readFileSync: mock_readFileSync,
-  writeFileSync: mock_writeFileSync
+export {
+  existsSync,
+  readFileSync,
+  writeFileSync
 };
