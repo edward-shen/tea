@@ -14,9 +14,10 @@
     "./node_modules/@types/node/index.d.ts"
   ],
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "__mocks__/fs.ts", "__mocks__/fs.js", "src/__mocks__/fs.js"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "__mocks__"
   ]
 }
