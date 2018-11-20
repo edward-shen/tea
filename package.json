@@ -8,11 +8,14 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "test": "echo \"Lmao I didn't implement tests yet\"",
+    "test": "yarn jest --coverage",
+    "test:watch": "yarn jest --coverage --watch",
     "start": "node ./dist/index.js",
     "build": "yarn tsc",
-    "watch": "yarn tsc --watch",
-    "clean": "rm -rf yarn-error.log"
+    "build:watch": "yarn tsc --watch",
+    "clean": "rm -rf yarn-error.log dist coverage",
+    "clean:cache": "rm -rf cache",
+    "clean:all": "yarn clean && yarn clean:cache && rm -rf node_modules"
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",

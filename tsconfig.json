@@ -18,6 +18,7 @@
   ],
   "exclude": [
     "node_modules",
-    "__mocks__"
+    "__mocks__",
+    "jest.config.js"
   ]
 }

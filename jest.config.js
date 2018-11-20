@@ -1,4 +1,4 @@
-ignore_paths = ['dist'];
+const ignore_paths = ['dist'];
 
 module.exports = {
   preset: 'ts-jest',
