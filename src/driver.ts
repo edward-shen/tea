@@ -1,5 +1,6 @@
 import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
+
 import metacache from './metacache';
 
 promise.USE_PROMISE_MANAGER = false;
@@ -7,13 +8,17 @@ promise.USE_PROMISE_MANAGER = false;
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
 
+/**
+ * Controls the driver requesting web data. Currently this is implemented as a
+ * Selenium webdriver, but later this should be best implemented without the
+ * chrome layer.
+ */
 class Driver {
   private username: string;
   private password: string;
   private driver: WebDriver;
   private hasInit: boolean = false;
   private hasAuth: boolean = false;
-
 
   public constructor(username: string, password: string) {
     this.username = username;
@@ -53,32 +58,44 @@ class Driver {
     this.hasAuth = true;
   }
 
-  public async updateCache(force: boolean = false) {
+  /**
+   * Checks and update the cache.
+   * TODO: move to metacache.ts
+   */
+  public async checkCache() {
     this.checkStatus();
 
     const latest: number = await this.fetchLatestSize();
     const cacheSize: number = await metacache.size();
 
-    console.log(cacheSize, latest);
-
     if (cacheSize > latest) {
       console.warn('Cache size (%s) is larger than latest (%s)', cacheSize, latest);
     } else if (cacheSize < latest) {
-      console.log('cache is not up to date. Performing incremental update.');
-      // Do stuff
+      console.log('Cache is not up to date. Performing incremental update.');
+      await metacache.updateCache(this, latest);
     } else {
-      console.log('cache has already been fully updated!');
+      console.log('Cache has already been fully updated!');
     }
+  }
+
+  /**
+   * Return the specified report page given the number of reports per pages.
+   *
+   * @param page The page number to fetch
+   * @param rpp The number of reports of page. This is the offset.
+   */
+  public async getMetaPage(page: number, rpp: number) {
+    this.checkStatus();
+
+    await this.driver.get(`${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`);
+    return JSON.parse(await this.driver.findElement(By.tagName('pre')).getText());
   }
 
   /**
    * Fetches the latest size of the remote database, and returns it as a number.
    */
   private async fetchLatestSize(): Promise<number> {
-    await this.driver.get(`${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=1&rpp=1&termId=0`);
-    const meta = JSON.parse(await this.driver.findElement(By.tagName('pre')).getText());
-
-    return meta.total;
+    return (await this.getMetaPage(1, 1)).total;
   }
 
   private checkStatus() {

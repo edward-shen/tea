@@ -12,7 +12,7 @@ async function main() {
   const driver = new Driver(username, password);
   await driver.init();
 
-  await driver.updateCache();
+  await driver.checkCache();
 }
 
 main();
