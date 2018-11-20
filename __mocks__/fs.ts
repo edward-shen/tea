@@ -1,17 +1,26 @@
+let mockFiles = {};
 
-function existsSync(path) {
-  return true;
+function __setMockFiles(files) {
+  mockFiles = {};
+  for (const path in files) {
+    writeFileSync(path, files[path]);
+  }
 }
 
-function readFileSync(path, encoding) {
-  return `username = "fileuser"\npassword = "filepass"\n`;
+function existsSync(path): boolean {
+  return mockFiles[path] !== undefined;
 }
 
-function writeFileSync(path) {
+function readFileSync(path): string {
+  return mockFiles[path];
+}
 
+function writeFileSync(path, content) {
+  mockFiles[path] = content;
 }
 
 export {
+  __setMockFiles,
   existsSync,
   readFileSync,
   writeFileSync

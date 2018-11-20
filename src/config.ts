@@ -29,15 +29,14 @@ function loadConfig(): Config {
   } else {
     writeFileSync(CONFIG_FILENAME, 'username = \npassword = \n');
     console.error(`Config not found. Please fill out ${CONFIG_FILENAME}`);
-    process.exit(-1);
+    return null;
   }
 
   // Attempt to parse config file
   try {
     return parse(config);
   } catch (e) {
-    console.error(`Parsing error on line ${e.line}, column ${e.column}: ${e.message}`);
-    process.exit(-1);
+    throw Error(`Parsing error on line ${e.line}, column ${e.column}: ${e.message}`);
   }
 }
 
