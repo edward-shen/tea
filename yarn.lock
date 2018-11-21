@@ -18,6 +18,13 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@types/cli-progress@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@types/cli-progress/-/cli-progress-1.8.0.tgz#d7cc20191efa0374b9b919531a6bee90ee223e99"
+  integrity sha512-anbR1K9PtAzzB7Uc577Nq5KzgLhax1AuiJp7SC029wEZTmgpOT68uKOs+LMXpvLn0aVjwOiU6ijEwkcNWT0/JA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/events@*":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
