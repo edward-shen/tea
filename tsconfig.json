@@ -14,11 +14,12 @@
     "./node_modules/@types/node/index.d.ts"
   ],
   "include": [
-    "src/**/*.ts", "__mocks__/fs.ts", "__mocks__/fs.js", "src/__mocks__/fs.js"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "__mocks__",
-    "jest.config.js"
+    "jest.config.js",
+    "test"
   ]
 }
