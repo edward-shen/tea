@@ -94,6 +94,7 @@ class MetaCache {
       jsonData.length = numToParse; // Trim the amount to get
       this.addToCache(jsonData); // Don't wait for database to finish updating.
       runningSum += numToParse;
+      page += 1;
       bar.increment();
     }
 
