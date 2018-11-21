@@ -1,7 +1,7 @@
 import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 
-import metacache from './metacache';
+import metacache from './cache/metacache';
 
 promise.USE_PROMISE_MANAGER = false;
 
