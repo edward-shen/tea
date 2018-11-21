@@ -17,7 +17,7 @@ function loadConfig(): Config {
   if (process.env.TEA_USERNAME && process.env.TEA_PASSWORD) {
     return {
       username: process.env.TEA_USERNAME,
-      password: process.env.TEA_PASSWORD
+      password: process.env.TEA_PASSWORD,
     };
   }
 

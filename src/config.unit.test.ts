@@ -2,18 +2,19 @@ import loadConfig from './config';
 
 jest.mock('fs');
 
+// tslint:disable-next-line:no-var-requires
 const fs = require('fs');
 
-const env_expected = { username: "testuser", password: "testpass" };
-const file_expected = { username: "fileuser", password: "filepass" };
+const envExpected = { username: 'testuser', password: 'testpass' };
+const fileExpected = { username: 'fileuser', password: 'filepass' };
 
 describe('loading environment variables', () => {
 
   beforeAll(() => {
     fs.__setMockFiles(
-      { 'config.toml': `username = "fileuser"\npassword = "filepass"\n` }
+      { 'config.toml': `username = "fileuser"\npassword = "filepass"\n` },
     );
-  })
+  });
 
   beforeEach(() => {
     delete process.env.TEA_USERNAME;
@@ -21,35 +22,35 @@ describe('loading environment variables', () => {
   });
 
   it('should accept environment variables when both are present', () => {
-    process.env.TEA_USERNAME = env_expected.username;
-    process.env.TEA_PASSWORD = env_expected.password;
+    process.env.TEA_USERNAME = envExpected.username;
+    process.env.TEA_PASSWORD = envExpected.password;
 
-    expect(loadConfig()).toStrictEqual(env_expected);
+    expect(loadConfig()).toStrictEqual(envExpected);
   });
 
   it('should try to load config file if username env var is missing', () => {
-    process.env.TEA_PASSWORD = "testpass";
+    process.env.TEA_PASSWORD = 'testpass';
 
-    expect(loadConfig()).toStrictEqual(file_expected);
+    expect(loadConfig()).toStrictEqual(fileExpected);
   });
 
   it('should try to load config file if password env var is missing', () => {
-    process.env.TEA_USERNAME = "testuser";
+    process.env.TEA_USERNAME = 'testuser';
 
-    expect(loadConfig()).toStrictEqual(file_expected);
+    expect(loadConfig()).toStrictEqual(fileExpected);
   });
 
   it('should try to load config file if both env vars are missing', () => {
-    expect(loadConfig()).toStrictEqual(file_expected);
+    expect(loadConfig()).toStrictEqual(fileExpected);
   });
 });
 
 describe('config file confuckery', () => {
-  const expected = { username: "fileuser", password: "filepass" };
+  const expected = { username: 'fileuser', password: 'filepass' };
 
   it('should load the config if it exists', () => {
     fs.__setMockFiles(
-      { 'config.toml': `username = "fileuser"\npassword = "filepass"\n` }
+      { 'config.toml': `username = "fileuser"\npassword = "filepass"\n` },
     );
 
     expect(loadConfig()).toStrictEqual(expected);

@@ -17,8 +17,8 @@ class Driver {
   private username: string;
   private password: string;
   private driver: WebDriver;
-  private hasInit: boolean = false;
-  private hasAuth: boolean = false;
+  private hasInit = false;
+  private hasAuth = false;
 
   public constructor(username: string, password: string) {
     this.username = username;
@@ -87,7 +87,8 @@ class Driver {
   public async getMetaPage(page: number, rpp: number) {
     this.checkStatus();
 
-    await this.driver.get(`${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`);
+    const req = `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`;
+    await this.driver.get(req);
     return JSON.parse(await this.driver.findElement(By.tagName('pre')).getText());
   }
 
