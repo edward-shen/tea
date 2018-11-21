@@ -32,40 +32,49 @@ interface QuestionMeta {
  */
 async function parse(pdfBuffer: Buffer) {
   const pdfData = (await pdf(pdfBuffer)).text;
-  // The magic of regex <3
-  const matched = pdfData.match(/(?<=%)[.\d]+/g);
-
-  const summaryGenerator = [
+  const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
+  const summaryIterator = [
     'courseSum',
     'learningSum',
     'instructorSum',
     'effectivenessSum',
   ][Symbol.iterator]();
-  const questionGenerator = ids[Symbol.iterator]();
+  const questionIterator = ids[Symbol.iterator]();
 
+  // The keys to associate row values with.
   const summaryKeys = ['mean', 'deptMean', 'univMean', 'median',
   'deptMedian', 'univMedian', 'stdev'];
   const questionKeys = ['courseMean', 'deptMean', 'univMean'];
 
   const ret = {};
   matched.map((str) => {
+    // Each data is in the form of (\d\.\d)*, which needs to be split up.
     const row = [];
     for (let i = 0; i < str.length; i += 3) {
       row.push(Number(str.slice(i, i + 3)));
     }
+
+    // Handle each row based on their length.
     if (row.length === 7) {
-      ret[summaryGenerator.next().value] = handleRow(summaryKeys, row);
+      ret[summaryIterator.next().value] = zip(summaryKeys, row);
     } else {
-      ret[questionGenerator.next().value] = handleRow(questionKeys, row);
+      ret[questionIterator.next().value] = zip(questionKeys, row);
     }
   });
 
   return ret;
 }
 
-function handleRow(keys: string[], row) {
+/**
+ * Returns an object with key-value pairs. This will fill as many key-value
+ * pairs as possible, and ignores extra values on each side.
+ *
+ * @param keys A list of keys
+ * @param values A list of values.
+ */
+function zip(keys: string[], values) {
   const ret = {};
-  row.map((v, i) => ret[keys[i]] = v);
+  values.map((v, i) => ret[keys[i]] = v);
   return ret;
 }
 
