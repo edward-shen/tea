@@ -12,7 +12,7 @@
     "test:watch": "yarn jest --coverage --watch",
     "start": "node ./dist/index.js",
     "build": "yarn tsc",
-    "build:watch": "yarn tsc --watch",
+    "build:watch": "yarn tsc -w",
     "clean": "rm -rf yarn-error.log dist coverage",
     "clean:cache": "rm -rf cache",
     "clean:all": "yarn clean && yarn clean:cache && rm -rf node_modules"
@@ -33,6 +33,7 @@
   "dependencies": {
     "cli-progress": "^2.1.0",
     "level": "^4.0.0",
+    "pdf-parse": "^1.1.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "sqlite3": "^4.0.4",
     "toml": "^2.3.3",
