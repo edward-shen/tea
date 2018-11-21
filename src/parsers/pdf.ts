@@ -28,11 +28,10 @@ interface QuestionMeta {
  * brittle. If NEU decides to change their questions, then this will likely
  * fail.
  *
- * @param stream A binary pdf file.
+ * @param pdfBuffer A binary pdf file.
  */
-async function parse(stream) {
-  const shit = readFileSync('/home/edward/Downloads/pdf.pdf');
-  const pdfData = (await pdf(shit)).text;
+async function parse(pdfBuffer: Buffer) {
+  const pdfData = (await pdf(pdfBuffer)).text;
   // The magic of regex <3
   const matched = pdfData.match(/(?<=%)[.\d]+/g);
 
