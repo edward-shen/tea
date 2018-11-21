@@ -1,6 +1,6 @@
 import { Database } from 'sqlite3';
 import { resolve } from 'path';
-import { Bar } from 'cli-progress';
+import { Bar, Presets } from 'cli-progress';
 import { existsSync, mkdirSync } from 'fs';
 
 import Driver from './driver';
@@ -84,7 +84,7 @@ class MetaCache {
     let page: number = Math.floor(start / rpp) + 1;
     let runningSum: number = 0;
 
-    const bar = new Bar();
+    const bar = new Bar({}, Presets.shades_classic);
 
     bar.start(Math.ceil(toFetch/ rpp), 0);
 
@@ -95,7 +95,7 @@ class MetaCache {
       this.addToCache(jsonData); // Don't wait for database to finish updating.
       runningSum += numToParse;
       page += 1;
-      bar.increment();
+      bar.increment(1);
     }
 
     bar.stop();
