@@ -9,8 +9,8 @@ async function main() {
   }
 
   const driver = new Driver(username, password);
-  await driver.init();
-  await driver.checkCache();
+  await driver.auth();
+  // await driver.checkCache();
 }
 
 main();

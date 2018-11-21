@@ -15,7 +15,8 @@
     "object-literal-sort-keys": false,
     "object-literal-key-quotes": [true, "as-needed"],
     "no-bitwise": false,
-    "no-inferrable-types": true
+    "no-inferrable-types": true,
+    "no-shadowed-variable": false
   },
   "rulesDirectory": []
 }
