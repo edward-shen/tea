@@ -1,7 +1,7 @@
-import { Database } from 'sqlite3';
-import { resolve } from 'path';
 import { Bar, Presets } from 'cli-progress';
 import { existsSync, mkdirSync } from 'fs';
+import { resolve } from 'path';
+import { Database } from 'sqlite3';
 
 import Driver from './driver';
 
@@ -27,7 +27,7 @@ class MetaCache {
   public constructor() {
     const dir = resolve(__dirname, '../cache');
 
-    if (!existsSync(dir)){
+    if (!existsSync(dir)) {
       mkdirSync(dir);
     }
 
@@ -35,7 +35,6 @@ class MetaCache {
       this.init();
     });
   }
-
 
   /**
    * Returns the size of the cache. If the database has not been initialized
@@ -47,12 +46,12 @@ class MetaCache {
       await this.init();
     }
 
-    return new Promise<number>((resolve) => {
+    return new Promise<number>((ok) => {
       this.db.get(`SELECT COUNT(*) FROM ${TABLE_NAME}`, (err, res) => {
         if (err) {
           throw Error(`Could not query database!${err}`);
         } else {
-          resolve(res['COUNT(*)']);
+          ok(res['COUNT(*)']);
         }
       });
     });
@@ -80,13 +79,13 @@ class MetaCache {
 
     const start = await this.size();
     const toFetch: number = retrievedNum - start;
-    const rpp: number = 100;
+    const rpp = 100;
     let page: number = Math.floor(start / rpp) + 1;
-    let runningSum: number = 0;
+    let runningSum = 0;
 
     const bar = new Bar({}, Presets.shades_classic);
 
-    bar.start(Math.ceil(toFetch/ rpp), 0);
+    bar.start(Math.ceil(toFetch / rpp), 0);
 
     while (runningSum < toFetch) {
       const jsonData: Metadata[] = (await driver.getMetaPage(page, rpp)).data;
@@ -126,7 +125,7 @@ class MetaCache {
           $enrollment: report.enrollment,
           $sourceId: Number(report.sourceId),
           $type: report.type,
-          $level: report.level
+          $level: report.level,
         };
 
         this.db.run(`INSERT INTO ${TABLE_NAME} VALUES (
@@ -154,9 +153,10 @@ class MetaCache {
    * tables already exist, then this function does nothing.
    */
   private async init() {
-    return new Promise((resolve) => {
+    return new Promise((ok) => {
       // Check if the table exists
-      this.db.get(`SELECT name FROM sqlite_master WHERE type='table' AND name='${TABLE_NAME}'`, (err, res) => {
+      const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='${TABLE_NAME}'`;
+      this.db.get(query, (err, res) => {
         if (err) {
           throw Error(`init error: ${err.message}`);
         }
@@ -179,17 +179,17 @@ class MetaCache {
             sourceId INTEGER,
             type TEXT,
             level TEXT
-          )`, (err, _) => {
-            if (err) {
-              throw Error(err);
+          )`, (err2, _) => {
+            if (err2) {
+              throw Error(err2);
             }
             this.hasInit = true;
             console.log('Metacache database not found, created a new db!');
-            resolve();
+            ok();
           });
         } else {
           this.hasInit = true;
-          resolve();
+          ok();
         }
       });
     });

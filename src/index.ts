@@ -1,7 +1,6 @@
 import loadConfig from './config';
 import Driver from './driver';
 
-
 async function main() {
   const {username, password} = loadConfig();
 
