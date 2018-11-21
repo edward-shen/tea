@@ -8,7 +8,9 @@ TEA is a tool to help analyze ApplyWeb's TRACE reviews.
   - [x] Creating a program that can authorize against the TRACE website.
   - [x] Hitting the endpoint that returns JSON metadata for all courses.
   - [x] Storing JSON metadata in a SQL database for caching.
-  - [ ] Using the metadata to download the class report in an excel spreadsheet (It does not appear that I can download the data in an simpler format).
+  - [ ] Using the metadata to download the class report data
+    - [ ] Get individual question distributions from excel sheets.
+    - [ ] Get central tendencies from PDF files.
   - [ ] Extracting information out of the excel file and storing it into a database.
 - [ ] Manipulation of data
   - [ ] Normalize section ratings against an overall class central tendency
@@ -20,6 +22,17 @@ TEA is a tool to help analyze ApplyWeb's TRACE reviews.
   - [ ] Create a webapp?
 
 https://www.applyweb.com/eval/new/showreport?c=37436&i=517&t=86&r=2&embedded=true
+
+PDF
+https://www.applyweb.com/eval/new/showreport/pdf?r=2&c=37436&i=517&t=86&d=false
+
+excel
+https://www.applyweb.com/eval/new/showreport/excel?r=2&c=37436&i=517&t=86&d=false
+
+I have no idea what the d flag does, but i'm keeping it as false to stay on the
+down load.
+
+r is probably the type of report, but i think r = 2 has everything you need.
 
 ## Workflow
 
