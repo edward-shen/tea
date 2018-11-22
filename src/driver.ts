@@ -88,9 +88,42 @@ class Driver {
                 // I'm fucking in callback hell.
                 this.request.get({
                   url: resp.headers.location,
-                }, (_, __, body) => {
-                  console.log(body);
+                }, () => {
+                  // At this point we've successfully authenticated against NEU
+                  // We can likely remove this get request.
+
+                  // Now to auth against applyweb
+                  // Kill me
                   console.log('finally authenticated against NEU.');
+                  this.request.get({
+                    url: `${BASE_URL}/shibboleth/neu/36892`,
+                  }, (_, __, body) => {
+                    // Another no-js page
+                    const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
+                    // Because the first field is a cookie but when sending it
+                    // In the post we should replace the HTTP entity with what
+                    // it really is
+                    formFields[0] = formFields[0].replace(/&#x3a;/, ':');
+                    this.request.post({
+                      url: `https://www.applyweb.com/eval/shibboleth/neu/Shibboleth.sso/SAML2/POST`,
+                      form: {
+                        RelayState: formFields[0],
+                        SAMLResponse: formFields[1],
+                      },
+                    }, (_, resp) => {
+                      console.log('now pinging', resp.headers.location);
+                      // 302 4: I hate myself.
+                      this.request.get({
+                        url: resp.headers.location,
+                      }, (_, resp, body) => {
+                        // FIXME: finish
+                        // Currently returns a 401 and I have no idea why
+                        console.log(resp.statusCode);
+                        console.log(resp.headers);
+                        console.log(body);
+                      });
+                    });
+                  });
                 });
               });
             });
