@@ -41,6 +41,8 @@ class Driver {
     // What this behemoth of callback hell does is it authenticates the request
     // instance against NEU's SSO.
     // TODO: De-hell this.
+    // FIXME: 401's at some point
+    /*
     this.request.get('https://my.northeastern.edu/c/portal/login', (_, __, body) => {
       // We'll be given a No-JS version, which has a SAML post form.
       const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
@@ -114,15 +116,17 @@ class Driver {
         });
       });
     });
+    */
 
-    // await this.driver.get('https://my.northeastern.edu');
-    // await this.driver.findElement(By.css('.inner-box a')).click();
-    // await this.driver.findElement(By.id('username')).sendKeys(this.username);
-    // await this.driver.findElement(By.id('password')).sendKeys(this.password);
-    // await this.driver.findElement(By.className('btn-submit')).click();
+    await this.driver.get('https://my.northeastern.edu');
+    await this.driver.findElement(By.css('.inner-box a')).click();
+    await this.driver.findElement(By.id('username')).sendKeys(this.username);
+    await this.driver.findElement(By.id('password')).sendKeys(this.password);
+    await this.driver.findElement(By.className('btn-submit')).click();
 
     // console.log(await (await this.driver.findElement(By.css('html'))).getText());
-    // await this.driver.get(`${BASE_URL}/shibboleth/neu/36892`);
+    await this.driver.get(`${BASE_URL}/shibboleth/neu/36892`);
+    // console.log(await (await this.driver.findElement(By.css('html'))).getText());
     this.hasAuth = true;
   }
 
@@ -133,16 +137,18 @@ class Driver {
   public async checkCache() {
     this.checkStatus();
 
-    const latest: number = await this.fetchLatestSize();
+    const latest: number = await this.latestSize();
     const cacheSize: number = await metacache.size();
 
     if (cacheSize > latest) {
       console.warn('Cache size (%s) is larger than latest (%s)', cacheSize, latest);
+      return 1;
     } else if (cacheSize < latest) {
       console.log('Cache is not up to date. Performing incremental update.');
-      await metacache.updateCache(this, latest);
+      return -1;
     } else {
       console.log('Cache has already been fully updated!');
+      return 0;
     }
   }
 
@@ -156,15 +162,15 @@ class Driver {
     this.checkStatus();
 
     const req = `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`;
-    // await this.driver.get(req);
-    // return JSON.parse(await this.driver.findElement(By.tagName('pre')).getText());
+    await this.driver.get(req);
+    return JSON.parse(await this.driver.findElement(By.tagName('pre')).getText());
     return {total: 1, data: []}; // TODO: dummy
   }
 
   /**
    * Fetches the latest size of the remote database, and returns it as a number.
    */
-  private async fetchLatestSize(): Promise<number> {
+  public async latestSize(): Promise<number> {
     return (await this.getMetaPage(1, 1)).total;
   }
 
