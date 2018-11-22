@@ -1,7 +1,7 @@
 import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 
-import { get, post } from 'request';
+import { defaults } from 'request';
 import metacache from './cache/metacache';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
@@ -17,7 +17,6 @@ class Driver {
   private username: string;
   private password: string;
   private hasAuth = false;
-  private cookies = {};
 
   public constructor(username: string, password: string) {
     this.username = username;
@@ -38,18 +37,16 @@ class Driver {
       .setChromeOptions(new Options().headless())
       .build();
 
+    const request = defaults({jar: true});
+
     // Request the login cookies
-    get('https://my.northeastern.edu/c/portal/login', (_, resp, body) => {
+    request.get('https://my.northeastern.edu/c/portal/login', (_, resp, body) => {
       // We'll be given a No-JS version, which has a SAML post form.
-      this.parseSetCookie(resp.headers['set-cookie']);
       const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
 
       // Post SAML request with cookies
-      post({
+      request.post({
         url: 'https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO',
-        headers: {
-          cookie: this.cookies,
-        },
         form: {
           RelayState: formFields[0],
           SAMLRequest: formFields[1],
@@ -57,24 +54,14 @@ class Driver {
       }, (_, resp) => {
         // Will return a 302 redirect to url:
         // https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO;jsessionid=xxxx?execution=e1s1
-        this.parseSetCookie(resp.headers['set-cookie']);
-        get({
+        request.get({
           url: resp.headers.location,
-          headers: {
-            cookie: this.cookies,
-          },
-        }, (_, resp, body) => {
-          console.log(body);
+        }, (_, __, body) => {
           // Now we're at the login form
-          this.parseSetCookie(resp.headers['set-cookie']);
-          const postLocation = body.match(/(?<=<form.*action=").*(?=")/g)[0];
+          const postLocation = body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
           const hiddenPost = body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
-          // Post data, including hidden fields
-          post({
+          request.post({
             url: `https://neuidmsso.neu.edu${postLocation}`,
-            headers: {
-              cookies: this.cookies,
-            },
             form: {
               username: this.username,
               password: this.password,
@@ -84,16 +71,28 @@ class Driver {
             },
           }, (_, resp) => {
             // Another fucking 302
-            this.parseSetCookie(resp.headers['set-cookie']);
-            get({
+            request.get({
               url: resp.headers.location,
-              headers: {
-                cookie: this.cookies,
-              },
             }, (_, resp, body) => {
-              // console.log(resp.statusCode);
-              // console.log(resp.headers);
-              // console.log(body);
+              // Another no-js prompt
+              const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
+              request.post({
+                url: 'https://my.northeastern.edu/c/portal/saml/acs',
+                form: {
+                  RelayState: formFields[0],
+                  SAMLResponse: formFields[1],
+                },
+              }, (_, resp) => {
+                // 302 3: Electric Boogathree
+                // I'm fucking in callback hell.
+    // Request the login cookies
+                request.get({
+                  url: resp.headers.location,
+                }, (_, __, body) => {
+                  console.log(body);
+                  console.log('finally authencated');
+                });
+              });
             });
           });
         });
@@ -146,16 +145,6 @@ class Driver {
     return {total: 1, data: []}; // TODO: dummy
   }
 
-  private parseSetCookie(str) {
-    for (const cookie of str) {
-      const relevant = cookie.slice(0, cookie.indexOf(';')).split('=');
-      if (relevant[1] === '""') {
-        delete this.cookies[relevant[0]];
-      } else {
-        this.cookies[relevant[0]] = relevant[1];
-      }
-    }
-  }
   /**
    * Fetches the latest size of the remote database, and returns it as a number.
    */
