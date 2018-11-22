@@ -17,7 +17,7 @@ class Driver {
   private username: string;
   private password: string;
   private hasAuth = false;
-  private request = defaults({jar: true});
+  private request = defaults({jar: true, followAllRedirects: true});
 
   public constructor(username: string, password: string) {
     this.username = username;
@@ -52,78 +52,61 @@ class Driver {
           RelayState: formFields[0],
           SAMLRequest: formFields[1],
         },
-      }, (_, resp) => {
-        // Will return a 302 redirect to url:
-        // https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO;jsessionid=xxxx?execution=e1s1
-        this.request.get({
-          url: resp.headers.location,
+      }, (_, __, body) => {
+        // Now we're at the login form
+        const postLocation = body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
+        const hiddenPost = body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
+        this.request.post({
+          url: `https://neuidmsso.neu.edu${postLocation}`,
+          form: {
+            username: this.username,
+            password: this.password,
+            lt: hiddenPost[0],
+            execution: hiddenPost[1],
+            _eventId: hiddenPost[2],
+          },
         }, (_, __, body) => {
-          // Now we're at the login form
-          const postLocation = body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
-          const hiddenPost = body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
+          // Another no-js prompt
+          const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
           this.request.post({
-            url: `https://neuidmsso.neu.edu${postLocation}`,
+            url: 'https://my.northeastern.edu/c/portal/saml/acs',
             form: {
-              username: this.username,
-              password: this.password,
-              lt: hiddenPost[0],
-              execution: hiddenPost[1],
-              _eventId: hiddenPost[2],
+              RelayState: formFields[0],
+              SAMLResponse: formFields[1],
             },
           }, (_, resp) => {
-            // Another fucking 302
+            // 302 3: Electric Boogathree
+            // I'm fucking in callback hell.
             this.request.get({
               url: resp.headers.location,
-            }, (_, __, body) => {
-              // Another no-js prompt
-              const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
-              this.request.post({
-                url: 'https://my.northeastern.edu/c/portal/saml/acs',
-                form: {
-                  RelayState: formFields[0],
-                  SAMLResponse: formFields[1],
-                },
-              }, (_, resp) => {
-                // 302 3: Electric Boogathree
-                // I'm fucking in callback hell.
-                this.request.get({
-                  url: resp.headers.location,
-                }, () => {
-                  // At this point we've successfully authenticated against NEU
-                  // We can likely remove this get request.
+            }, () => {
+              // At this point we've successfully authenticated against NEU
+              // We can likely remove this get request.
 
-                  // Now to auth against applyweb
-                  // Kill me
-                  console.log('finally authenticated against NEU.');
-                  this.request.get({
-                    url: `${BASE_URL}/shibboleth/neu/36892`,
-                  }, (_, __, body) => {
-                    // Another no-js page
-                    const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
-                    // Because the first field is a cookie but when sending it
-                    // In the post we should replace the HTTP entity with what
-                    // it really is
-                    formFields[0] = formFields[0].replace(/&#x3a;/, ':');
-                    this.request.post({
-                      url: `https://www.applyweb.com/eval/shibboleth/neu/Shibboleth.sso/SAML2/POST`,
-                      form: {
-                        RelayState: formFields[0],
-                        SAMLResponse: formFields[1],
-                      },
-                    }, (_, resp) => {
-                      console.log('now pinging', resp.headers.location);
-                      // 302 4: I hate myself.
-                      this.request.get({
-                        url: resp.headers.location,
-                      }, (_, resp, body) => {
-                        // FIXME: finish
-                        // Currently returns a 401 and I have no idea why
-                        console.log(resp.statusCode);
-                        console.log(resp.headers);
-                        console.log(body);
-                      });
-                    });
-                  });
+              // Now to auth against applyweb
+              // Kill me
+              console.log('finally authenticated against NEU.');
+              this.request.get({
+                url: `${BASE_URL}/shibboleth/neu/36892`,
+              }, (_, __, body) => {
+                // Another no-js page
+                const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
+                // Because the first field is a cookie but when sending it
+                // In the post we should replace the HTTP entity with what
+                // it really is
+                formFields[0] = formFields[0].replace(/&#x3a;/, ':');
+                this.request.post({
+                  url: `https://www.applyweb.com/eval/shibboleth/neu/Shibboleth.sso/SAML2/POST`,
+                  form: {
+                    RelayState: formFields[0],
+                    SAMLResponse: formFields[1],
+                  },
+                }, (_, resp, body) => {
+                  // FIXME: finish
+                  // Currently returns a 401 and I have no idea why
+                  console.log(resp.statusCode);
+                  console.log(resp.headers);
+                  console.log(body);
                 });
               });
             });
