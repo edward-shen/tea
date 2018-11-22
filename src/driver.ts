@@ -28,7 +28,7 @@ class Driver {
    * Authenticates the webdriver against NEU's SSO so we can fetch data from the
    * TRACE website.
    */
-  public async auth(): Promise<void> {
+  public async auth() {
     if (this.hasAuth) {
       console.warn('This webdriver has already been authorized!');
     }
@@ -38,94 +38,76 @@ class Driver {
       .setChromeOptions(new Options().headless())
       .build();
 
-    // What this behemoth of callback hell does is it authenticates the request
-    // instance against NEU's SSO.
-    // TODO: De-hell this.
-    // FIXME: 401's at some point
-    /*
-    this.request.get('https://my.northeastern.edu/c/portal/login', (_, __, body) => {
-      // We'll be given a No-JS version, which has a SAML post form.
-      const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
+    let response;
+    let formFields;
+    let postLocation;
+    let hiddenPost;
 
-      // Post SAML request with cookies
-      this.request.post({
-        url: 'https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO',
-        form: {
-          RelayState: formFields[0],
-          SAMLRequest: formFields[1],
-        },
-      }, (_, __, body) => {
-        // Now we're at the login form
-        const postLocation = body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
-        const hiddenPost = body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
-        this.request.post({
-          url: `https://neuidmsso.neu.edu${postLocation}`,
-          form: {
-            username: this.username,
-            password: this.password,
-            lt: hiddenPost[0],
-            execution: hiddenPost[1],
-            _eventId: hiddenPost[2],
-          },
-        }, (_, __, body) => {
-          // Another no-js prompt
-          const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
-          this.request.post({
-            url: 'https://my.northeastern.edu/c/portal/saml/acs',
-            form: {
-              RelayState: formFields[0],
-              SAMLResponse: formFields[1],
-            },
-          }, (_, resp) => {
-            // 302 3: Electric Boogathree
-            // I'm fucking in callback hell.
-            this.request.get({
-              url: resp.headers.location,
-            }, () => {
-              // At this point we've successfully authenticated against NEU
-              // We can likely remove this get request.
+    // Get initial cookies for session authentication.
+    response = await this.get({url: 'https://my.northeastern.edu/c/portal/login'});
 
-              // Now to auth against applyweb
-              // Kill me
-              console.log('finally authenticated against NEU.');
-              this.request.get({
-                url: `${BASE_URL}/shibboleth/neu/36892`,
-              }, (_, __, body) => {
-                // Another no-js page
-                const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
-                // Because the first field is a cookie but when sending it
-                // In the post we should replace the HTTP entity with what
-                // it really is
-                formFields[0] = formFields[0].replace(/&#x3a;/, ':');
-                this.request.post({
-                  url: `https://www.applyweb.com/eval/shibboleth/neu/Shibboleth.sso/SAML2/POST`,
-                  form: {
-                    RelayState: formFields[0],
-                    SAMLResponse: formFields[1],
-                  },
-                }, (_, resp, body) => {
-                  // FIXME: finish
-                  // Currently returns a 401 and I have no idea why
-                  console.log(resp.statusCode);
-                  console.log(resp.headers);
-                  console.log(body);
-                });
-              });
-            });
-          });
-        });
-      });
+    // No-JS prompt
+    formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
+    response = await this.post({
+      url: 'https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO',
+      form: {
+        RelayState: formFields[0],
+        SAMLRequest: formFields[1],
+      },
     });
-    */
 
-    await this.driver.get('https://my.northeastern.edu');
-    await this.driver.findElement(By.css('.inner-box a')).click();
-    await this.driver.findElement(By.id('username')).sendKeys(this.username);
-    await this.driver.findElement(By.id('password')).sendKeys(this.password);
-    await this.driver.findElement(By.className('btn-submit')).click();
+    // Login page
+    postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
+    hiddenPost = response.body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
+    response = await this.post({
+      url: `https://neuidmsso.neu.edu${postLocation}`,
+      form: {
+        username: this.username,
+        password: this.password,
+        lt: hiddenPost[0],
+        execution: hiddenPost[1],
+        _eventId: hiddenPost[2],
+      },
+    });
+
+    // Another No-JS prompt
+    formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
+    response = await this.post({
+      url: 'https://my.northeastern.edu/c/portal/saml/acs',
+      form: {
+        RelayState: formFields[0],
+        SAMLResponse: formFields[1],
+      },
+    });
+
+    // We are now authenticated against NEU.
+    console.log('Driver is now authenticated against NEU!');
+
+    response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
+
+    formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
+    // Because the first field is a cookie but when sending it
+    // In the post we should replace the HTTP entity with what
+    // it really is
+    formFields[0] = formFields[0].replace(/&#x3a;/, ':');
+    response = await this.post({
+      url: `https://www.applyweb.com/eval/shibboleth/neu/Shibboleth.sso/SAML2/POST`,
+      form: {
+        RelayState: formFields[0],
+        SAMLResponse: formFields[1],
+      },
+    });
+
+    // console.log(response.body);
+
+    // await this.driver.get('https://my.northeastern.edu');
+    // await this.driver.findElement(By.css('.inner-box a')).click();
+    // await this.driver.findElement(By.id('username')).sendKeys(this.username);
+    // await this.driver.findElement(By.id('password')).sendKeys(this.password);
+    // await this.driver.findElement(By.className('btn-submit')).click();
 
     // console.log(await (await this.driver.findElement(By.css('html'))).getText());
-    await this.driver.get(`${BASE_URL}/shibboleth/neu/36892`);
+    // await this.driver.get(`${BASE_URL}/shibboleth/neu/36892`);
     // console.log(await (await this.driver.findElement(By.css('html'))).getText());
     this.hasAuth = true;
   }
@@ -174,6 +156,27 @@ class Driver {
     return (await this.getMetaPage(1, 1)).total;
   }
 
+  public async getPdf(courseID: number, instruID: number, term: number) {
+    const fetchCookies = {};
+    const cookies = await this.driver.manage().getCookies();
+
+    for (const cookie of cookies) {
+        fetchCookies[cookie.name] = cookie.value;
+    }
+
+    console.log(fetchCookies);
+    const next = `${BASE_URL}/new/showreport/pdf?r=2&c=${courseID}&i=${instruID}&t=${term}&d=false`;
+    this.request({
+      url: next,
+      headers: {
+        cookie: fetchCookies,
+      },
+    }, (_, resp, body) => {
+      console.log(resp.headers);
+      console.log(body);
+    });
+  }
+
   /**
    * Checks whether or not the driver has been initialized yet. Throws an error
    * if the driver has not been initialize yet. This should be called within
@@ -183,6 +186,34 @@ class Driver {
     if (!this.hasAuth) {
       throw Error(`Driver hasn't been authorized!`);
     }
+  }
+
+  /**
+   * Simple async/await wrapper for the request get function. Returns the
+   * callback args as an object instead.
+   *
+   * @param options The options used to send to the request library.
+   */
+  private async get(options) {
+    return new Promise((resolve) => {
+      this.request.get(options, (err, resp, body) => resolve({
+        err, resp, body,
+      }));
+    });
+  }
+
+  /**
+   * Simple async/await wrapper for the request post function. Returns the
+   * callback args as an object instead.
+   *
+   * @param options The options used to send to the request library.
+   */
+  private async post(options) {
+    return new Promise((resolve) => {
+      this.request.post(options, (err, resp, body) => resolve({
+        err, resp, body,
+      }));
+    });
   }
 
 }

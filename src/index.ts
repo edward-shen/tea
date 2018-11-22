@@ -11,10 +11,12 @@ async function main() {
 
   const driver = new Driver(username, password);
   await driver.auth();
-  const status = await driver.checkCache();
-  if (status === -1) {
-    await metacache.updateCache(driver, await driver.latestSize());
-  }
+  // const status = await driver.checkCache();
+  // if (status === -1) {
+  //   await metacache.updateCache(driver, await driver.latestSize());
+  // }
+
+  // const pdf = driver.getPdf(37436, 517, 86);
 }
 
 main();
