@@ -17,6 +17,7 @@ class Driver {
   private username: string;
   private password: string;
   private hasAuth = false;
+  private request = defaults({jar: true});
 
   public constructor(username: string, password: string) {
     this.username = username;
@@ -37,15 +38,15 @@ class Driver {
       .setChromeOptions(new Options().headless())
       .build();
 
-    const request = defaults({jar: true});
-
-    // Request the login cookies
-    request.get('https://my.northeastern.edu/c/portal/login', (_, resp, body) => {
+    // What this behemoth of callback hell does is it authenticates the request
+    // instance against NEU's SSO.
+    // TODO: De-hell this.
+    this.request.get('https://my.northeastern.edu/c/portal/login', (_, __, body) => {
       // We'll be given a No-JS version, which has a SAML post form.
       const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
 
       // Post SAML request with cookies
-      request.post({
+      this.request.post({
         url: 'https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO',
         form: {
           RelayState: formFields[0],
@@ -54,13 +55,13 @@ class Driver {
       }, (_, resp) => {
         // Will return a 302 redirect to url:
         // https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO;jsessionid=xxxx?execution=e1s1
-        request.get({
+        this.request.get({
           url: resp.headers.location,
         }, (_, __, body) => {
           // Now we're at the login form
           const postLocation = body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
           const hiddenPost = body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
-          request.post({
+          this.request.post({
             url: `https://neuidmsso.neu.edu${postLocation}`,
             form: {
               username: this.username,
@@ -71,12 +72,12 @@ class Driver {
             },
           }, (_, resp) => {
             // Another fucking 302
-            request.get({
+            this.request.get({
               url: resp.headers.location,
-            }, (_, resp, body) => {
+            }, (_, __, body) => {
               // Another no-js prompt
               const formFields = body.match(/(?<=\<input.*value=").*(?=")/g);
-              request.post({
+              this.request.post({
                 url: 'https://my.northeastern.edu/c/portal/saml/acs',
                 form: {
                   RelayState: formFields[0],
@@ -85,12 +86,11 @@ class Driver {
               }, (_, resp) => {
                 // 302 3: Electric Boogathree
                 // I'm fucking in callback hell.
-    // Request the login cookies
-                request.get({
+                this.request.get({
                   url: resp.headers.location,
                 }, (_, __, body) => {
                   console.log(body);
-                  console.log('finally authencated');
+                  console.log('finally authenticated against NEU.');
                 });
               });
             });
