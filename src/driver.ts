@@ -1,7 +1,8 @@
+import { XmlEntities } from 'html-entities';
+import { defaults } from 'request';
 import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 
-import { defaults } from 'request';
 import metacache from './cache/metacache';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
@@ -17,7 +18,10 @@ class Driver {
   private username: string;
   private password: string;
   private hasAuth = false;
-  private request = defaults({jar: true, followAllRedirects: true});
+  private request = defaults({
+    jar: true,
+    followAllRedirects: true,
+  });
 
   public constructor(username: string, password: string) {
     this.username = username;
@@ -33,85 +37,31 @@ class Driver {
       console.warn('This webdriver has already been authorized!');
     }
 
-    this.driver = await new Builder()
-      .forBrowser('chrome')
-      .setChromeOptions(new Options().headless())
-      .build();
-
     // Some variables that'll be used for authentication.
     let response;
-    let formFields;
     let postLocation;
     let hiddenPost;
 
     // Get initial cookies for session authentication.
-    response = await this.get({url: 'https://my.northeastern.edu/c/portal/login'});
-
-    // No-JS prompt
-    formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
-    response = await this.post({
-      url: 'https://neuidmsso.neu.edu/idp/profile/SAML2/POST/SSO',
-      form: {
-        RelayState: formFields[0],
-        SAMLRequest: formFields[1],
-      },
-    });
+    response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
 
     // Login page
     postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
     hiddenPost = response.body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
+    const formData = this.getHiddenPostData(response.body);
+    formData.username = this.username;
+    formData.password = this.password;
     response = await this.post({
       url: `https://neuidmsso.neu.edu${postLocation}`,
-      form: {
-        username: this.username,
-        password: this.password,
-        lt: hiddenPost[0],
-        execution: hiddenPost[1],
-        _eventId: hiddenPost[2],
-      },
+      form: formData,
     });
 
-    // Another No-JS prompt
-    formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
+    postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
     response = await this.post({
-      url: 'https://my.northeastern.edu/c/portal/saml/acs',
-      form: {
-        RelayState: formFields[0],
-        SAMLResponse: formFields[1],
-      },
+      url: new XmlEntities().decode(postLocation),
+      form: this.getHiddenPostData(response.body),
     });
-
-    // We are now authenticated against NEU.
-    console.log('Driver is now authenticated against NEU!');
-
-    // Authenticated against ApplyWeb.
-    response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
-
-    formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
-    // Because the first field is a cookie but when sending it
-    // In the post we should replace the HTTP entity with what
-    // it really is
-    formFields[0] = formFields[0].replace(/&#x3a;/, ':');
-    response = await this.post({
-      url: `https://www.applyweb.com/eval/shibboleth/neu/Shibboleth.sso/SAML2/POST`,
-      form: {
-        RelayState: formFields[0],
-        SAMLResponse: formFields[1],
-      },
-    });
-
-    // At this point we're still getting a 401 user not found.
     console.log(response.body);
-
-    // await this.driver.get('https://my.northeastern.edu');
-    // await this.driver.findElement(By.css('.inner-box a')).click();
-    // await this.driver.findElement(By.id('username')).sendKeys(this.username);
-    // await this.driver.findElement(By.id('password')).sendKeys(this.password);
-    // await this.driver.findElement(By.className('btn-submit')).click();Update pages.css
-
-    // console.log(await (await this.driver.findElement(By.css('html'))).getText());
-    // await this.driver.get(`${BASE_URL}/shibboleth/neu/36892`);
-    // console.log(await (await this.driver.findElement(By.css('html'))).getText());
     this.hasAuth = true;
   }
 
@@ -218,6 +168,19 @@ class Driver {
     });
   }
 
+  private getHiddenPostData(html: string) {
+    const formNames = html.match(/(?<=<input.*name=").*?(?=")/g);
+    const formFields = html.match(/(?<=<input.*value=").*?(?=")/g);
+
+    const retVal = Object.create(null);
+
+    const decoder = new XmlEntities();
+    for (let i = 0; i < formNames.length; i++) {
+      retVal[formNames[i]] = decoder.decode(formFields[i]);
+    }
+
+    return retVal;
+  }
 }
 
 export default Driver;
