@@ -38,6 +38,7 @@ class Driver {
       .setChromeOptions(new Options().headless())
       .build();
 
+    // Some variables that'll be used for authentication.
     let response;
     let formFields;
     let postLocation;
@@ -83,6 +84,7 @@ class Driver {
     // We are now authenticated against NEU.
     console.log('Driver is now authenticated against NEU!');
 
+    // Authenticated against ApplyWeb.
     response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
 
     formFields = response.body.match(/(?<=\<input.*value=").*(?=")/g);
@@ -98,13 +100,14 @@ class Driver {
       },
     });
 
-    // console.log(response.body);
+    // At this point we're still getting a 401 user not found.
+    console.log(response.body);
 
     // await this.driver.get('https://my.northeastern.edu');
     // await this.driver.findElement(By.css('.inner-box a')).click();
     // await this.driver.findElement(By.id('username')).sendKeys(this.username);
     // await this.driver.findElement(By.id('password')).sendKeys(this.password);
-    // await this.driver.findElement(By.className('btn-submit')).click();
+    // await this.driver.findElement(By.className('btn-submit')).click();Update pages.css
 
     // console.log(await (await this.driver.findElement(By.css('html'))).getText());
     // await this.driver.get(`${BASE_URL}/shibboleth/neu/36892`);
@@ -113,8 +116,7 @@ class Driver {
   }
 
   /**
-   * Checks and update the cache.
-   * TODO: move to metacache.ts
+   * Returns the status of the cache.
    */
   public async checkCache() {
     this.checkStatus();
@@ -124,13 +126,13 @@ class Driver {
 
     if (cacheSize > latest) {
       console.warn('Cache size (%s) is larger than latest (%s)', cacheSize, latest);
-      return 1;
+      return CacheStatus.OVERFILLED;
     } else if (cacheSize < latest) {
       console.log('Cache is not up to date. Performing incremental update.');
-      return -1;
+      return CacheStatus.OUT_OF_DATE;
     } else {
       console.log('Cache has already been fully updated!');
-      return 0;
+      return CacheStatus.UP_TO_DATE;
     }
   }
 

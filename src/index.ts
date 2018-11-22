@@ -12,7 +12,7 @@ async function main() {
   const driver = new Driver(username, password);
   await driver.auth();
   // const status = await driver.checkCache();
-  // if (status === -1) {
+  // if (status === CacheStatus.OUT_OF_DATE) {
   //   await metacache.updateCache(driver, await driver.latestSize());
   // }
 
