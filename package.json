@@ -21,6 +21,7 @@
     "@types/cheerio": "^0.22.9",
     "@types/cli-progress": "^1.8.0",
     "@types/encoding-down": "^5.0.0",
+    "@types/html-entities": "^1.2.16",
     "@types/jest": "^23.3.9",
     "@types/leveldown": "^4.0.0",
     "@types/levelup": "^3.1.0",
