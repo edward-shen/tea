@@ -20,7 +20,7 @@ async function main() {
 
   const http = await driver.getPdf(37436, 517, 86);
 
-  console.log(await parse(Buffer.from(http, 'binary')));
+  console.log(await parse(http));
 }
 
 main();

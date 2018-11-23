@@ -3,7 +3,7 @@ import * as pdf from 'pdf-parse';
 
 import ids from './questionIDs';
 
-interface Summary {
+interface PDFSummary {
   mean: number;
   deptMean: number;
   univMean: number;
@@ -13,24 +13,32 @@ interface Summary {
   stdev: number;
 }
 
-interface QuestionMeta {
+interface PDFQuestion {
   courseMean: number;
   deptMean: number;
   univMean: number;
 }
 
+interface PDFData {
+  courseSum: PDFSummary;
+  learningSum: PDFSummary;
+  instructorSum: PDFSummary;
+  effectivenessSum: PDFSummary;
+  [key: number]: PDFQuestion;
+}
+
 /**
  * Structures data from a PDF file. Returns an object containing a mapping from
- * a quesiton ID to the parsed variant. It also contains overall central
+ * a question ID to the parsed variant. It also contains overall central
  * tendencies.
  *
  * In many ways, due to how we're scraping data from a pdf file, this is very
  * brittle. If NEU decides to change their questions, then this will likely
  * fail.
  *
- * @param pdfBuffer A binary pdf file.
+ * @param pdfBuffer A pdf file, in binary.
  */
-async function parse(pdfBuffer) {
+async function parse(pdfBuffer): Promise<PDFData> {
   const pdfData = (await pdf(pdfBuffer)).text;
   const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
   const summaryIterator = [
@@ -46,7 +54,7 @@ async function parse(pdfBuffer) {
   'deptMedian', 'univMedian', 'stdev'];
   const questionKeys = ['courseMean', 'deptMean', 'univMean'];
 
-  const ret = {};
+  const ret = Object.create(null);
   matched.map((str) => {
     // Each data is in the form of (\d\.\d)*, which needs to be split up.
     const row = [];
@@ -79,5 +87,8 @@ function zip(keys: string[], values) {
 }
 
 export {
+  PDFSummary,
+  PDFQuestion,
+  PDFData,
   parse,
 };
