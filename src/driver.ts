@@ -1,6 +1,6 @@
 import { load } from 'cheerio';
 import { XmlEntities } from 'html-entities';
-import { defaults } from 'request';
+import { CookieJar, defaults, jar } from 'request';
 import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 
@@ -19,14 +19,20 @@ class Driver {
   private username: string;
   private password: string;
   private hasAuth = false;
-  private request = defaults({
-    jar: true,
-    followAllRedirects: true,
-  });
+  private jar: CookieJar;
+  private request;
 
   public constructor(username: string, password: string) {
     this.username = username;
     this.password = password;
+    this.jar = jar();
+    this.request = defaults({
+      jar: this.jar,
+      followAllRedirects: true,
+      headers: {
+        'User-Agent': `Your servers shouldn't return 401 on empty user-agents.`,
+      },
+    });
   }
 
   /**
@@ -60,12 +66,18 @@ class Driver {
 
     $ = load(response.body);
     postLocation = $('form').attr('action');
+    this.jar.setCookie(`awBrowserCheck="true"`, 'https://www.applyweb.com/');
     response = await this.post({
       url: new XmlEntities().decode(postLocation),
       form: this.getHiddenPostData(response.body),
     });
 
+    response = await this.get({
+      url: `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=1&rpp=1&termId=0`,
+    });
+
     console.log(response.body);
+
     this.hasAuth = true;
   }
 
@@ -113,20 +125,9 @@ class Driver {
   }
 
   public async getPdf(courseID: number, instruID: number, term: number) {
-    const fetchCookies = {};
-    const cookies = await this.driver.manage().getCookies();
-
-    for (const cookie of cookies) {
-        fetchCookies[cookie.name] = cookie.value;
-    }
-
-    console.log(fetchCookies);
     const next = `${BASE_URL}/new/showreport/pdf?r=2&c=${courseID}&i=${instruID}&t=${term}&d=false`;
     this.request({
       url: next,
-      headers: {
-        cookie: fetchCookies,
-      },
     }, (_, resp, body) => {
       console.log(resp.headers);
       console.log(body);
