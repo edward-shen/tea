@@ -31,4 +31,21 @@ Currently, TRACE reviews are authenticated via SAML. To access reviews, we need 
 
 ## Configuration
 
-TEA will accept either a username and password passed as `TEA_USERNAME` and `TEA_PASSWORD` as environment variables or as `username` and `password` fields in `config.toml`. If you choose to use the `.toml` file, you must either create the config yourself or try running the program once without the aforementioned environment variables. It will create the config file for you.
+### Installation
+
+As of writing this readme, this software uses the latest Node v10 version. If you have `nvm` installed, you may simply run
+```bash
+nvm use
+```
+to use the correct node version. If you don't have the specified node version, please install it.
+
+Then like all other Node setups,
+```bash
+yarn install
+yarn build
+yarn start
+```
+
+### Environment variables or `config.toml`
+
+TEA will accept either a username and password passed as `TEA_USERNAME` and `TEA_PASSWORD` as environment variables or as `username` and `password` fields in `config.toml`. If you choose to use the `.toml` file, you must either create the config yourself or try running the program once without the aforementioned environment variables. It will create the config file for you. Either way, one of the two must be present for this to work.
