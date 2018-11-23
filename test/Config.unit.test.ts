@@ -1,4 +1,4 @@
-import loadConfig from '../src/config';
+import loadConfig from '../src/Config';
 
 jest.mock('fs');
 

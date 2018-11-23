@@ -26,7 +26,6 @@ const hoursColIDs = [
 function parseExcel(excelBuffer) {
   const parsed = read(excelBuffer);
   const data = utils.sheet_to_json(parsed.Sheets[parsed.SheetNames[0]]);
-
   const responseInclDeclines = Object.values(Object.values(data)[4])[1];
   const declines = Object.values(Object.values(data)[5])[1];
 

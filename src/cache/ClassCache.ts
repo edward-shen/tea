@@ -2,6 +2,9 @@ import leveldown from 'leveldown';
 import levelup from 'levelup';
 import { resolve } from 'path';
 
+/**
+ * Interface with the leveldb.
+ */
 class ClassCache {
   private db;
 
@@ -9,7 +12,7 @@ class ClassCache {
     this.db = levelup(leveldown(resolve(__dirname, '../../cache/classdb')));
   }
 
-  public async put(key: string, value: JSON) {
+  public async put(key: string, value) {
     await this.db.put(key, JSON.stringify(value));
   }
 

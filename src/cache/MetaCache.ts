@@ -100,6 +100,17 @@ class MetaCache {
     bar.stop();
   }
 
+  public async getReportData() {
+    return await this.all(`SELECT id, instructorId, termID from ${this.TABLE}`);
+  }
+
+  private async all(arg) {
+    return new Promise((resolve) => {
+      this.db.all(arg, (_, res) => {
+        resolve(res);
+      });
+    });
+  }
   /**
    * Select the values that we want to add to our data from all JSON fields per
    * report, and then insert them in parallel since this should be a write-only
@@ -152,7 +163,7 @@ class MetaCache {
    * tables already exist, then this function does nothing.
    */
   private async init() {
-    return new Promise((ok) => {
+    return new Promise((resolve) => {
       // Check if the table exists
       const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='${this.TABLE}'`;
       this.db.get(query, (err, res) => {
@@ -184,11 +195,11 @@ class MetaCache {
             }
             this.hasInit = true;
             console.log('Metacache database not found, created a new db!');
-            ok();
+            resolve();
           });
         } else {
           this.hasInit = true;
-          ok();
+          resolve();
         }
       });
     });
