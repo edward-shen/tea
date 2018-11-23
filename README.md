@@ -25,22 +25,9 @@ TEA is a tool to help analyze ApplyWeb's TRACE reviews.
 - [ ] Visualizing data
   - [ ] Create a webapp?
 
-https://www.applyweb.com/eval/new/showreport?c=37436&i=517&t=86&r=2&embedded=true
-
-PDF
-https://www.applyweb.com/eval/new/showreport/pdf?r=2&c=37436&i=517&t=86&d=false
-
-excel
-https://www.applyweb.com/eval/new/showreport/excel?r=2&c=37436&i=517&t=86&d=false
-
-I have no idea what the d flag does, but i'm keeping it as false to stay on the
-down load.
-
-r is probably the type of report, but i think r = 2 has everything you need.
-
 ## Workflow
 
-Currently, TRACE reviews are authenticated via SAML. To access reviews, we need to first authenticate our application against the university's SAML. After we have authenticated our application, we start looking at how many reports we need to fetch. TEA caches the metadata after we fetch it, so we don't hit ApplyWeb's endpoint every time we run this. If the cache doesn't have as many reports as live data, we'll fetch as many as we need.
+Currently, TRACE reviews are authenticated via SAML. To access reviews, we need to first authenticate our application against the university's SAML. After we have authenticated our application, we start looking at how many reports we need to fetch. TEA caches the metadata after we fetch it, so we don't hit ApplyWeb's endpoint every time we run this. If the cache doesn't have as many reports as live data, we'll fetch as many as we need. (Currently brokenish).
 
 ## Configuration
 
