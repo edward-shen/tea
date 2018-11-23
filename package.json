@@ -40,6 +40,7 @@
     "request": "^2.88.0",
     "sqlite3": "^4.0.4",
     "toml": "^2.3.3",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "xlsx": "^0.14.1"
   }
 }
