@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs';
 import * as pdf from 'pdf-parse';
 
 import ids from './questionIDs';
