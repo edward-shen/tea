@@ -82,7 +82,7 @@ class Driver {
   /**
    * Returns the status of the cache.
    */
-  public async checkCache() {
+  public async checkCache(): Promise<CacheStatus> {
     this.checkStatus();
 
     const latest: number = await this.latestSize();
@@ -121,12 +121,47 @@ class Driver {
     return (await this.getMetaPage(1, 1)).total;
   }
 
-  public async getPdf(courseID: number, instruID: number, term: number) {
+  /**
+   * Gets the PDF course data that correlate to the provided fields.
+   * Returns the data in binary form.
+   *
+   * @param courseID The course number of the course to fetch.
+   * @param instructorID The instructor ID of the course to fetch.
+   * @param term The term of the course to fetch.
+   */
+  public async getPdf(courseID: number, instructorID: number, term: number) {
+    return await this.getMetadata('pdf', courseID, instructorID, term);
+  }
+
+  /**
+   * Gets the excel course data that correlate to the provided fields.
+   * Returns the data in binary form.
+   *
+   * @param courseID The course number of the course to fetch.
+   * @param instructorID The instructor ID of the course to fetch.
+   * @param term The term of the course to fetch.
+   */
+  public async getExcel(courseID: number, instructorID: number, term: number) {
+    return await this.getMetadata('excel', courseID, instructorID, term);
+  }
+
+  /**
+   * Hits the specified endpoint with the specified query params and returns the
+   * result as binary data.
+   *
+   * @param endpoint The endpoint to hit.
+   * @param courseID The course number of the course to fetch.
+   * @param instructorID The instructor ID of the course to fetch.
+   * @param term The term of the course to fetch.
+   */
+  private async getMetadata(
+    endpoint: string, courseID: number, instructorID: number, term: number) {
     this.checkStatus();
 
-    const next = `${BASE_URL}/new/showreport/pdf?r=2&c=${courseID}&i=${instruID}&t=${term}&d=false`;
+    const queryString = `r=2&c=${courseID}&i=${instructorID}&t=${term}&d=false`;
+    const url = `${BASE_URL}/new/showreport/${endpoint}?${queryString}`;
     return (await this.get({
-      url: next,
+      url,
       encoding: null,
     })).body;
   }
@@ -136,7 +171,7 @@ class Driver {
    * if the driver has not been initialize yet. This should be called within
    * the body of every function requiring the web driver.
    */
-  private checkStatus() {
+  private checkStatus(): void {
     if (!this.hasAuth) {
       throw Error(`Driver hasn't been authorized!`);
     }
@@ -162,14 +197,20 @@ class Driver {
    *
    * @param options The options used to send to the request library.
    */
-  private async post(options) {
-    return new Promise((resolve) => {
+  private async post(options): Promise<Response> {
+    return new Promise<Response>((resolve) => {
       this.request.post(options, (err, resp, body) => resolve({
         err, resp, body,
       }));
     });
   }
 
+  /**
+   * Returns an request form compatible object containing hidden HTML post
+   * fields, and tries to decode the field values from their HTTP entity form.
+   *
+   * @param html A string version of the HTML to get form data from.
+   */
   private getHiddenPostData(html: string) {
     const retVal = Object.create(null);
     const $ = load(html);
