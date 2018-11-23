@@ -3,9 +3,9 @@ import * as Deque from 'double-ended-queue';
 /**
  * <rant>
  * I really should need to make this class. Turns out, if you send 271 requests
- * to the fucking TRACE server, you'll just cause whatever puny server that it's
- * hosted on to drop everything and just return a 500. But not because you sent
- * too many requests at the same time (well, yes, because of that), but because
+ * to the TRACE server, you'll just cause whatever puny server that it's hosted
+ * on to drop everything and just return a 500. But not because you sent too
+ * many requests at the same time (well, yes, because of that), but because
  * there's a nested exception where the spring framework they're using can't
  * create a Transaction.
  *
@@ -17,7 +17,8 @@ import * as Deque from 'double-ended-queue';
  * </rant>
  */
 class RequestPool {
-  private readonly MAX_SIMULTANEOUS_REQUESTS = 50;
+  public readonly MAX_SIMULTANEOUS_REQUESTS = 50;
+
   private numAvailable = this.MAX_SIMULTANEOUS_REQUESTS;
   private queue = new Deque();
   private barrierQueue = new Deque();
@@ -57,6 +58,15 @@ class RequestPool {
         }
       }
     }
+  }
+
+  /**
+   * Returns the status of the pool.
+   *
+   * @returns whether or not the pool has slots available.
+   */
+  public get status(): boolean {
+    return this.queue.isEmpty();
   }
 
   /**
