@@ -58,7 +58,7 @@ describe('config file confuckery', () => {
 
   it(`should exit after generating a file if it doesn't exist`, () => {
     fs.__setMockFiles();
-    expect(loadConfig()).toBe(null);
+    expect(loadConfig()).toBe(undefined);
     expect(fs.existsSync('config.toml')).toBeDefined();
   });
 

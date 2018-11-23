@@ -5,9 +5,18 @@
  * @param keys A list of keys
  * @param values A list of values.
  */
-function zip(keys: string[], values) {
+function zip(keys: any[], values: any[]) {
   const ret = {};
-  values.map((v, i) => ret[keys[i]] = v);
+
+  if (!keys || !values) {
+    return {};
+  }
+
+  values.map((v, i) => {
+    if (keys[i]) {
+      return ret[keys[i]] = v;
+    }
+  });
   return ret;
 }
 
