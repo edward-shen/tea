@@ -29,7 +29,7 @@ function loadConfig(): Config {
   } else {
     writeFileSync(CONFIG_FILENAME, 'username = \npassword = \n');
     console.error(`Config not found. Please fill out ${CONFIG_FILENAME}`);
-    return null;
+    return;
   }
 
   // Attempt to parse config file
