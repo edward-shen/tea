@@ -3,7 +3,7 @@ import { XmlEntities } from 'html-entities';
 import { CookieJar, defaults, jar } from 'request';
 import CacheStatus from './cache/CacheStatus';
 
-import metacache from './cache/metacache';
+import metacache from './cache/MetaCache';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';

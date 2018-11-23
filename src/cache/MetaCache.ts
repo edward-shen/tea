@@ -3,9 +3,8 @@ import { existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { Database } from 'sqlite3';
 
-import Driver from '../driver';
-
-const TABLE_NAME = 'metadata';
+import Driver from '../Driver';
+import RequestPool from './RequestPool';
 
 /**
  * Keeps track of metadata, storing information in a SQLite database. This was
@@ -18,6 +17,7 @@ const TABLE_NAME = 'metadata';
  * a relational database.
  */
 class MetaCache {
+  private readonly TABLE = 'metadata';
   private db: Database;
   private hasInit = false;
 
@@ -47,9 +47,9 @@ class MetaCache {
     }
 
     return new Promise<number>((ok) => {
-      this.db.get(`SELECT COUNT(*) FROM ${TABLE_NAME}`, (err, res) => {
+      this.db.get(`SELECT COUNT(*) FROM ${this.TABLE}`, (err, res) => {
         if (err) {
-          throw Error(`Could not query database!${err}`);
+          throw Error(`Could not query database! ${err}`);
         } else {
           ok(res['COUNT(*)']);
         }
@@ -82,25 +82,23 @@ class MetaCache {
     const start = await this.size();
     const toFetch: number = retrievedNum - start;
     const rpp = 100;
-    let page = 1;
-    let runningSum = 0;
-
     const bar = new Bar({}, Presets.shades_classic);
 
     bar.start(Math.ceil(toFetch / rpp), 0);
 
-    while (runningSum < toFetch) {
-      const jsonData: Metadata[] = (await driver.getMetaPage(page, rpp)).data;
-      const numToParse: number = Math.min(toFetch - runningSum, rpp);
-      jsonData.length = numToParse; // Trim the amount to get
-      this.addToCache(jsonData); // Don't wait for database to finish updating.
-      runningSum += numToParse;
-      page += 1;
-      bar.increment(1);
+    const pool = new RequestPool();
+
+    // No need to ceil this
+    for (let i = 1; i < toFetch / rpp; i++) {
+      await pool.request();
+      driver.getMetaPage(i, rpp).then((res) => {
+        this.addToCache(res.data);
+        bar.increment(1);
+        pool.return();
+      });
     }
 
     bar.stop();
-    this.db.close();
   }
 
   /**
@@ -130,7 +128,7 @@ class MetaCache {
           $level: report.level,
         };
 
-        this.db.run(`INSERT INTO ${TABLE_NAME} VALUES (
+        this.db.run(`INSERT INTO ${this.TABLE} VALUES (
           $id,
           $instructorId,
           $termId,
@@ -157,7 +155,7 @@ class MetaCache {
   private async init() {
     return new Promise((ok) => {
       // Check if the table exists
-      const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='${TABLE_NAME}'`;
+      const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='${this.TABLE}'`;
       this.db.get(query, (err, res) => {
         if (err) {
           throw Error(`init error: ${err.message}`);
@@ -166,7 +164,7 @@ class MetaCache {
         if (res === undefined) {
           // Number field needs to be converted
           // source id needs to be a number
-          this.db.run(`CREATE TABLE ${TABLE_NAME}(
+          this.db.run(`CREATE TABLE ${this.TABLE}(
             id INTEGER,
             instructorId INTEGER,
             termId INTEGER,

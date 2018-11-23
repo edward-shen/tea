@@ -1,7 +1,7 @@
 import CacheStatus from './cache/CacheStatus';
-import metacache from './cache/metacache';
-import loadConfig from './config';
-import Driver from './driver';
+import metacache from './cache/MetaCache';
+import loadConfig from './Config';
+import Driver from './Driver';
 import { parseExcel } from './parsers/excel';
 import { parsePdf } from './parsers/pdf';
 

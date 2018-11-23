@@ -3,6 +3,9 @@
  * These values were generated from manually downloading a excel sheet and
  * copying those values, since there is a 1-1 correlation between the pdf
  * questions and excel questions.
+ *
+ * There is no better way that doesn't require you to first download a random
+ * xlsx file, parse it, and then get the question IDs.
  */
 const values = [
   1,
