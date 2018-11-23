@@ -1,13 +1,18 @@
 import { load } from 'cheerio';
 import { XmlEntities } from 'html-entities';
 import { CookieJar, defaults, jar } from 'request';
-import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
-import { Options } from 'selenium-webdriver/chrome';
+import CacheStatus from './cache/CacheStatus';
 
 import metacache from './cache/metacache';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
+
+interface Response {
+  err: any;
+  resp: object;
+  body: string;
+}
 
 /**
  * Controls the driver requesting web data. Currently this is implemented as a
@@ -72,12 +77,6 @@ class Driver {
       form: this.getHiddenPostData(response.body),
     });
 
-    response = await this.get({
-      url: `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=1&rpp=1&termId=0`,
-    });
-
-    console.log(response.body);
-
     this.hasAuth = true;
   }
 
@@ -112,9 +111,8 @@ class Driver {
     this.checkStatus();
 
     const req = `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`;
-    await this.driver.get(req);
-    return JSON.parse(await this.driver.findElement(By.tagName('pre')).getText());
-    return {total: 1, data: []}; // TODO: dummy
+    const resp = await this.get({url: req});
+    return JSON.parse(resp.body);
   }
 
   /**
@@ -151,8 +149,8 @@ class Driver {
    *
    * @param options The options used to send to the request library.
    */
-  private async get(options) {
-    return new Promise((resolve) => {
+  private async get(options): Promise<Response> {
+    return new Promise<Response>((resolve) => {
       this.request.get(options, (err, resp, body) => resolve({
         err, resp, body,
       }));
