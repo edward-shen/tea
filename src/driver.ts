@@ -40,20 +40,19 @@ class Driver {
     // Some variables that'll be used for authentication.
     let response;
     let postLocation;
-    let hiddenPost;
 
     // Get initial cookies for session authentication.
     response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
 
     // Login page
     postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
-    hiddenPost = response.body.match(/(?<=<input type="hidden".*value=").*(?=")/g);
-    const formData = this.getHiddenPostData(response.body);
-    formData.username = this.username;
-    formData.password = this.password;
     response = await this.post({
       url: `https://neuidmsso.neu.edu${postLocation}`,
-      form: formData,
+      form: {
+        ...this.getHiddenPostData(response.body),
+        username: this.username,
+        password: this.password,
+      },
     });
 
     postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
@@ -61,6 +60,7 @@ class Driver {
       url: new XmlEntities().decode(postLocation),
       form: this.getHiddenPostData(response.body),
     });
+
     console.log(response.body);
     this.hasAuth = true;
   }
