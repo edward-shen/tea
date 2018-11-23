@@ -1,3 +1,4 @@
+import { load } from 'cheerio';
 import { XmlEntities } from 'html-entities';
 import { defaults } from 'request';
 import { Builder, By, promise, WebDriver } from 'selenium-webdriver';
@@ -40,12 +41,14 @@ class Driver {
     // Some variables that'll be used for authentication.
     let response;
     let postLocation;
+    let $;
 
     // Get initial cookies for session authentication.
     response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
 
     // Login page
-    postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
+    $ = load(response.body);
+    postLocation = $('form').attr('action');
     response = await this.post({
       url: `https://neuidmsso.neu.edu${postLocation}`,
       form: {
@@ -55,7 +58,8 @@ class Driver {
       },
     });
 
-    postLocation = response.body.match(/(?<=<form.*action=").*(?=" .*)/g)[0];
+    $ = load(response.body);
+    postLocation = $('form').attr('action');
     response = await this.post({
       url: new XmlEntities().decode(postLocation),
       form: this.getHiddenPostData(response.body),
@@ -169,10 +173,18 @@ class Driver {
   }
 
   private getHiddenPostData(html: string) {
-    const formNames = html.match(/(?<=<input.*name=").*?(?=")/g);
-    const formFields = html.match(/(?<=<input.*value=").*?(?=")/g);
-
     const retVal = Object.create(null);
+    const $ = load(html);
+
+    const formNames = [];
+    $('input').each((_, e) => {
+      formNames.push($(e).attr('name'));
+    });
+
+    const formFields = [];
+    $('input').each((_, e) => {
+      formFields.push($(e).attr('value'));
+    });
 
     const decoder = new XmlEntities();
     for (let i = 0; i < formNames.length; i++) {
