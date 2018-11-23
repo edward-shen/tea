@@ -30,7 +30,7 @@ interface QuestionMeta {
  *
  * @param pdfBuffer A binary pdf file.
  */
-async function parse(pdfBuffer: Buffer) {
+async function parse(pdfBuffer) {
   const pdfData = (await pdf(pdfBuffer)).text;
   const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
   const summaryIterator = [

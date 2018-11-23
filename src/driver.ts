@@ -20,7 +20,6 @@ interface Response {
  * chrome layer.
  */
 class Driver {
-  private driver;
   private username: string;
   private password: string;
   private hasAuth = false;
@@ -123,13 +122,13 @@ class Driver {
   }
 
   public async getPdf(courseID: number, instruID: number, term: number) {
+    this.checkStatus();
+
     const next = `${BASE_URL}/new/showreport/pdf?r=2&c=${courseID}&i=${instruID}&t=${term}&d=false`;
-    this.request({
+    return (await this.get({
       url: next,
-    }, (_, resp, body) => {
-      console.log(resp.headers);
-      console.log(body);
-    });
+      encoding: null,
+    })).body;
   }
 
   /**

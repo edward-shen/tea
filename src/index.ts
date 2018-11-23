@@ -2,6 +2,7 @@ import CacheStatus from './cache/CacheStatus';
 import metacache from './cache/metacache';
 import loadConfig from './config';
 import Driver from './driver';
+import { parse } from './parsers/pdf';
 
 async function main() {
   const {username, password} = loadConfig();
@@ -17,7 +18,9 @@ async function main() {
     await metacache.updateCache(driver, await driver.latestSize());
   }
 
-  // const pdf = driver.getPdf(37436, 517, 86);
+  const http = await driver.getPdf(37436, 517, 86);
+
+  console.log(await parse(Buffer.from(http, 'binary')));
 }
 
 main();
