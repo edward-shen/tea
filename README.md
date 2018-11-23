@@ -11,9 +11,11 @@ TEA is a tool to help analyze ApplyWeb's TRACE reviews.
   - [ ] Using the metadata to download the class report data
     - [ ] Downloading Excel sheets into memory
     - [ ] Get individual question distributions from excel sheets.
-    - [ ] Downloading PDFs into memory
+    - [ ] Mass downloading of memory
+    - [x] Downloading PDFs into memory
     - [x] Get central tendencies from PDF files.
-  - [ ] Extracting information out of the excel file and storing it into a database.
+    - [ ] Mass downloading of memory
+  - [ ] Storing information received above into a database.
 - [ ] Manipulation of data
   - [ ] Normalize section ratings against an overall class central tendency
   - [ ] Transform data from flat row data into nested documents (perhaps querying a relational database generated above and generating a document-based NoSQL one instead)?
