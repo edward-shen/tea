@@ -31,9 +31,7 @@ class MetaCache {
       mkdirSync(dir);
     }
 
-    this.db = new Database(`${dir}/meta.db`, () => {
-      this.init();
-    });
+    this.db = new Database(`${dir}/meta.db`, () => this.init());
   }
 
   /**
@@ -98,6 +96,7 @@ class MetaCache {
       });
     }
 
+    await pool.barrier();
     bar.stop();
   }
 

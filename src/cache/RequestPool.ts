@@ -20,6 +20,7 @@ class RequestPool {
   private readonly MAX_SIMULTANEOUS_REQUESTS = 50;
   private numAvailable = this.MAX_SIMULTANEOUS_REQUESTS;
   private queue = new Deque();
+  private barrierQueue = new Deque();
 
   /**
    * Requests to make a request to the outgoing server. Will return immediately
@@ -41,6 +42,8 @@ class RequestPool {
    * Signal that the request is no longer in air and that another request can
    * be made. This will immediately resolve the longest-waiting request, or if
    * no requests are waiting, increment the number of available requests.
+   *
+   * If the pool is fully replenished, resolve all barrier promises.
    */
   public async return() {
     // Check for waiting resolves, pop one instead if it's not empty.
@@ -48,7 +51,20 @@ class RequestPool {
       this.queue.pop()();
     } else {
       this.numAvailable += 1;
+      if (this.numAvailable === this.MAX_SIMULTANEOUS_REQUESTS) {
+        while (!this.barrierQueue.isEmpty()) {
+          this.barrierQueue.pop()();
+        }
+      }
     }
+  }
+
+  /**
+   * Waits for the pool to be completely replenished before resolving. This is
+   * very similar to OMP's `#pragma barrier`.
+   */
+  public async barrier() {
+    return new Promise((resolve) => this.barrierQueue.push(resolve));
   }
 }
 
