@@ -2,7 +2,8 @@ import CacheStatus from './cache/CacheStatus';
 import metacache from './cache/metacache';
 import loadConfig from './config';
 import Driver from './driver';
-import { parse } from './parsers/pdf';
+import { parseExcel } from './parsers/excel';
+import { parsePdf } from './parsers/pdf';
 
 async function main() {
   const {username, password} = loadConfig();
@@ -13,14 +14,16 @@ async function main() {
 
   const driver = new Driver(username, password);
   await driver.auth();
-  const status = await driver.checkCache();
-  if (status === CacheStatus.OUT_OF_DATE) {
+
+  if (await driver.checkCache() === CacheStatus.OUT_OF_DATE) {
     await metacache.updateCache(driver, await driver.latestSize());
   }
 
-  const http = await driver.getPdf(37436, 517, 86);
+  const excel = await driver.getExcel(37436, 517, 86);
+  console.log(parseExcel(excel));
 
-  console.log(await parse(http));
+  const pdf = await driver.getPdf(37436, 517, 86);
+  console.log(await parsePdf(pdf));
 }
 
 main();

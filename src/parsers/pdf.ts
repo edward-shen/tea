@@ -38,7 +38,7 @@ interface PDFData {
  *
  * @param pdfBuffer A pdf file, in binary.
  */
-async function parse(pdfBuffer): Promise<PDFData> {
+async function parsePdf(pdfBuffer): Promise<PDFData> {
   const pdfData = (await pdf(pdfBuffer)).text;
   const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
   const summaryIterator = [
@@ -77,5 +77,5 @@ export {
   PDFSummary,
   PDFQuestion,
   PDFData,
-  parse,
+  parsePdf,
 };

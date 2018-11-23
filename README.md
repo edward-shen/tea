@@ -9,8 +9,8 @@ TEA is a tool to help analyze ApplyWeb's TRACE reviews.
   - [x] Hitting the endpoint that returns JSON metadata for all courses.
   - [x] Storing JSON metadata in a SQL database for caching.
   - [ ] Using the metadata to download the class report data
-    - [ ] Downloading Excel sheets into memory
-    - [ ] Get individual question distributions from excel sheets.
+    - [x] Downloading Excel sheets into memory
+    - [x] Get individual question distributions from excel sheets.
     - [ ] Mass downloading of memory
     - [x] Downloading PDFs into memory
     - [x] Get central tendencies from PDF files.

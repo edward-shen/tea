@@ -10,16 +10,25 @@ const questionColIDs = [
   'respCount', 'respRate',
 ];
 
+const teacherColIDs = [
+  'id', 'abbrev', 'question',
+  '5', '4', '3', '2', '1',
+  'mean', 'median', 'stdDev',
+  'respCount', 'respRate',
+];
+
 const hoursColIDs = [
   'id', 'abbrev', 'question',
   '17-20', '13-16', '9-12', '5-8', '1-4',
   'respCount',
 ];
 
-function parse(excelBuffer) {
-  const lol = readFileSync('/home/edward/Downloads/xls.xls');
-  const parsed = read(lol);
+function parseExcel(excelBuffer) {
+  const parsed = read(excelBuffer);
   const data = utils.sheet_to_json(parsed.Sheets[parsed.SheetNames[0]]);
+
+  const responseInclDeclines = Object.values(Object.values(data)[4])[1];
+  const declines = Object.values(Object.values(data)[5])[1];
 
   const questions = Object.values(data)
     .map((row) => Object.values(row))
@@ -27,12 +36,20 @@ function parse(excelBuffer) {
     .map((row) => {
       if (row.length === 14) {
         return zip(questionColIDs, row);
+      } else if (row.length === 13) {
+        return zip(teacherColIDs, row);
       } else {
         return zip(hoursColIDs, row);
       }
     });
 
-  console.log();
+  // FIXME: dehack this
+  // tslint:disable-next-line:no-string-literal
+  questions['resps'] = responseInclDeclines;
+  // tslint:disable-next-line:no-string-literal
+  questions['declines'] = declines;
+
+  return questions;
 }
 
-export { parse };
+export { parseExcel };
