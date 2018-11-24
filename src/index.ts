@@ -30,32 +30,38 @@ async function main() {
   bar.start(Object.values(meta).length, 0);
 
   for (const data of Object.values(meta)) {
+    // These must be blocking, and must be located here to avoid the race
+    // condition where all iterations are waiting for a request to get pdf data.
+    // In other words, this operation must be atomic.
     await pool.request();
     await pool.request();
+    driver.getExcel(data.id, data.instructorId, data.termId).then((rawExcel) => {
+      const excel = parseExcel(rawExcel);
+      driver.getPdf(data.id, data.instructorId, data.termId).then(async (rawPdf) => {
+        pool.return();
+        pool.return();
+        let pdf = await parsePdf(rawPdf);
+        if (!pdf) {
+          console.log(`PDF Parsing failed for ${data.id}, ${data.instructorId}, ${data.termId}`);
+          pdf = {} as PDFData;
+        }
 
-    const excel = parseExcel(await driver.getExcel(data.id, data.instructorId, data.termId));
-    let pdf = await parsePdf(await driver.getPdf(data.id, data.instructorId, data.termId));
-    if (!pdf) {
-      console.log(`PDF Parsing failed for ${data.id}, ${data.instructorId}, ${data.termId}`);
-      pdf = {} as PDFData;
-    }
+        for (const question of excel) {
+          pdf[question['id']] = {
+            ...pdf[question['id']],
+            ...question,
+          };
 
-    for (const question of excel) {
-      pdf[question['id']] = {
-        ...pdf[question['id']],
-        ...question,
-      };
+          delete pdf[question['id']]['id'];
+        }
 
-      delete pdf[question['id']]['id'];
-    }
+        pdf['resps'] = excel['resps'];
+        pdf['declines'] = excel['declines'];
 
-    pdf['resps'] = excel['resps'];
-    pdf['declines'] = excel['declines'];
+        ClassCache.put(data.id, pdf);
+      });
+    });
 
-    ClassCache.put(data.id, pdf);
-
-    pool.return();
-    pool.return();
     bar.increment(1);
   }
 
