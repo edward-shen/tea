@@ -1,7 +1,7 @@
-import ProgressBar from '../ProgressBar';
 import { existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { Database } from 'sqlite3';
+import ProgressBar from '../ProgressBar';
 
 import Driver from '../Driver';
 import RequestPool from './RequestPool';
@@ -104,6 +104,11 @@ class MetaCache {
     return await this.all(`SELECT id, instructorId, termID from ${this.TABLE}`);
   }
 
+  /**
+   * Simple async/await wrapper for db.all() function.
+   *
+   * @param arg The SQL command to pass to the DB.
+   */
   private async all(arg) {
     return new Promise((resolve) => {
       this.db.all(arg, (_, res) => {
@@ -111,6 +116,7 @@ class MetaCache {
       });
     });
   }
+
   /**
    * Select the values that we want to add to our data from all JSON fields per
    * report, and then insert them in parallel since this should be a write-only
@@ -121,39 +127,25 @@ class MetaCache {
   private async addToCache(json: Metadata[]) {
     this.db.parallelize(() => { // Kinda like a #pragma lmao
       for (const report of json) {
-        const row = {
-          $id: report.id,
-          $instructorId: report.instructorId,
-          $termId: report.termId,
-          $subject: report.subject,
-          $number: Number(report.number),
-          $termTitle: report.termTitle,
-          $name: report.name,
-          $instructorFirstName: report.instructorFirstName,
-          $instructorLastName: report.instructorLastName,
-          $termEndDate: report.termEndDate,
-          $enrollment: report.enrollment,
-          $sourceId: Number(report.sourceId),
-          $type: report.type,
-          $level: report.level,
-        };
+        const row = [
+          report.id,
+          report.instructorId,
+          report.termId,
+          report.subject,
+          Number(report.number),
+          report.termTitle,
+          report.name,
+          report.instructorFirstName,
+          report.instructorLastName,
+          report.termEndDate,
+          report.enrollment,
+          Number(report.sourceId),
+          report.type,
+          report.level,
+        ];
 
-        this.db.run(`INSERT INTO ${this.TABLE} VALUES (
-          $id,
-          $instructorId,
-          $termId,
-          $subject,
-          $number,
-          $termTitle,
-          $name,
-          $instructorFirstName,
-          $instructorLastName,
-          $termEndDate,
-          $enrollment,
-          $sourceId,
-          $type,
-          $level
-        )`, row);
+        this.db.run(
+          `INSERT INTO ${this.TABLE} VALUES (${'?, '.repeat(row.length).slice(0, -2)})`, row);
       }
     });
   }
@@ -189,9 +181,9 @@ class MetaCache {
             sourceId INTEGER,
             type TEXT,
             level TEXT
-          )`, (err2, _) => {
-            if (err2) {
-              throw Error(err2);
+          )`, (err, _) => {
+            if (err) {
+              throw Error(err);
             }
             this.hasInit = true;
             console.log('Metacache database not found, created a new db!');
