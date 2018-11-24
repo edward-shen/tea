@@ -8,6 +8,8 @@ import metacache from './cache/MetaCache';
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
 
+// TODO: Handle read timeouts
+
 /**
  * Controls the driver requesting web data. Currently this is implemented as a
  * Selenium webdriver, but later this should be best implemented without the
@@ -217,6 +219,7 @@ class Driver {
       });
     });
   }
+
   /**
    * Returns an request form compatible object containing hidden HTML post
    * fields, and tries to decode the field values from their HTTP entity form.
@@ -224,16 +227,13 @@ class Driver {
    * @param html A string version of the HTML to get form data from.
    */
   private getHiddenPostData(html: string) {
-    const retVal = Object.create(null);
+    const retVal = {};
+
     const $ = load(html);
     const decoder = new XmlEntities();
 
-    const formFields = [];
-    const formNames = [];
-
     $('input').each((_, e) => {
-      formNames.push($(e).attr('name'));
-      formFields.push(decoder.decode($(e).attr('value')));
+      retVal[$(e).attr('name')] = decoder.decode($(e).attr('value'));
     });
 
     return retVal;

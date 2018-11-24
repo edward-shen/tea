@@ -68,7 +68,7 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
   'deptMedian', 'univMedian', 'stdev'];
   const questionKeys = ['courseMean', 'deptMean', 'univMean'];
 
-  const ret = Object.create(null);
+  const ret = {};
   matched.map((str) => {
     // Each data is in the form of (\d\.\d)*, which needs to be split up.
     const row = [];
@@ -84,7 +84,7 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
     }
   });
 
-  return ret;
+  return ret as PDFData;
 }
 
 export {
