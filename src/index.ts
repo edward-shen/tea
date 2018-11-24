@@ -1,4 +1,3 @@
-import { Bar, Presets } from 'cli-progress';
 import CacheStatus from './cache/CacheStatus';
 import ClassCache from './cache/ClassCache';
 import metacache from './cache/MetaCache';
@@ -7,6 +6,7 @@ import loadConfig from './Config';
 import Driver from './Driver';
 import { parseExcel } from './parsers/excel';
 import { parsePdf, PDFData } from './parsers/pdf';
+import ProgressBar from './ProgressBar';
 
 async function main() {
   const {username, password} = loadConfig();
@@ -29,8 +29,8 @@ async function main() {
     console.log('Class DB up to date!');
   } else {
     console.log('Class DB not up to date, updating!');
-    const bar = new Bar({}, Presets.shades_classic);
-    bar.start(Object.values(meta).length, 0);
+    const bar = new ProgressBar(Object.values(meta).length);
+    bar.start();
 
     for (const data of Object.values(meta)) {
       // These must be blocking, and must be located here to avoid the race
@@ -70,7 +70,7 @@ async function main() {
         });
       });
 
-      bar.increment(1);
+      bar.increment();
     }
 
     await pool.barrier();

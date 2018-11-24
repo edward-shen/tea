@@ -1,4 +1,4 @@
-import { Bar, Presets } from 'cli-progress';
+import ProgressBar from '../ProgressBar';
 import { existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { Database } from 'sqlite3';
@@ -80,9 +80,9 @@ class MetaCache {
     const start = await this.size();
     const toFetch: number = retrievedNum - start;
     const rpp = 100;
-    const bar = new Bar({}, Presets.shades_classic);
+    const bar = new ProgressBar(Math.ceil(toFetch / rpp));
 
-    bar.start(Math.ceil(toFetch / rpp), 0);
+    bar.start();
 
     const pool = new RequestPool();
 
@@ -91,7 +91,7 @@ class MetaCache {
       await pool.request();
       driver.getMetaPage(i, rpp).then((res) => {
         this.addToCache(res.data);
-        bar.increment(1);
+        bar.increment();
         pool.return();
       });
     }
