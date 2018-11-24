@@ -41,6 +41,12 @@ interface PDFData {
 async function parsePdf(pdfBuffer): Promise<PDFData> {
   const pdfData = (await pdf(pdfBuffer)).text;
   const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
+
+  if (!matched) {
+    // PDF regex did not match anything, apparently this is common.
+    return null;
+  }
+
   const summaryIterator = [
     'courseSum',
     'learningSum',

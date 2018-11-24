@@ -6,7 +6,7 @@ import RequestPool from './cache/RequestPool';
 import loadConfig from './Config';
 import Driver from './Driver';
 import { parseExcel } from './parsers/excel';
-import { parsePdf } from './parsers/pdf';
+import { parsePdf, PDFData } from './parsers/pdf';
 
 async function main() {
   const {username, password} = loadConfig();
@@ -34,7 +34,11 @@ async function main() {
     await pool.request();
 
     const excel = parseExcel(await driver.getExcel(data.id, data.instructorId, data.termId));
-    const pdf = await parsePdf(await driver.getPdf(data.id, data.instructorId, data.termId));
+    let pdf = await parsePdf(await driver.getPdf(data.id, data.instructorId, data.termId));
+    if (!pdf) {
+      console.log(`PDF Parsing failed for ${data.id}, ${data.instructorId}, ${data.termId}`);
+      pdf = {} as PDFData;
+    }
 
     for (const question of excel) {
       pdf[question['id']] = {
