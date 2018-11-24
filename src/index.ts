@@ -51,15 +51,17 @@ async function main() {
             pdf = {} as PDFData;
           }
 
+          // Merge the excel data into the pdf data
           for (const question of excel) {
             const id = question.id;
             delete question.id;
             pdf[id] = {
-              ...pdf[question.id],
+              ...pdf[id],
               ...question,
             };
           }
 
+          // Merge the remaining meta data into the final data.
           const toAdd = {
             ...pdf,
             responses,
