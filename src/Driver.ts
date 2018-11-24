@@ -49,31 +49,32 @@ class Driver {
     }
 
     // Some variables that'll be used for authentication.
-    let response;
+    let resp;
+    let body;
     let postLocation;
     let $;
 
     // Get initial cookies for session authentication.
-    response = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
+    [resp, body] = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
 
     // Login page
-    $ = load(response.body);
+    $ = load(body);
     postLocation = $('form').attr('action');
-    response = await this.post({
+    [resp, body] = await this.post({
       url: `https://neuidmsso.neu.edu${postLocation}`,
       form: {
-        ...this.getHiddenPostData(response.body),
+        ...this.getHiddenPostData(body),
         username: this.username,
         password: this.password,
       },
     });
 
-    $ = load(response.body);
+    $ = load(body);
     postLocation = $('form').attr('action');
     this.jar.setCookie(`awBrowserCheck="true"`, 'https://www.applyweb.com/');
-    response = await this.post({
+    [resp, body] = await this.post({
       url: new XmlEntities().decode(postLocation),
-      form: this.getHiddenPostData(response.body),
+      form: this.getHiddenPostData(body),
     });
 
     this.hasAuth = true;
@@ -110,8 +111,17 @@ class Driver {
     this.checkStatus();
 
     const req = `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`;
-    const resp = await this.get({url: req});
-    return JSON.parse(resp.body);
+    const [resp, body] = await this.get({url: req});
+
+    // Might bug out if internet connection is bad...
+    try {
+      return JSON.parse(body);
+    } catch (e) {
+      console.log(resp.statusCode);
+      console.log(resp.headers);
+      console.log(body);
+      throw Error(`Got error ${e} when parsing JSON!`);
+    }
   }
 
   /**
@@ -160,10 +170,7 @@ class Driver {
 
     const queryString = `r=2&c=${courseID}&i=${instructorID}&t=${term}&d=false`;
     const url = `${BASE_URL}/new/showreport/${endpoint}?${queryString}`;
-    return (await this.get({
-      url,
-      encoding: null,
-    })).body;
+    return (await this.get({ url, encoding: null }))[1];
   }
 
   /**
@@ -179,32 +186,43 @@ class Driver {
 
   /**
    * Simple async/await wrapper for the request get function. Returns the
-   * callback args as an object instead.
+   * callback args as an tuple instead.
    *
    * @param options The options used to send to the request library.
    */
-  private async get(options): Promise<Response> {
-    return new Promise<Response>((resolve) => {
-      this.request.get(options, (err, resp, body) => resolve({
-        err, resp, body,
-      }));
-    });
+  private get(options): Promise<[any, string]> {
+    return this.requestOperation(this.request.get, options);
   }
 
   /**
    * Simple async/await wrapper for the request post function. Returns the
-   * callback args as an object instead.
+   * callback args as an tuple instead.
    *
    * @param options The options used to send to the request library.
    */
-  private async post(options): Promise<Response> {
-    return new Promise<Response>((resolve) => {
-      this.request.post(options, (err, resp, body) => resolve({
-        err, resp, body,
-      }));
-    });
+  private post(options): Promise<[any, string]> {
+    return this.requestOperation(this.request.post, options);
   }
 
+  /**
+   * Consequence of the DRY principle. Returns a Promise for the HTTP response
+   * and body, as a tuple.
+   *
+   * @param fn The request operation to call.
+   * @param options The options to pass to the request function.
+   */
+  private requestOperation(fn, options): Promise<[any, string]> {
+    return new Promise<[any, string]>((resolve, reject) => {
+      fn(options, (err, resp, body) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve([resp, body]);
+        }
+      });
+    });
+  }
   /**
    * Returns an request form compatible object containing hidden HTML post
    * fields, and tries to decode the field values from their HTTP entity form.
@@ -214,21 +232,15 @@ class Driver {
   private getHiddenPostData(html: string) {
     const retVal = Object.create(null);
     const $ = load(html);
-
-    const formNames = [];
-    $('input').each((_, e) => {
-      formNames.push($(e).attr('name'));
-    });
+    const decoder = new XmlEntities();
 
     const formFields = [];
-    $('input').each((_, e) => {
-      formFields.push($(e).attr('value'));
-    });
+    const formNames = [];
 
-    const decoder = new XmlEntities();
-    for (let i = 0; i < formNames.length; i++) {
-      retVal[formNames[i]] = decoder.decode(formFields[i]);
-    }
+    $('input').each((_, e) => {
+      formNames.push($(e).attr('name'));
+      formFields.push(decoder.decode($(e).attr('value')));
+    });
 
     return retVal;
   }

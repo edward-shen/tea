@@ -45,9 +45,12 @@ async function main() {
           // pool as fast as possible
           pool.return();
           pool.return();
+
+          // PDF parsing is very flaky.
           let pdf = await parsePdf(rawPdf);
           if (!pdf) {
             console.log(`PDF Parsing failed for ${data.id}, ${data.instructorId}, ${data.termId}`);
+            // Continue. We'll lose central tendencies but they're not critical.
             pdf = {} as PDFData;
           }
 
