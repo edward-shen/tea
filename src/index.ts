@@ -36,8 +36,10 @@ async function main() {
     await pool.request();
     await pool.request();
     driver.getExcel(data.id, data.instructorId, data.termId).then((rawExcel) => {
-      const excel = parseExcel(rawExcel);
+      const [excel, responses, declines] = parseExcel(rawExcel);
       driver.getPdf(data.id, data.instructorId, data.termId).then(async (rawPdf) => {
+        // Once both requests have been completed, return the request to the
+        // pool as fast as possible
         pool.return();
         pool.return();
         let pdf = await parsePdf(rawPdf);
@@ -47,18 +49,21 @@ async function main() {
         }
 
         for (const question of excel) {
-          pdf[question['id']] = {
-            ...pdf[question['id']],
+          const id = question.id;
+          delete question.id;
+          pdf[id] = {
+            ...pdf[question.id],
             ...question,
           };
-
-          delete pdf[question['id']]['id'];
         }
 
-        pdf['resps'] = excel['resps'];
-        pdf['declines'] = excel['declines'];
+        const toAdd = {
+          ...pdf,
+          responses,
+          declines,
+        };
 
-        ClassCache.put(data.id, pdf);
+        ClassCache.put(data.id, toAdd);
       });
     });
 
@@ -66,6 +71,7 @@ async function main() {
   }
 
   await pool.barrier();
+
   bar.stop();
   console.log('class cache generated!');
 }
