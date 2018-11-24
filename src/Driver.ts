@@ -8,12 +8,6 @@ import metacache from './cache/MetaCache';
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
 
-interface Response {
-  err: any;
-  resp: object;
-  body: string;
-}
-
 /**
  * Controls the driver requesting web data. Currently this is implemented as a
  * Selenium webdriver, but later this should be best implemented without the
