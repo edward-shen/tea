@@ -1,7 +1,12 @@
 import { Bar, Presets } from 'cli-progress';
+import { green, yellow } from 'colors';
 
 class ProgressBar {
-  private readonly bar = new Bar({}, Presets.shades_classic);
+  private readonly bar = new Bar({
+    format: '{bar} {percentage}% '
+      + `(${green('{value}')}/{total})`
+      + ` | {duration_formatted} ETA: ${yellow('{eta_formatted}')}`,
+  }, Presets.shades_classic);
   private readonly maxValue;
 
   public constructor(maxValue) {
