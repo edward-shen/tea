@@ -39,11 +39,19 @@ interface PDFData {
  * @param pdfBuffer A pdf file, in binary.
  */
 async function parsePdf(pdfBuffer): Promise<PDFData> {
-  const pdfData = (await pdf(pdfBuffer)).text;
+  let parsed = { text: '' };
+  try {
+    parsed = await pdf(pdfBuffer);
+  } catch (e) {
+    console.error('Could not even load pdf!', e);
+    return null;
+  }
+  const pdfData = parsed.text;
   const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
 
   if (!matched) {
     // PDF regex did not match anything, apparently this is common.
+    console.warn('PDF did not match anything!');
     return null;
   }
 
