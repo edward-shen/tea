@@ -40,10 +40,6 @@ class Driver {
    * TRACE website.
    */
   public async auth() {
-    if (this.hasAuth) {
-      console.warn('This webdriver has already been authorized!');
-    }
-
     // Some variables that'll be used for authentication.
     let resp;
     let body;
@@ -227,16 +223,16 @@ class Driver {
    * @param html A string version of the HTML to get form data from.
    */
   private getHiddenPostData(html: string) {
-    const retVal = {};
+    const postData = {};
 
     const $ = load(html);
     const decoder = new XmlEntities();
 
     $('input').each((_, e) => {
-      retVal[$(e).attr('name')] = decoder.decode($(e).attr('value'));
+      postData[$(e).attr('name')] = decoder.decode($(e).attr('value'));
     });
 
-    return retVal;
+    return postData;
   }
 }
 
