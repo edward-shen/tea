@@ -1,9 +1,9 @@
 import { existsSync, mkdirSync } from 'fs';
-import { resolve } from 'path';
 import { Database } from 'sqlite3';
-import ProgressBar from '../ProgressBar';
 
 import Driver from '../Driver';
+import ProgressBar from '../ProgressBar';
+import { DATABASE_LOCATION } from '../utils';
 import RequestPool from './RequestPool';
 
 /**
@@ -25,13 +25,11 @@ class MetaCache {
    * Opens up the existing cache and begin startup checks for the database.
    */
   public constructor() {
-    const dir = resolve(__dirname, '../../cache');
-
-    if (!existsSync(dir)) {
-      mkdirSync(dir);
+    if (!existsSync(DATABASE_LOCATION)) {
+      mkdirSync(DATABASE_LOCATION);
     }
 
-    this.db = new Database(`${dir}/meta.db`, () => this.init());
+    this.db = new Database(`${DATABASE_LOCATION}/meta.db`, () => this.init());
   }
 
   /**

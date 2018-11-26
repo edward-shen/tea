@@ -1,6 +1,7 @@
 import leveldown from 'leveldown';
 import levelup from 'levelup';
-import { resolve } from 'path';
+
+import { DATABASE_LOCATION } from '../utils';
 
 /**
  * Interface with the leveldb.
@@ -9,7 +10,7 @@ class ClassCache {
   private db;
 
   public constructor() {
-    this.db = levelup(leveldown(resolve(__dirname, '../../cache/classdb')));
+    this.db = levelup(leveldown(`${DATABASE_LOCATION}/classdb`));
   }
 
   public async size() {
