@@ -55,28 +55,28 @@ class Driver {
     let $;
 
     // Get initial cookies for session authentication.
-    body = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`})[1];
+    body = (await this.get({url: `${BASE_URL}/shibboleth/neu/36892`}))[1];
 
     // Login page
     $ = load(body);
     postLocation = $('form').attr('action');
-    body = await this.post({
+    body = (await this.post({
       url: `https://neuidmsso.neu.edu${postLocation}`,
       form: {
         ...this.getHiddenPostData(body),
         username: this.username,
         password: this.password,
       },
-    })[1];
+    }))[1];
 
     $ = load(body);
     postLocation = $('form').attr('action');
     // Injects cookie to bypass browser check.
     this.jar.setCookie(`awBrowserCheck="true"`, 'https://www.applyweb.com/');
-    body = await this.post({
+    body = (await this.post({
       url: new XmlEntities().decode(postLocation),
       form: this.getHiddenPostData(body),
-    })[1];
+    }))[1];
 
     this.hasAuth = true;
   }
