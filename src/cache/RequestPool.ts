@@ -20,8 +20,8 @@ class RequestPool {
   public readonly MAX_SIMULTANEOUS_REQUESTS = 50;
 
   private numAvailable = this.MAX_SIMULTANEOUS_REQUESTS;
-  private queue = new Deque();
-  private barrierQueue = new Deque();
+  private queue: Deque<() => void> = new Deque();
+  private barrierQueue: Deque<() => void> = new Deque();
 
   /**
    * Requests to make a request to the outgoing server. Will return immediately
