@@ -17,8 +17,8 @@ class ProgressBar {
     this.maxValue = maxValue;
   }
 
-  public start(): void {
-    this.bar.start(this.maxValue, 0);
+  public start(initVal = 0): void {
+    this.bar.start(this.maxValue, initVal);
   }
 
   public increment(): void {

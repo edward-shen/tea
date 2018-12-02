@@ -23,11 +23,12 @@ async function updateMetaCache() {
      // Might be better to work backwards.
 
     const start = await MetaCache.size();
-    const toFetch: number = await Driver.latestSize() - start;
+    const remoteSize = await Driver.latestSize();
+    const toFetch: number = remoteSize - start;
     const rpp = 100;
-    const bar = new ProgressBar(Math.ceil(toFetch / rpp));
+    const bar = new ProgressBar(Math.ceil(remoteSize / rpp));
 
-    bar.start();
+    bar.start(start);
     const pool = new RequestPool();
 
     // No need to ceil this
@@ -47,18 +48,19 @@ async function updateMetaCache() {
 
 async function updateClassCache() {
   const meta = await MetaCache.getReportData();
-  const metaSize = await ClassCache.size();
+  const classSize = await ClassCache.size();
   const pool = new RequestPool();
 
   const numClasses = await Driver.latestSize();
-  if (metaSize === numClasses) {
+  if (classSize === numClasses) {
     console.log('Class DB up to date!');
   } else {
     console.log('Class DB not up to date, updating!');
     const bar = new ProgressBar(Object.values(meta).length);
-    bar.start();
+    bar.start(classSize);
 
-    for (const data of Object.values(meta)) {
+    const metaData = Object.values(meta).slice(classSize);
+    for (const data of metaData) {
       // These must be blocking, and must be located here to avoid the race
       // condition where all iterations are waiting for a request to get pdf data.
       // In other words, this operation must be atomic.
