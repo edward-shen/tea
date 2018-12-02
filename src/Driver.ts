@@ -38,6 +38,7 @@ class Driver {
       jar: this.jar,
       followAllRedirects: true,
       headers: {
+        gzip: true,
         // This must be present for authentication to work.
         'User-Agent': `Your servers shouldn't return 401 on empty user-agents.`,
       },

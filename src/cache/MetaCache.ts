@@ -184,7 +184,7 @@ class MetaCache {
               throw Error(err);
             }
             this.hasInit = true;
-            console.log('Metacache database not found, created a new db!');
+            console.log('Metacache database not found. Created a new DB.');
             resolve();
           });
         } else {

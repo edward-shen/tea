@@ -17,6 +17,7 @@ async function main() {
 
   const driver = new Driver(username, password);
   await driver.auth();
+  console.log('Driver has been authenticated!');
 
   const numClasses = await driver.latestSize();
   if (await driver.checkCache() === CacheStatus.OUT_OF_DATE) {
@@ -24,8 +25,9 @@ async function main() {
   }
 
   const meta = await metacache.getReportData();
+  const metaSize = await ClassCache.size();
   const pool = new RequestPool();
-  if (await ClassCache.size() === numClasses) {
+  if (metaSize === numClasses) {
     console.log('Class DB up to date!');
   } else {
     console.log('Class DB not up to date, updating!');
