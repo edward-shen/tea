@@ -22,6 +22,14 @@ class Driver {
   private jar: CookieJar;
   private request;
 
+  /**
+   * Creates a wrapper around the request library that stores the username and
+   * password and has the ability to inject cookies. Also sets it up so that
+   * the servers will be able to properly handle requests from the library.
+   *
+   * @param username The NEU username to use.
+   * @param password The NEU password to use.
+   */
   public constructor(username: string, password: string) {
     this.username = username;
     this.password = password;
@@ -30,6 +38,7 @@ class Driver {
       jar: this.jar,
       followAllRedirects: true,
       headers: {
+        // This must be present for authentication to work.
         'User-Agent': `Your servers shouldn't return 401 on empty user-agents.`,
       },
     });
@@ -41,33 +50,33 @@ class Driver {
    */
   public async auth() {
     // Some variables that'll be used for authentication.
-    let resp;
     let body;
     let postLocation;
     let $;
 
     // Get initial cookies for session authentication.
-    [resp, body] = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`});
+    body = await this.get({url: `${BASE_URL}/shibboleth/neu/36892`})[1];
 
     // Login page
     $ = load(body);
     postLocation = $('form').attr('action');
-    [resp, body] = await this.post({
+    body = await this.post({
       url: `https://neuidmsso.neu.edu${postLocation}`,
       form: {
         ...this.getHiddenPostData(body),
         username: this.username,
         password: this.password,
       },
-    });
+    })[1];
 
     $ = load(body);
     postLocation = $('form').attr('action');
+    // Injects cookie to bypass browser check.
     this.jar.setCookie(`awBrowserCheck="true"`, 'https://www.applyweb.com/');
-    [resp, body] = await this.post({
+    body = await this.post({
       url: new XmlEntities().decode(postLocation),
       form: this.getHiddenPostData(body),
-    });
+    })[1];
 
     this.hasAuth = true;
   }
