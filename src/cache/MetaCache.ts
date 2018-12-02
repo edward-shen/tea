@@ -59,11 +59,13 @@ class MetaCache {
    * then return immediately.
    */
   public async finishInit() {
-    if (this.hasInit) {
-      return;
-    }
-
-    return new Promise((resolve) => this.awaitingInit.push(resolve));
+    return new Promise((resolve) => {
+      if (this.hasInit) {
+        resolve();
+      } else {
+        this.awaitingInit.push(resolve);
+      }
+    });
   }
 
   /**
@@ -117,15 +119,15 @@ class MetaCache {
    * tables already exist, then this function does nothing.
    */
   private async init() {
-    function resolveOk(resolve) {
+    const resolveOk = (resolve) => {
       this.hasInit = true;
       while (!this.awaitingInit.isEmpty()) {
         this.awaitingInit.pop()();
       }
       resolve();
-    }
+    };
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // Check if the table exists
       const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='${this.TABLE}'`;
       this.db.get(query, (err, res) => {
@@ -162,7 +164,6 @@ class MetaCache {
           resolveOk(resolve);
         }
       });
-      reject();
     });
   }
 }
