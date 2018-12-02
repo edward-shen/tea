@@ -55,11 +55,10 @@ class MetaCache {
 
   /**
    *
-   * @param driver The driver to use to scrape the data from.
    * @param retrievedNum The number of records to fetch
    * @param start The report to start at.
    */
-  public async updateCache(driver: Driver, retrievedNum: number) {
+  public async updateCache(retrievedNum: number) {
     if (!this.hasInit) {
       await this.init();
     }
@@ -87,7 +86,7 @@ class MetaCache {
     // No need to ceil this
     for (let i = 1; i < toFetch / rpp; i++) {
       await pool.request();
-      driver.getMetaPage(i, rpp).then((res) => {
+      Driver.getMetaPage(i, rpp).then((res) => {
         this.addToCache(res.data);
         bar.increment();
         pool.return();

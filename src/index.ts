@@ -15,13 +15,12 @@ async function main() {
     process.exit(-1);
   }
 
-  const driver = new Driver(username, password);
-  await driver.auth();
+  await Driver.auth();
   console.log('Driver has been authenticated!');
 
-  const numClasses = await driver.latestSize();
-  if (await driver.checkCache() === CacheStatus.OUT_OF_DATE) {
-    await metacache.updateCache(driver, numClasses);
+  const numClasses = await Driver.latestSize();
+  if (await Driver.checkCache() === CacheStatus.OUT_OF_DATE) {
+    await metacache.updateCache(numClasses);
   }
 
   const meta = await metacache.getReportData();
@@ -40,9 +39,9 @@ async function main() {
       // In other words, this operation must be atomic.
       await pool.request();
       await pool.request();
-      driver.getExcel(data.id, data.instructorId, data.termId).then((rawExcel) => {
+      Driver.getExcel(data.id, data.instructorId, data.termId).then((rawExcel) => {
         const [excel, responses, declines] = parseExcel(rawExcel);
-        driver.getPdf(data.id, data.instructorId, data.termId).then(async (rawPdf) => {
+        Driver.getPdf(data.id, data.instructorId, data.termId).then(async (rawPdf) => {
           // Once both requests have been completed, return the request to the
           // pool as fast as possible
           pool.return();

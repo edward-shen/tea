@@ -41,3 +41,4 @@ function loadConfig(): Config {
 }
 
 export default loadConfig;
+export { Config };

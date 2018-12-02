@@ -4,6 +4,7 @@ import { CookieJar, defaults, jar } from 'request';
 import CacheStatus from './cache/CacheStatus';
 
 import metacache from './cache/MetaCache';
+import loadConfig, { Config } from './Config';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
@@ -27,12 +28,11 @@ class Driver {
    * password and has the ability to inject cookies. Also sets it up so that
    * the servers will be able to properly handle requests from the library.
    *
-   * @param username The NEU username to use.
-   * @param password The NEU password to use.
+   * @param config The config object to load data from.
    */
-  public constructor(username: string, password: string) {
-    this.username = username;
-    this.password = password;
+  public constructor(config: Config) {
+    this.username = config.username;
+    this.password = config.password;
     this.jar = jar();
     this.request = defaults({
       jar: this.jar,
@@ -246,4 +246,4 @@ class Driver {
   }
 }
 
-export default Driver;
+export default new Driver(loadConfig());
