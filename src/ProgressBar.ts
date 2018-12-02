@@ -1,6 +1,10 @@
 import { Bar, Presets } from 'cli-progress';
 import { green, yellow } from 'colors';
 
+/**
+ * Wrapper class for the progress bar module. It also standardizes the look of
+ * the progress bar.
+ */
 class ProgressBar {
   private readonly bar = new Bar({
     format: '{bar} {percentage}% '
@@ -16,6 +20,7 @@ class ProgressBar {
   public start(): void {
     this.bar.start(this.maxValue, 0);
   }
+
   public increment(): void {
     this.bar.increment(1);
   }
