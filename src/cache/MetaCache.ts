@@ -1,10 +1,8 @@
+import * as Deque from 'double-ended-queue';
 import { existsSync, mkdirSync } from 'fs';
 import { Database } from 'sqlite3';
 
-import Driver from '../Driver';
-import ProgressBar from '../ProgressBar';
 import { DATABASE_LOCATION } from '../utils';
-import RequestPool from './RequestPool';
 
 /**
  * Keeps track of metadata, storing information in a SQLite database. This was
@@ -20,6 +18,7 @@ class MetaCache {
   private readonly TABLE = 'metadata';
   private db: Database;
   private hasInit = false;
+  private awaitingInit: Deque<() => void> = new Deque();
 
   /**
    * Opens up the existing cache and begin startup checks for the database.
@@ -38,9 +37,7 @@ class MetaCache {
    * number of rows in the cache.
    */
   public async size(): Promise<number> {
-    if (!this.hasInit) {
-      await this.init();
-    }
+    await this.finishInit();
 
     return new Promise<number>((ok) => {
       this.db.get(`SELECT COUNT(*) FROM ${this.TABLE}`, (err, res) => {
@@ -53,65 +50,20 @@ class MetaCache {
     });
   }
 
-  /**
-   *
-   * @param retrievedNum The number of records to fetch
-   * @param start The report to start at.
-   */
-  public async updateCache(retrievedNum: number) {
-    if (!this.hasInit) {
-      await this.init();
-    }
-
-    /**
-     * TODO: So this code is under the assumption that we will always add $rpp
-     * amounts every time, and that the database is consistent to every $rpp
-     * reports. This might not be the case, so we need to delete entries until
-     * we hit a multiple of $rpp, and then start fetching from there.
-     * There isn't really a clean way to do this otherwise because of the
-     * limitations of the API.
-     */
-
-     // Might be better to work backwards.
-
-    const start = await this.size();
-    const toFetch: number = retrievedNum - start;
-    const rpp = 100;
-    const bar = new ProgressBar(Math.ceil(toFetch / rpp));
-
-    bar.start();
-
-    const pool = new RequestPool();
-
-    // No need to ceil this
-    for (let i = 1; i < toFetch / rpp; i++) {
-      await pool.request();
-      Driver.getMetaPage(i, rpp).then((res) => {
-        this.addToCache(res.data);
-        bar.increment();
-        pool.return();
-      });
-    }
-
-    await pool.barrier();
-    bar.stop();
-  }
-
   public async getReportData() {
     return await this.all(`SELECT id, instructorId, termID from ${this.TABLE}`);
   }
 
   /**
-   * Simple async/await wrapper for db.all() function.
-   *
-   * @param arg The SQL command to pass to the DB.
+   * Waits for init to finish before returning. If the cache was already init,
+   * then return immediately.
    */
-  private async all(arg) {
-    return new Promise((resolve) => {
-      this.db.all(arg, (_, res) => {
-        resolve(res);
-      });
-    });
+  public async finishInit() {
+    if (this.hasInit) {
+      return;
+    }
+
+    return new Promise((resolve) => this.awaitingInit.push(resolve));
   }
 
   /**
@@ -121,7 +73,7 @@ class MetaCache {
    *
    * @param json Array of JSON metadata to add to our database.
    */
-  private async addToCache(json: Metadata[]) {
+  public async addToCache(json: Metadata[]) {
     this.db.parallelize(() => { // Kinda like a #pragma lmao
       for (const report of json) {
         const row = [
@@ -148,11 +100,32 @@ class MetaCache {
   }
 
   /**
+   * Simple async/await wrapper for db.all() function.
+   *
+   * @param arg The SQL command to pass to the DB.
+   */
+  private async all(arg) {
+    return new Promise((resolve) => {
+      this.db.all(arg, (_, res) => {
+        resolve(res);
+      });
+    });
+  }
+
+  /**
    * Attempts to initialize the tables inside the DB if they don't exist. If the
    * tables already exist, then this function does nothing.
    */
   private async init() {
-    return new Promise((resolve) => {
+    function resolveOk(resolve) {
+      this.hasInit = true;
+      while (!this.awaitingInit.isEmpty()) {
+        this.awaitingInit.pop()();
+      }
+      resolve();
+    }
+
+    return new Promise((resolve, reject) => {
       // Check if the table exists
       const query = `SELECT name FROM sqlite_master WHERE type='table' AND name='${this.TABLE}'`;
       this.db.get(query, (err, res) => {
@@ -182,15 +155,14 @@ class MetaCache {
             if (err) {
               throw Error(err);
             }
-            this.hasInit = true;
             console.log('Metacache database not found. Created a new DB.');
-            resolve();
+            resolveOk(resolve);
           });
         } else {
-          this.hasInit = true;
-          resolve();
+          resolveOk(resolve);
         }
       });
+      reject();
     });
   }
 }

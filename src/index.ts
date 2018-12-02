@@ -1,4 +1,4 @@
-import CacheStatus from './cache/CacheStatus';
+import { updateMetaCache } from './cache/CacheManager';
 import ClassCache from './cache/ClassCache';
 import metacache from './cache/MetaCache';
 import RequestPool from './cache/RequestPool';
@@ -18,14 +18,13 @@ async function main() {
   await Driver.auth();
   console.log('Driver has been authenticated!');
 
-  const numClasses = await Driver.latestSize();
-  if (await Driver.checkCache() === CacheStatus.OUT_OF_DATE) {
-    await metacache.updateCache(numClasses);
-  }
+  await updateMetaCache();
 
   const meta = await metacache.getReportData();
   const metaSize = await ClassCache.size();
   const pool = new RequestPool();
+
+  const numClasses = await Driver.latestSize();
   if (metaSize === numClasses) {
     console.log('Class DB up to date!');
   } else {
