@@ -28,7 +28,7 @@ function loadConfig(): Config {
     config = readFileSync(CONFIG_FILENAME, 'utf8');
   } else {
     writeFileSync(CONFIG_FILENAME, 'username = \npassword = \n');
-    console.error(`Config not found. Please fill out ${CONFIG_FILENAME}`);
+    console.log(`Config not found. Please fill out ${CONFIG_FILENAME}`);
     return;
   }
 

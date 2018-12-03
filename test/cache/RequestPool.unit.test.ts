@@ -1,4 +1,4 @@
-import RequestPool from '../../src/cache/RequestPool';
+import RequestPool, { MAX_SIMULTANEOUS_REQUESTS } from '../../src/cache/RequestPool';
 
 describe('Requesting requests should work', () => {
 
@@ -38,30 +38,34 @@ describe('Requesting requests should work', () => {
 
   it('should hold off until all resolve with a barrier', async () => {
     let count = 0;
-    for (let i = 0; i < requestPool.MAX_SIMULTANEOUS_REQUESTS / 2; i++) {
-      requestPool.request().then(() => {
+    for (let i = 0; i < MAX_SIMULTANEOUS_REQUESTS / 2; i++) {
+      requestPool.request().then((id) => {
         count++;
-        requestPool.return();
+        requestPool.return(id);
       });
     }
 
     await requestPool.barrier();
 
-    expect(count).toBe(Math.floor(requestPool.MAX_SIMULTANEOUS_REQUESTS / 2));
+    expect(count).toBe(Math.floor(MAX_SIMULTANEOUS_REQUESTS / 2));
   });
 
+  it('should resolve a barrier request immediately if clean', async () => {
+    await requestPool.barrier();
+  }, 10);
+
   it('should wait on returning if there are none to hand out.', async () => {
-    for (let i = 0; i < requestPool.MAX_SIMULTANEOUS_REQUESTS; i++) {
-      await requestPool.request();
+    let singleId;
+    for (let i = 0; i < MAX_SIMULTANEOUS_REQUESTS; i++) {
+      singleId = await requestPool.request();
     }
 
     // Now there aren't any more slots available, force something to be added
     requestPool.request();
-
     expect(requestPool.status).toBeFalsy();
 
-    requestPool.return();
-
+    // Returning one should make show that there is no queue.
+    requestPool.return(singleId);
     expect(requestPool.status).toBeTruthy();
   });
 });

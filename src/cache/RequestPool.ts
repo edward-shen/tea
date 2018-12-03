@@ -71,7 +71,7 @@ class RequestPool {
       + difference * RTT_NEW_WEIGHT_MODIFIER;
 
     // Check for waiting resolves, pop one instead if it's not empty.
-    if (!this.available.isEmpty() && !this.queue.isEmpty()) {
+    if (this.available.isEmpty() && !this.queue.isEmpty()) {
       this.queue.pop()(await this.checkout());
     } else {
       this.available.push(id);
@@ -97,6 +97,9 @@ class RequestPool {
    * very similar to OMP's `#pragma barrier`.
    */
   public async barrier() {
+    if (this.available.toArray().length === MAX_SIMULTANEOUS_REQUESTS) {
+      return;
+    }
     return new Promise((resolve) => this.barrierQueue.push(resolve));
   }
 
@@ -119,3 +122,4 @@ class RequestPool {
 }
 
 export default RequestPool;
+export { MAX_SIMULTANEOUS_REQUESTS };
