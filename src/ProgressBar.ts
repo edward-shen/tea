@@ -1,5 +1,5 @@
 import { Bar, Presets } from 'cli-progress';
-import { green, yellow } from 'colors';
+import { green } from 'colors';
 
 /**
  * Wrapper class for the progress bar module. It also standardizes the look of
@@ -9,7 +9,7 @@ class ProgressBar {
   private readonly bar = new Bar({
     format: '{bar} {percentage}% '
       + `(${green('{value}')}/{total})`
-      + ` | {duration_formatted} ETA: ${yellow('{eta_formatted}')}`,
+      + ` | {duration_formatted}}`,
   }, Presets.shades_classic);
   private readonly maxValue;
 
