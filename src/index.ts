@@ -1,4 +1,4 @@
-import { updateClassCache, updateMetaCache } from './cache/CacheManager';
+import { cleanupDB, updateClassCache, updateMetaCache } from './cache/CacheManager';
 import loadConfig from './Config';
 import Driver from './Driver';
 
@@ -14,6 +14,9 @@ async function main() {
 
   await updateMetaCache();
   await updateClassCache();
+
+  // Close DBs when we're done
+  cleanupDB();
 }
 
 main();

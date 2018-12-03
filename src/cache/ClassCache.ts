@@ -9,8 +9,9 @@ class ClassCache {
   private collection;
 
   public constructor() {
-    // this.db = levelup(leveldown(`${DATABASE_LOCATION}/classdb`));
-    this.client = new MongoClient('mongodb://localhost:27017');
+    this.client = new MongoClient('mongodb://localhost:27017', {
+      useNewUrlParser: true,
+    });
     this.client.connect((_, client) => {
       this.db = client.db('tea');
       this.collection = this.db.collection('class');
@@ -18,7 +19,7 @@ class ClassCache {
   }
 
   public async size() {
-    return await this.collection.count();
+    return await this.collection.countDocuments();
   }
 
   public async put(doc) {
@@ -27,6 +28,10 @@ class ClassCache {
 
   public async get(query) {
     return await this.collection.find(query);
+  }
+
+  public close() {
+    this.client.close();
   }
 }
 

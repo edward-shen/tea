@@ -111,4 +111,8 @@ async function updateClassCache() {
   }
 }
 
-export { updateClassCache, updateMetaCache  };
+function cleanupDB() {
+  ClassCache.close();
+}
+
+export { updateClassCache, updateMetaCache, cleanupDB };
