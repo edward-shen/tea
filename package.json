@@ -11,6 +11,7 @@
     "test": "yarn jest --coverage",
     "test:watch": "yarn jest --coverage --watch",
     "start": "node ./dist/index.js",
+    "start:db": "mkdir -p ./cache/classcache && mongod --dbpath ./cache/classcache",
     "build": "yarn tsc",
     "build:watch": "yarn tsc -w",
     "clean": "rm -rf yarn-error.log dist coverage",
