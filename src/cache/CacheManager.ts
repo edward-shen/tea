@@ -93,13 +93,11 @@ async function updateClassCache() {
           }
 
           // Merge the remaining meta data into the final data.
-          const toAdd = {
+          ClassCache.put({
             ...pdf,
             responses,
             declines,
-          };
-
-          ClassCache.put(data.id, toAdd);
+          });
         });
       });
 

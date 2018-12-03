@@ -1,50 +1,32 @@
-import leveldown from 'leveldown';
-import levelup from 'levelup';
-
-import { DATABASE_LOCATION } from '../utils';
+import { MongoClient } from 'mongodb';
 
 /**
  * Interface with the leveldb.
  */
 class ClassCache {
+  private client;
   private db;
+  private collection;
 
   public constructor() {
-    this.db = levelup(leveldown(`${DATABASE_LOCATION}/classdb`));
+    // this.db = levelup(leveldown(`${DATABASE_LOCATION}/classdb`));
+    this.client = new MongoClient('mongodb://localhost:27017');
+    this.client.connect((_, client) => {
+      this.db = client.db('tea');
+      this.collection = this.db.collection('class');
+    });
   }
 
   public async size() {
-    let count = 0;
-    let isDone = false;
-    const iterator = this.db.iterator();
-
-    while (!isDone) {
-      await new Promise((resolve, reject) => {
-        iterator.next((err, key, value) => {
-          if (err) {
-            reject();
-          }
-
-          if (key && value) {
-            count += 1;
-          } else {
-            isDone = true;
-          }
-
-          resolve();
-        });
-      });
-    }
-
-    return count;
+    return await this.collection.count();
   }
 
-  public async put(key: string, value) {
-    await this.db.put(key, JSON.stringify(value));
+  public async put(doc) {
+    await this.collection.insertOne(doc);
   }
 
-  public async get(key: string) {
-    return JSON.parse((await this.db.get(key)).toString());
+  public async get(query) {
+    return await this.collection.find(query);
   }
 }
 
