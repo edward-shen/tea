@@ -1,5 +1,10 @@
 import * as Deque from 'double-ended-queue';
 
+const MAX_SIMULTANEOUS_REQUESTS = 50;
+const RTT_NEW_WEIGHT_MODIFIER = 0.2;
+const MAX_AVG_RTT_MILLIS = 10000;
+const RESET_TIMEOUT_MILLIS = 60000; // 1 minute
+
 /**
  * <rant>
  * I really should need to make this class. Turns out, if you send 271 requests
@@ -15,24 +20,36 @@ import * as Deque from 'double-ended-queue';
  * So here I am, making a class that limits the number of fucking simultaneous
  * requests. Hell, it doesn't really do anything but keep track of requesters.
  * </rant>
+ *
+ * Well, regardless, making a custom pool will let me have finer control over
+ * stuff like displaying progress bars.
+ *
+ * This pool will
  */
 class RequestPool {
-  public readonly MAX_SIMULTANEOUS_REQUESTS = 50;
 
-  private numAvailable = this.MAX_SIMULTANEOUS_REQUESTS;
-  private queue: Deque<() => void> = new Deque();
+  private available: Deque<number>  = new Deque(MAX_SIMULTANEOUS_REQUESTS);
+  private queue: Deque<(id: any) => void> = new Deque();
   private barrierQueue: Deque<() => void> = new Deque();
+
+  private checkoutTimes = new Array(MAX_SIMULTANEOUS_REQUESTS);
+  private runningRTTAvg = 0;
+
+  constructor() {
+    for (let i = 0; i < MAX_SIMULTANEOUS_REQUESTS; i++) {
+      this.available.push(i);
+    }
+  }
 
   /**
    * Requests to make a request to the outgoing server. Will return immediately
    * if there we haven't reached the maximum number of in-air requests.
    * Otherwise, the promise will resolve whenever a slot becomes available.
    */
-  public async request() {
-    return new Promise((resolve) => {
-      if (this.numAvailable > 0) {
-        this.numAvailable -= 1;
-        resolve();
+  public async request(): Promise<number> {
+    return new Promise<number>(async (resolve) => {
+      if (!this.available.isEmpty()) {
+        resolve(await this.checkout());
       } else {
         this.queue.push(resolve);
       }
@@ -46,13 +63,17 @@ class RequestPool {
    *
    * If the pool is fully replenished, resolve all barrier promises.
    */
-  public async return() {
+  public async return(id: number) {
+    const difference = Date.now() - this.checkoutTimes[id];
+    this.runningRTTAvg = this.runningRTTAvg * (1 - RTT_NEW_WEIGHT_MODIFIER)
+      + difference * RTT_NEW_WEIGHT_MODIFIER;
+
     // Check for waiting resolves, pop one instead if it's not empty.
-    if (this.numAvailable === 0 && !this.queue.isEmpty()) {
-      this.queue.pop()();
+    if (!this.available.isEmpty() && !this.queue.isEmpty()) {
+      this.queue.pop()(await this.checkout());
     } else {
-      this.numAvailable += 1;
-      if (this.numAvailable === this.MAX_SIMULTANEOUS_REQUESTS) {
+      this.available.push(id);
+      if (this.available.toArray().length === MAX_SIMULTANEOUS_REQUESTS) {
         while (!this.barrierQueue.isEmpty()) {
           this.barrierQueue.pop()();
         }
@@ -75,6 +96,23 @@ class RequestPool {
    */
   public async barrier() {
     return new Promise((resolve) => this.barrierQueue.push(resolve));
+  }
+
+  /**
+   * Performs the bookkeeping needed to "checkout" a request. If the RTT time is
+   * greater than the allowed value, wait until checking out.
+   */
+  private async checkout(): Promise<number> {
+    if (this.runningRTTAvg >= MAX_AVG_RTT_MILLIS) {
+      console.warn('Average RTT exceeded limit, waiting timeout before continuing!');
+      await new Promise((resolve) => setTimeout(() => resolve(), RESET_TIMEOUT_MILLIS));
+      this.runningRTTAvg = 0;
+      console.log('Resuming after timeout');
+    }
+
+    const threadId = this.available.pop();
+    this.checkoutTimes[threadId] = Date.now();
+    return threadId;
   }
 }
 

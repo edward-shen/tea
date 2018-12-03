@@ -33,11 +33,11 @@ async function updateMetaCache() {
 
     // No need to ceil this
     for (let i = 1; i < toFetch / rpp; i++) {
-      await pool.request();
+      const threadId = await pool.request();
       Driver.getMetaPage(i, rpp).then((res) => {
         MetaCache.addToCache(res.data);
         bar.increment();
-        pool.return();
+        pool.return(threadId);
       });
     }
 
@@ -64,15 +64,15 @@ async function updateClassCache() {
       // These must be blocking, and must be located here to avoid the race
       // condition where all iterations are waiting for a request to get pdf data.
       // In other words, this operation must be atomic.
-      await pool.request();
-      await pool.request();
+      const threadId1 = await pool.request();
+      const threadId2 = await pool.request();
       Driver.getExcel(data.id, data.instructorId, data.termId).then((rawExcel) => {
         const [excel, responses, declines] = parseExcel(rawExcel);
         Driver.getPdf(data.id, data.instructorId, data.termId).then(async (rawPdf) => {
           // Once both requests have been completed, return the request to the
           // pool as fast as possible
-          pool.return();
-          pool.return();
+          pool.return(threadId1);
+          pool.return(threadId2);
 
           // PDF parsing is very flaky.
           let pdf = await parsePdf(rawPdf);
