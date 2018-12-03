@@ -50,8 +50,11 @@ class MetaCache {
     });
   }
 
+  /**
+   * Returns the necessary metadata needed for class fetching and caching.
+   */
   public async getReportData() {
-    return await this.all(`SELECT id, instructorId, termID from ${this.TABLE}`);
+    return await this.all(`SELECT * from ${this.TABLE}`);
   }
 
   /**

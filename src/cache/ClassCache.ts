@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 /**
- * Interface with the leveldb.
+ * Interface with the MongoDB server.
  */
 class ClassCache {
   private client;
