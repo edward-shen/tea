@@ -15,6 +15,7 @@ async function main() {
   await updateMetaCache();
   await updateClassCache();
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   // Close DBs when we're done
   cleanupDB();
 }

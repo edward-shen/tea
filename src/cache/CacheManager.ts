@@ -121,8 +121,10 @@ async function updateClassCache() {
     bar.stop();
     console.log('Class Cache generated!');
 
-    console.warn(`Could not parse info for ${bad.length} entries:`);
-    console.warn(JSON.stringify(bad));
+    if (bad.length !== 0) {
+      console.warn(`Could not parse info for ${bad.length} entries:`);
+      console.warn(JSON.stringify(bad));
+    }
   }
 }
 
