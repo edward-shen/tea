@@ -24,7 +24,9 @@ const RESET_TIMEOUT_MILLIS = 60000; // 1 minute
  * Well, regardless, making a custom pool will let me have finer control over
  * stuff like displaying progress bars.
  *
- * This pool will
+ * This pool will keep track of timeout, holding off on returning a slot to let
+ * the server on the other side cool down if needed, since it looks like their
+ * slowly grinds to a halt if given too many requests.
  */
 class RequestPool {
 
