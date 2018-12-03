@@ -1,8 +1,9 @@
 import * as Deque from 'double-ended-queue';
+import Driver from '../Driver';
 
 const MAX_SIMULTANEOUS_REQUESTS = 50;
 const RTT_NEW_WEIGHT_MODIFIER = 0.2;
-const MAX_AVG_RTT_MILLIS = 10000;
+const MAX_AVG_RTT_MILLIS = 60000;
 const RESET_TIMEOUT_MILLIS = 60000; // 1 minute
 
 /**
@@ -109,10 +110,10 @@ class RequestPool {
    */
   private async checkout(): Promise<number> {
     if (this.runningRTTAvg >= MAX_AVG_RTT_MILLIS) {
-      console.warn('Average RTT exceeded limit, waiting timeout before continuing!');
-      await new Promise((resolve) => setTimeout(() => resolve(), RESET_TIMEOUT_MILLIS));
+      console.warn('Average RTT exceeded limit, reauthing.');
+      // await new Promise((resolve) => setTimeout(() => resolve(), RESET_TIMEOUT_MILLIS));
+      await Driver.auth();
       this.runningRTTAvg = 0;
-      console.log('Resuming after timeout');
     }
 
     const threadId = this.available.pop();
