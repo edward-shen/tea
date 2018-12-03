@@ -4,18 +4,18 @@
 TEA is a tool to help analyze ApplyWeb's TRACE reviews.
 
 ## Roadmap
-- [ ] Extraction and storage of data
+- [x] Extraction and storage of data
   - [x] Creating a program that can authorize against the TRACE website.
   - [x] Hitting the endpoint that returns JSON metadata for all courses.
   - [x] Storing JSON metadata in a SQL database for caching.
-  - [ ] Using the metadata to download the class report data
+  - [x] Using the metadata to download the class report data
     - [x] Downloading Excel sheets into memory
     - [x] Get individual question distributions from excel sheets.
-    - [ ] Mass downloading of memory
+    - [x] Mass downloading of memory
     - [x] Downloading PDFs into memory
     - [x] Get central tendencies from PDF files.
-    - [ ] Mass downloading of memory
-  - [ ] Storing information received above into a database.
+    - [x] Mass downloading of memory
+  - [x] Storing information received above into a database.
 - [ ] Manipulation of data
   - [ ] Normalize section ratings against an overall class central tendency
   - [ ] Transform data from flat row data into nested documents (perhaps querying a relational database generated above and generating a document-based NoSQL one instead)?
@@ -30,6 +30,14 @@ TEA is a tool to help analyze ApplyWeb's TRACE reviews.
 Currently, TRACE reviews are authenticated via SAML. To access reviews, we need to first authenticate our application against the university's SAML. After we have authenticated our application, we start looking at how many reports we need to fetch. TEA caches the metadata after we fetch it, so we don't hit ApplyWeb's endpoint every time we run this. If the cache doesn't have as many reports as live data, we'll fetch as many as we need. (Currently brokenish).
 
 ## Configuration
+
+### Prerequisites
+
+This requires the following:
+- Node (tested on v10.13.0, YMMV with older versions)
+- MongoDB (tested on v4.0.4, YMMV with older versions)
+
+Please refer to your package distributor for help on getting these installed. These must also be in your path.
 
 ### Installation
 
