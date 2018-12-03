@@ -7,6 +7,9 @@ import ClassCache from './ClassCache';
 import MetaCache from './MetaCache';
 import RequestPool from './RequestPool';
 
+/**
+ * Asynchronously update the metacache, if it's not up to date.
+ */
 async function updateMetaCache() {
   if (await Driver.checkCache() === CacheStatus.OUT_OF_DATE) {
     await MetaCache.finishInit();
@@ -19,8 +22,7 @@ async function updateMetaCache() {
      * There isn't really a clean way to do this otherwise because of the
      * limitations of the API.
      */
-
-     // Might be better to work backwards.
+    // Might be better to work backwards.
 
     const start = await MetaCache.size();
     const remoteSize = await Driver.latestSize();
@@ -46,6 +48,9 @@ async function updateMetaCache() {
   }
 }
 
+/**
+ * Asynchronously updates the class cache, if it's not up to date.
+ */
 async function updateClassCache() {
   const meta = await MetaCache.getReportData();
   const classSize = await ClassCache.size();
@@ -59,6 +64,7 @@ async function updateClassCache() {
     const bar = new ProgressBar(Object.values(meta).length);
     bar.start(classSize);
 
+    const bad = [];
     const metaData = Object.values(meta).slice(classSize);
     for (const data of metaData) {
       // These must be blocking, and must be located here to avoid the race
@@ -77,7 +83,11 @@ async function updateClassCache() {
           // PDF parsing is very flaky.
           let pdf = await parsePdf(rawPdf);
           if (!pdf) {
-            console.log(`PDF Parsing failed for ${data.id}, ${data.instructorId}, ${data.termId}`);
+            bad.push({
+              id: data.id,
+              instructorId: data.instructorId,
+              termId: data.termId,
+            });
             // Continue. We'll lose central tendencies but they're not critical.
             pdf = {} as PDFData;
           }
@@ -97,6 +107,8 @@ async function updateClassCache() {
             ...pdf,
             responses,
             declines,
+            subject: data.subject,
+            ...data,
           });
         });
       });
@@ -108,6 +120,9 @@ async function updateClassCache() {
 
     bar.stop();
     console.log('Class Cache generated!');
+
+    console.warn(`Could not parse info for ${bad.length} entries:`);
+    console.warn(JSON.stringify(bad));
   }
 }
 
