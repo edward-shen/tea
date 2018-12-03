@@ -14,7 +14,7 @@
     "start:db": "mkdir -p ./cache/classcache && mongod --dbpath ./cache/classcache",
     "build": "yarn tsc",
     "build:watch": "yarn tsc -w",
-    "clean": "rm -rf yarn-error.log dist coverage",
+    "clean": "rm -rf yarn-error.log dist coverage ./*.tar.gz",
     "clean:cache": "rm -rf cache",
     "clean:all": "yarn clean && yarn clean:cache && rm -rf node_modules"
   },

@@ -5,3 +5,4 @@ dist/
 coverage/
 config.toml
 yarn-error.log
+*.tar.gz

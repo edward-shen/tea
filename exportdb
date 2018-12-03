@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+timestamp=$(date +%Y-%m-%d_%H-%M-%S)
+
+tar -zcvf $timestamp.tar.gz cache
