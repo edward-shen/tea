@@ -24,4 +24,13 @@ function zip(keys: any[], values: any[]) {
   return ret;
 }
 
-export { DATABASE_LOCATION, zip };
+/**
+ * Delays execution for the provided length.
+ *
+ * @param millis The number of milliseconds to delay.
+ */
+async function delay(millis: number) {
+  return new Promise((resolve) => setTimeout(resolve, millis));
+}
+
+export { DATABASE_LOCATION, delay, zip };

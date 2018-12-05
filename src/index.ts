@@ -1,6 +1,7 @@
 import { cleanupDB, updateClassCache, updateMetaCache } from './cache/CacheManager';
 import loadConfig from './Config';
 import Driver from './Driver';
+import { delay } from './utils';
 
 async function main() {
   const {username, password} = loadConfig();
@@ -15,7 +16,7 @@ async function main() {
   await updateMetaCache();
   await updateClassCache();
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await delay(1000);
   // Close DBs when we're done
   cleanupDB();
 }
