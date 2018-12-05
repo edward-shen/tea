@@ -69,7 +69,7 @@ async function updateClassCache() {
     for (const data of metaData) {
       // These must be blocking, and must be located here to avoid the race
       // condition where all iterations are waiting for a request to get pdf data.
-      // In other words, this operation must be atomic.
+      // In other words, this operation must be atomic as possible.
       const threadId1 = await pool.request();
       const threadId2 = await pool.request();
       Driver.getExcel(data.id, data.instructorId, data.termId).then((rawExcel) => {
