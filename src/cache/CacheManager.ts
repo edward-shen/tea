@@ -107,7 +107,6 @@ async function updateClassCache() {
             ...pdf,
             responses,
             declines,
-            subject: data.subject,
             ...data,
           });
         });
