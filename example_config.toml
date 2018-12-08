@@ -1,0 +1,10 @@
+[driver]
+  username = "EXAMPLE_USERNAME"
+  password = "EXAMPLE_PASSWORD"
+
+[class_db]
+  address = "localhost"
+  port = 27017
+
+[metadata_db]
+  location = "cache/"

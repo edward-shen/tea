@@ -1,5 +1,8 @@
 import { MongoClient } from 'mongodb';
 
+import Config from '../Config';
+import ExitCode from '../ExitCodes';
+
 /**
  * Interface with the MongoDB server.
  */
@@ -9,13 +12,13 @@ class ClassCache {
   private collection;
 
   public constructor() {
-    this.client = new MongoClient('mongodb://localhost:27017', {
+    this.client = new MongoClient(`mongodb://${Config.mongodb.address}:${Config.mongodb.port}`, {
       useNewUrlParser: true,
     });
     this.client.connect((err, client) => {
       if (err) {
         console.error('Could not connect to MongoDB; did you run yarn start:db?');
-        process.exit(-1);
+        process.exit(ExitCode.MONGODB_NO_RESP);
       }
 
       this.db = client.db('tea');

@@ -4,7 +4,8 @@ import { CookieJar, defaults, jar } from 'request';
 import CacheStatus from './cache/CacheStatus';
 
 import metacache from './cache/MetaCache';
-import loadConfig, { Config } from './Config';
+import Config from './Config';
+import ExitCode from './ExitCodes';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
@@ -30,9 +31,9 @@ class Driver {
    *
    * @param config The config object to load data from.
    */
-  public constructor(config: Config) {
-    this.username = config.username;
-    this.password = config.password;
+  public constructor() {
+    this.username = Config.driver.username;
+    this.password = Config.driver.password;
     this.jar = jar();
     this.request = defaults({
       jar: this.jar,
@@ -71,6 +72,13 @@ class Driver {
     }))[1];
 
     $ = load(body);
+
+    // Title tag only exists if we failed authentication.
+    if ($('title').text()) {
+      console.log(`Auth failed with username ${this.username} and password ${this.password}`);
+      process.exit(ExitCode.FAILED_AUTH);
+    }
+
     postLocation = $('form').attr('action');
     // Injects cookie to bypass browser check.
     this.jar.setCookie(`awBrowserCheck="true"`, 'https://www.applyweb.com/');
@@ -80,6 +88,7 @@ class Driver {
     }))[1];
 
     this.hasAuth = true;
+    console.log('Driver has been authenticated!');
   }
 
   /**
@@ -246,4 +255,4 @@ class Driver {
   }
 }
 
-export default new Driver(loadConfig());
+export default new Driver();

@@ -1,6 +1,7 @@
 import { resolve } from 'path';
+import Config from './Config';
 
-const DATABASE_LOCATION = resolve(__dirname, '../cache/');
+const DATABASE_LOCATION = resolve(__dirname, `../${Config.database.location}`);
 
 /**
  * Returns an object with key-value pairs. This will fill as many key-value

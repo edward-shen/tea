@@ -1,9 +1,21 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { copyFileSync } from 'fs';
+import { resolve } from 'path';
 import { parse } from 'toml';
 
+import ExitCode from './ExitCodes';
 interface Config {
-  username: string;
-  password: string;
+  driver: {
+    username: string;
+    password: string;
+  };
+  database: {
+    location: string;
+  };
+  mongodb: {
+    address: string;
+    port: number;
+  };
 }
 
 const CONFIG_FILENAME = 'config.toml';
@@ -14,10 +26,14 @@ const CONFIG_FILENAME = 'config.toml';
  */
 function loadConfig(): Config {
 
+  let envData = null;
+
   if (process.env.TEA_USERNAME && process.env.TEA_PASSWORD) {
-    return {
-      username: process.env.TEA_USERNAME,
-      password: process.env.TEA_PASSWORD,
+    envData = {
+      driver: {
+        username: process.env.TEA_USERNAME,
+        password: process.env.TEA_PASSWORD,
+      },
     };
   }
 
@@ -27,18 +43,24 @@ function loadConfig(): Config {
   if (existsSync(CONFIG_FILENAME)) {
     config = readFileSync(CONFIG_FILENAME, 'utf8');
   } else {
-    writeFileSync(CONFIG_FILENAME, 'username = \npassword = \n');
-    console.log(`Config not found. Please fill out ${CONFIG_FILENAME}`);
-    return;
+    copyFileSync(
+      resolve(__dirname, `example_${CONFIG_FILENAME}`),
+      resolve(__dirname, CONFIG_FILENAME));
+    console.error(`Config not found. Please fill out ${CONFIG_FILENAME}.`);
+    process.exit(ExitCode.CONFIG_NOT_FOUND);
   }
 
   // Attempt to parse config file
   try {
-    return parse(config);
+    return {
+      ...parse(config),
+      ...envData,
+    };
   } catch (e) {
-    throw Error(`Parsing error on line ${e.line}, column ${e.column}: ${e.message}`);
+    console.error(`Parsing error on line ${e.line}, column ${e.column}: ${e.message}`);
+    process.exit(ExitCode.CONFIG_PARSE_ERR);
   }
 }
 
-export default loadConfig;
+export default loadConfig();
 export { Config };
