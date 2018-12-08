@@ -12,7 +12,12 @@ class ClassCache {
     this.client = new MongoClient('mongodb://localhost:27017', {
       useNewUrlParser: true,
     });
-    this.client.connect((_, client) => {
+    this.client.connect((err, client) => {
+      if (err) {
+        console.error('Could not connect to MongoDB; did you run yarn start:db?');
+        process.exit(-1);
+      }
+
       this.db = client.db('tea');
       this.collection = this.db.collection('class');
     });
