@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { copyFileSync } from 'fs';
 import { resolve } from 'path';
 import { parse } from 'toml';

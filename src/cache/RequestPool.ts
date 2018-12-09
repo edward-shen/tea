@@ -4,22 +4,14 @@ import Driver from '../Driver';
 const MAX_SIMULTANEOUS_REQUESTS = 50;
 const RTT_NEW_WEIGHT_MODIFIER = 0.2;
 const MAX_AVG_RTT_MILLIS = 60000;
-const RESET_TIMEOUT_MILLIS = 60000; // 1 minute
 
 /**
  * <rant>
- * I really should need to make this class. Turns out, if you send 271 requests
- * to the TRACE server, you'll just cause whatever puny server that it's hosted
- * on to drop everything and just return a 500. But not because you sent too
- * many requests at the same time (well, yes, because of that), but because
- * there's a nested exception where the spring framework they're using can't
- * create a Transaction.
- *
  * If you're going to fail, at least fail in the way that you don't have
  * stacktrace enabled. Basic security principles, people!
  *
  * So here I am, making a class that limits the number of fucking simultaneous
- * requests. Hell, it doesn't really do anything but keep track of requesters.
+ * requests.
  * </rant>
  *
  * Well, regardless, making a custom pool will let me have finer control over

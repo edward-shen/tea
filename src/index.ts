@@ -1,5 +1,4 @@
 import { cleanupDB, updateClassCache, updateMetaCache } from './cache/CacheManager';
-import loadConfig from './Config';
 import Driver from './Driver';
 import { delay } from './utils';
 
