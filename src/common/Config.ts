@@ -16,6 +16,9 @@ interface Config {
     address: string;
     port: number;
   };
+  dev_server: {
+    express_port: number;
+  };
 }
 
 const CONFIG_FILENAME = 'config.toml';
