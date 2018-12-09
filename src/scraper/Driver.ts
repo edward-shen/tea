@@ -3,9 +3,9 @@ import { XmlEntities } from 'html-entities';
 import { CookieJar, defaults, jar } from 'request';
 import CacheStatus from './cache/CacheStatus';
 
+import Config from '../common/Config';
+import ExitCode from '../common/ExitCodes';
 import metacache from './cache/MetaCache';
-import Config from './Config';
-import ExitCode from './ExitCodes';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';

@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
-import Config from '../Config';
-import ExitCode from '../ExitCodes';
+import Config from '../../common/Config';
+import ExitCode from '../../common/ExitCodes';
 
 /**
  * Interface with the MongoDB server.
