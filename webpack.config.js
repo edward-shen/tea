@@ -40,6 +40,8 @@ module.exports = {
 
   devServer: {
     contentBase: "dist/frontend/",
+    host: '0.0.0.0',
+    port: 8080,
   },
 
   plugins: [
