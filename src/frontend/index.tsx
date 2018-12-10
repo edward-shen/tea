@@ -1,10 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+
+import CardView from './CardView';
+import Navbar from './Navbar';
+
 import './css/base.scss';
 
-import Hello from './Hello';
-
-ReactDOM.render(
-    <Hello compiler='TypeScript' framework='React' />,
+ReactDOM.render([
+    <Navbar />,
+    <CardView />,
+    ],
     document.getElementById('app'),
 );
