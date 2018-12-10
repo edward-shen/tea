@@ -3,7 +3,7 @@ import { parseExcel } from '../parsers/excel';
 import { parsePdf, PDFData } from '../parsers/pdf';
 import ProgressBar from '../ProgressBar';
 import CacheStatus from './CacheStatus';
-import ClassCache from './ClassCache';
+import ClassCache from '../../common/MongoClient';
 import MetaCache from './MetaCache';
 import RequestPool from './RequestPool';
 

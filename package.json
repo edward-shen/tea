@@ -14,7 +14,7 @@
     "start:db": "mkdir -p ./cache/classcache && mongod --dbpath ./cache/classcache",
     "start:express": "node ./dist/webserver/index.js",
     "start:serve": "webpack-dev-server --hot --mode development",
-    "start:dev": "concurrently -k \"yarn start:db\" \"yarn start:express\" \"yarn start:serve\"",
+    "start:dev": "concurrently -k \"yarn start:express\" \"yarn start:serve\"",
     "build:backend": "tsc",
     "build:frontend": "webpack",
     "build:watch": "tsc -w",

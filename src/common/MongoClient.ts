@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
-import Config from '../../common/Config';
-import ExitCode from '../../common/ExitCodes';
+import Config from './Config';
+import ExitCode from './ExitCodes';
 
 /**
  * Interface with the MongoDB server.
@@ -35,7 +35,8 @@ class ClassCache {
   }
 
   public async get(query) {
-    return await this.collection.find(query);
+
+    return await this.collection.find(query).toArray();
   }
 
   public close() {

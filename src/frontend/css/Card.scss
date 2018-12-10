@@ -3,16 +3,16 @@
   max-width: 15vw;
   min-height: 200px;
   max-height: 16vh;
-  margin-right: 1em;
-  margin-bottom: 1em;
+  margin: 1em;
   display: flex;
   flex-direction: column;
-
 
   header {
     padding: 10px;
     background-color: #4af3d1;
     flex-grow: 1;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
   }
 
   h2 {

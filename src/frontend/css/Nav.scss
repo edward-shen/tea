@@ -1,0 +1,31 @@
+nav {
+  display: flex;
+  align-items: center;
+  height: 75px;
+
+  form {
+    display: inherit;
+    padding: 1em;
+  }
+
+  input {
+    font-size: 1em;
+    outline: none;
+    font-weight: 700;
+    font-family: inherit;
+    width: 30em;
+    transition: .3s;
+    border: none;
+
+    &:focus {
+      width: 45em;
+      &::placeholder {
+        color: transparent;
+      }
+    }
+
+    &::placeholder {
+
+    }
+  }
+}

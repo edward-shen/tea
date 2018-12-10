@@ -10,7 +10,7 @@ interface CardProps {
 class Card extends React.Component<CardProps, {}> {
   public render() {
     return (
-      <section className='card hover-shadow'>
+      <section className='card hover-shadow rounded'>
         <header>
           <h2>{this.props.header}</h2>
           <h3>{this.props.subheader}</h3>
@@ -22,3 +22,4 @@ class Card extends React.Component<CardProps, {}> {
 }
 
 export default Card;
+export { CardProps };

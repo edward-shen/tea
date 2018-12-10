@@ -1,27 +1,30 @@
 
 import * as React from 'react';
-import Card from './Card';
+import Card, { CardProps } from './Card';
 
 import './css/CardView.scss';
 
-class CardView extends React.Component<{}, {}> {
+interface CardViewState {
+  search: CardProps[];
+}
+
+class CardView extends React.Component<{}, CardViewState> {
+
+  public constructor(props) {
+    super(props);
+    this.state = {search: []};
+  }
+
+  public componentDidMount() {
+    fetch('api/express_backend')
+      .then(res => res.json())
+      .then(res => this.setState({search: res}));
+  }
+
   public render() {
-    const data = [
-      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
-      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
-      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
-      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
-      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
-      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
-      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
-      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
-      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
-      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
-      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
-      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},];
     return (
     <main className="main-view">
-      { data.map((cardData) => {
+      { this.state.search.map((cardData) => {
         return <Card header={cardData.header} subheader={cardData.subheader} />
       }) }
     </main>
