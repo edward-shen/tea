@@ -16,7 +16,7 @@ class CardView extends React.Component<{}, CardViewState> {
   }
 
   public componentDidMount() {
-    fetch('api/express_backend')
+    fetch('api/search')
       .then(res => res.json())
       .then(res => this.setState({search: res}));
   }

@@ -35,8 +35,11 @@ class ClassCache {
   }
 
   public async get(query, page = 0, rpp = 10) {
-
-    return await this.collection.find(query).skip(page * rpp).limit(rpp).toArray();
+    return await this.collection
+      .find(query)
+      .skip(page * rpp)
+      .limit(rpp)
+      .toArray();
   }
 
   public close() {
