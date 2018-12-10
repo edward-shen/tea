@@ -5,6 +5,7 @@ import CardView from './CardView';
 import Navbar from './Navbar';
 
 import './css/Base.scss';
+import './css/Common.scss';
 
 ReactDOM.render([
     <Navbar />,
