@@ -34,7 +34,7 @@ class ClassCache {
     await this.collection.insertOne(doc);
   }
 
-  public async get(query, page = 0, rpp = 10) {
+  public async get(query, page = 0, rpp = 30) {
     return await this.collection
       .find(query)
       .skip(page * rpp)
