@@ -1,11 +1,11 @@
 
 import * as React from 'react';
-import Card, { CardProps } from './Card';
+import Card, { CardData } from './Card';
 
 import './css/CardView.scss';
 
 interface CardViewState {
-  search: CardProps[];
+  search: CardData[];
 }
 
 class CardView extends React.Component<{}, CardViewState> {
@@ -25,7 +25,7 @@ class CardView extends React.Component<{}, CardViewState> {
     return (
     <main className="main-view">
       { this.state.search.map((cardData) => {
-        return <Card header={cardData.header} subheader={cardData.subheader} />
+        return <Card data={cardData}/>
       }) }
     </main>
     );

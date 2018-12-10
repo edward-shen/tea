@@ -1,10 +1,14 @@
-import { CardProps } from "../frontend/Card";
+import { CardData } from "../frontend/Card";
 
-function toCard(data): CardProps {
-  return data.map( classData => {
+function toCard(data): CardData {
+  return data.map(report => {
     return {
-      header: `${classData.subject} ${classData.number}`,
-      subheader: classData.name,
+      header: `${report.subject} ${report.number}`,
+      subheader: report.name,
+      instructor: report.instructorLastName,
+      term: report.termTitle.slice(report.termTitle.indexOf(":") + 1),
+      classId: report.id,
+      instructorId: report.instructorId,
     }
   });
 }

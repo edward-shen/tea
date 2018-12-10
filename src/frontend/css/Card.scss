@@ -28,6 +28,11 @@
   }
 
   footer {
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
+    p {
+      margin: 0;
+    }
   }
 }
