@@ -6,7 +6,19 @@ import './css/CardView.scss';
 
 class CardView extends React.Component<{}, {}> {
   public render() {
-    const data = [{header: "CS 2500", subheader:"Fundamentals of Computer Science I"}, {header: "CS 2510", subheader:"Fundamentals of Computer Science II"}];
+    const data = [
+      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
+      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
+      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
+      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
+      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
+      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
+      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
+      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
+      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
+      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},
+      {header: "CS 2500", subheader:"Fundamentals of Computer Science I"},
+      {header: "CS 2510", subheader:"Fundamentals of Computer Science II"},];
     return (
     <main className="main-view">
       { data.map((cardData) => {

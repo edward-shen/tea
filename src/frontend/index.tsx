@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 import CardView from './CardView';
 import Navbar from './Navbar';
 
-import './css/base.scss';
+import './css/Base.scss';
 
 ReactDOM.render([
     <Navbar />,
