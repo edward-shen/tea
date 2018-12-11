@@ -1,8 +1,8 @@
 
 import * as React from 'react';
-import Card, { CardData } from './Card';
+import Card, { CardData } from '../Card';
 
-import './css/CardView.scss';
+import '../css/CardView.scss';
 
 interface CardViewState {
   search: CardData[];
