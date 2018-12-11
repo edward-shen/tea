@@ -1,8 +1,12 @@
 import * as React from 'react';
+import BaseProps from './BaseProps';
 
-class ReportView extends React.Component<{}, {}> {
+interface ReportViewProps extends BaseProps {
+}
+
+class ReportView extends React.Component<ReportViewProps, {}> {
   public render() {
-    return <h1>REPORT</h1>;
+    return <h1>{this.props.match.params.id}</h1>;
   }
 }
 
