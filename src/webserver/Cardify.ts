@@ -1,7 +1,7 @@
 import { CardData } from '../frontend/Card';
 
 function toCard(data): CardData {
-  return data.map(report => {
+  return data.map((report) => {
     return {
       header: `${report.subject} ${report.number}`,
       subheader: report.name,

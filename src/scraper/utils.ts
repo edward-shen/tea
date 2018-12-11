@@ -31,7 +31,7 @@ function zip(keys: any[], values: any[]) {
  * @param millis The number of milliseconds to delay.
  */
 async function delay(millis: number) {
-  return new Promise((resolve) => setTimeout(resolve, millis));
+  return new Promise(resolve => setTimeout(resolve, millis));
 }
 
 export { DATABASE_LOCATION, delay, zip };

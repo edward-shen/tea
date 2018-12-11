@@ -27,11 +27,11 @@ class RequestPool {
   private queue: Deque<(id: any) => void> = new Deque();
   private barrierQueue: Deque<() => void> = new Deque();
 
-  private checkoutTimes = new Array(MAX_SIMULTANEOUS_REQUESTS);
+  private checkoutTimes = [];
   private runningRTTAvg = 0;
 
   constructor() {
-    for (let i = 0; i < MAX_SIMULTANEOUS_REQUESTS; i++) {
+    for (let i = 0; i < MAX_SIMULTANEOUS_REQUESTS; i += 1) {
       this.available.push(i);
     }
   }
@@ -93,7 +93,7 @@ class RequestPool {
     if (this.available.toArray().length === MAX_SIMULTANEOUS_REQUESTS) {
       return;
     }
-    return new Promise((resolve) => this.barrierQueue.push(resolve));
+    return new Promise(resolve => this.barrierQueue.push(resolve));
   }
 
   /**

@@ -60,16 +60,18 @@ function parseExcel(excelBuffer) {
   const declines = Object.values(Object.values(data)[5])[1];
 
   const questions = Object.values(data)
-    .map((row) => Object.values(row))
-    .filter((row) => typeof row[0] === 'number')
+    .map(row => Object.values(row))
+    .filter(row => typeof row[0] === 'number')
     .map((row) => {
       if (row.length === 14) {
         return zip(questionColIDs, row);
-      } else if (row.length === 13) {
-        return zip(teacherColIDs, row);
-      } else {
-        return zip(hoursColIDs, row);
       }
+
+      if (row.length === 13) {
+        return zip(teacherColIDs, row);
+      }
+
+      return zip(hoursColIDs, row);
     }) as Array<Question | TRACEQuestion | HoursQuestion>;
 
   return [questions, responseInclDeclines, declines];
