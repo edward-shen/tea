@@ -5,6 +5,7 @@
   max-height: 16vh;
   margin: 1em;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
 
   header {
