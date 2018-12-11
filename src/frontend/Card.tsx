@@ -15,7 +15,7 @@ interface CardData {
 class Card extends React.Component<{data: CardData}, {}> {
   public render() {
     return (
-      <section className='card hover-shadow rounded'>
+      <Link className='card hover-shadow rounded' to={`/class/${this.props.data.classId}`}>
         <header>
           <h2>{this.props.data.header}</h2>
           <h3>{this.props.data.subheader}</h3>
@@ -26,7 +26,7 @@ class Card extends React.Component<{data: CardData}, {}> {
           </Link>
           <p>{this.props.data.term}</p>
         </footer>
-      </section>
+      </Link>
     );
   }
 }
