@@ -156,7 +156,7 @@ class MetaCache {
             sourceId INTEGER,
             type TEXT,
             level TEXT
-          )`,         (err, _) => {
+          )`, (err, _) => {
             if (err) {
               throw Error(err);
             }

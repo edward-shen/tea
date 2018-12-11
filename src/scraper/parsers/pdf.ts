@@ -66,8 +66,15 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
   const questionIterator = questionIDs[Symbol.iterator]();
 
   // The keys to associate row values with.
-  const summaryKeys = ['mean', 'deptMean', 'univMean', 'median',
-    'deptMedian', 'univMedian', 'stdev'];
+  const summaryKeys = [
+    'mean',
+    'deptMean',
+    'univMean',
+    'median',
+    'deptMedian',
+    'univMedian',
+    'stdev',
+  ];
   const questionKeys = ['courseMean', 'deptMean', 'univMean'];
 
   const ret = {};
