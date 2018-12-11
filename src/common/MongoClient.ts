@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 import Config from './Config';
-import ExitCode from './ExitCodes';
+import ExitCodes from './ExitCodes';
 
 /**
  * Interface with the MongoDB server.
@@ -18,7 +18,7 @@ class ClassCache {
     this.client.connect((err, client) => {
       if (err) {
         console.error('Could not connect to MongoDB; did you run yarn start:db?');
-        process.exit(ExitCode.MONGODB_NO_RESP);
+        process.exit(ExitCodes.MONGODB_NO_RESP);
       }
 
       this.db = client.db('tea');

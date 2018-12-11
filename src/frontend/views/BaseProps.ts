@@ -1,4 +1,4 @@
-import { match } from "react-router";
+import { match } from 'react-router';
 
 interface BaseParams {
   id: string;

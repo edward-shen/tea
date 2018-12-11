@@ -1,9 +1,9 @@
-import React = require("react");
+import * as React from 'react';
 
-class AboutView extends React.Component<{}, {}>{
+class AboutView extends React.Component<{}, {}> {
   public render() {
     return [
-    <h1>Henlo!</h1>
+      <h1>Henlo!</h1>,
     ];
   }
 }

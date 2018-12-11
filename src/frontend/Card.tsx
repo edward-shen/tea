@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
 import './css/Card.scss';
-import { Link } from 'react-router-dom';
 
 interface CardData {
   header: string;

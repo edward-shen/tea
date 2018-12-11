@@ -1,9 +1,9 @@
+import MongoClient from '../../common/MongoClient';
 import Driver from '../Driver';
 import { parseExcel } from '../parsers/excel';
 import { parsePdf, PDFData } from '../parsers/pdf';
 import ProgressBar from '../ProgressBar';
 import CacheStatus from './CacheStatus';
-import ClassCache from '../../common/MongoClient';
 import MetaCache from './MetaCache';
 import RequestPool from './RequestPool';
 
@@ -34,7 +34,7 @@ async function updateMetaCache() {
     const pool = new RequestPool();
 
     // No need to ceil this
-    for (let i = 1; i < toFetch / rpp; i++) {
+    for (let i = 1; i < toFetch / rpp; i += 1) {
       const threadId = await pool.request();
       Driver.getMetaPage(i, rpp).then((res) => {
         MetaCache.addToCache(res.data);
@@ -53,7 +53,7 @@ async function updateMetaCache() {
  */
 async function updateClassCache() {
   const meta = await MetaCache.getReportData();
-  const classSize = await ClassCache.size();
+  const classSize = await MongoClient.size();
   const pool = new RequestPool();
 
   const numClasses = await Driver.latestSize();
@@ -103,7 +103,7 @@ async function updateClassCache() {
           }
 
           // Merge the remaining meta data into the final data.
-          ClassCache.put({
+          MongoClient.put({
             ...pdf,
             responses,
             declines,
@@ -128,7 +128,7 @@ async function updateClassCache() {
 }
 
 function cleanupDB() {
-  ClassCache.close();
+  MongoClient.close();
 }
 
 export { updateClassCache, updateMetaCache, cleanupDB };

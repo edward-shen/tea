@@ -10,7 +10,7 @@ class ProgressBar {
     format: '{bar} {percentage}% '
       + `(${green('{value}')}/{total})`
       + ` | {duration_formatted}}`,
-  }, Presets.shades_classic);
+  },                             Presets.shades_classic);
   private readonly maxValue;
 
   public constructor(maxValue) {

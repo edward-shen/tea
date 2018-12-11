@@ -1,9 +1,9 @@
-import { existsSync, readFileSync } from 'fs';
-import { copyFileSync } from 'fs';
+import { copyFileSync, existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { parse } from 'toml';
 
-import ExitCode from './ExitCodes';
+import ExitCodes from './ExitCodes';
+
 interface Config {
   driver: {
     username: string;
@@ -50,7 +50,7 @@ function loadConfig(): Config {
       resolve(__dirname, `example_${CONFIG_FILENAME}`),
       resolve(__dirname, CONFIG_FILENAME));
     console.error(`Config not found. Please fill out ${CONFIG_FILENAME}.`);
-    process.exit(ExitCode.CONFIG_NOT_FOUND);
+    process.exit(ExitCodes.CONFIG_NOT_FOUND);
   }
 
   // Attempt to parse config file
@@ -61,7 +61,7 @@ function loadConfig(): Config {
     };
   } catch (e) {
     console.error(`Parsing error on line ${e.line}, column ${e.column}: ${e.message}`);
-    process.exit(ExitCode.CONFIG_PARSE_ERR);
+    process.exit(ExitCodes.CONFIG_PARSE_ERR);
   }
 }
 

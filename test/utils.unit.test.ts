@@ -1,4 +1,4 @@
-import { zip } from '../src/utils';
+import { zip } from '../src/scraper/utils';
 
 describe('zip tests', () => {
   it('should zip same-size key and value arrays together', () => {
@@ -9,7 +9,7 @@ describe('zip tests', () => {
 
     expect(zip(numbers, strings)).toStrictEqual({ 1: 'a', 2: 'b', 3: 'c' });
     expect(zip(strings, numbers)).toStrictEqual({ a: 1, b: 2, c: 3 });
-    expect(zip(mixed, mixed)).toStrictEqual({ 1: 1, b: 'b', 3: 3});
+    expect(zip(mixed, mixed)).toStrictEqual({ 1: 1, b: 'b', 3: 3 });
     expect(zip(mixed, mixed2)).toStrictEqual({ 1: 'a', b: 2, 3: 'c' });
   });
 
@@ -23,7 +23,7 @@ describe('zip tests', () => {
   it('should handle different sized inputs', () => {
     const short = [1, 2];
     const long = [3, 4, 5, 6];
-    expect(zip(short, long)).toStrictEqual({1: 3, 2: 4});
-    expect(zip(long, short)).toStrictEqual({3: 1, 4: 2});
+    expect(zip(short, long)).toStrictEqual({ 1: 3, 2: 4 });
+    expect(zip(long, short)).toStrictEqual({ 3: 1, 4: 2 });
   });
 });

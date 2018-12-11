@@ -1,7 +1,7 @@
 import * as pdf from 'pdf-parse';
 
 import { zip } from '../utils';
-import ids from './questionIDs';
+import questionIDs from './questionIDs';
 
 interface PDFSummary {
   mean: number;
@@ -61,11 +61,12 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
     'instructorSum',
     'effectivenessSum',
   ][Symbol.iterator]();
-  const questionIterator = ids[Symbol.iterator]();
+
+  const questionIterator = summaryIterator[Symbol.iterator]();
 
   // The keys to associate row values with.
   const summaryKeys = ['mean', 'deptMean', 'univMean', 'median',
-  'deptMedian', 'univMedian', 'stdev'];
+    'deptMedian', 'univMedian', 'stdev'];
   const questionKeys = ['courseMean', 'deptMean', 'univMean'];
 
   const ret = {};

@@ -1,8 +1,8 @@
 import * as Express from 'express';
 
-import toCard from './Cardify';
 import Config from '../common/Config';
 import Database from '../common/MongoClient';
+import toCard from './Cardify';
 
 const app = Express();
 

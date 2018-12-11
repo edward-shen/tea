@@ -12,20 +12,20 @@ class CardView extends React.Component<{}, CardViewState> {
 
   public constructor(props) {
     super(props);
-    this.state = {search: []};
+    this.state = { search: [] };
   }
 
   public componentDidMount() {
     fetch('api/search')
       .then(res => res.json())
-      .then(res => this.setState({search: res}));
+      .then(res => this.setState({ search: res }));
   }
 
   public render() {
     return (
-    <main className="main-view">
+    <main className='main-view'>
       { this.state.search.map((cardData) => {
-        return <Card data={cardData}/>
+        return <Card data={cardData}/>;
       }) }
     </main>
     );

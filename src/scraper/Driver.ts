@@ -4,8 +4,8 @@ import { CookieJar, defaults, jar } from 'request';
 import CacheStatus from './cache/CacheStatus';
 
 import Config from '../common/Config';
-import ExitCode from '../common/ExitCodes';
-import metacache from './cache/MetaCache';
+import ExitCodes from '../common/ExitCodes';
+import MetaCache from './cache/MetaCache';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
@@ -57,7 +57,7 @@ class Driver {
     let $;
 
     // Get initial cookies for session authentication.
-    body = (await this.get({url: `${BASE_URL}/shibboleth/neu/36892`}))[1];
+    body = (await this.get({ url: `${BASE_URL}/shibboleth/neu/36892` }))[1];
 
     // Login page
     $ = load(body);
@@ -76,7 +76,7 @@ class Driver {
     // Title tag only exists if we failed authentication.
     if ($('title').text()) {
       console.log(`Auth failed with username ${this.username} and password ${this.password}`);
-      process.exit(ExitCode.FAILED_AUTH);
+      process.exit(ExitCodes.FAILED_AUTH);
     }
 
     postLocation = $('form').attr('action');
@@ -98,18 +98,21 @@ class Driver {
     this.checkStatus();
 
     const latest: number = await this.latestSize();
-    const cacheSize: number = await metacache.size();
+    const cacheSize: number = await MetaCache.size();
 
     if (cacheSize > latest) {
       console.warn('Cache size (%s) is larger than latest (%s)', cacheSize, latest);
       return CacheStatus.OVERFILLED;
-    } else if (cacheSize < latest) {
+    }
+
+    if (cacheSize < latest) {
       console.log('Cache is not up to date. Performing incremental update.');
       return CacheStatus.OUT_OF_DATE;
-    } else {
-      console.log('Cache has already been fully updated!');
-      return CacheStatus.UP_TO_DATE;
     }
+
+    console.log('Cache has already been fully updated!');
+    return CacheStatus.UP_TO_DATE;
+
   }
 
   /**
@@ -122,7 +125,7 @@ class Driver {
     this.checkStatus();
 
     const req = `${BASE_URL}${METADATA_ENDPOINT}?excludeTA=false&page=${page}&rpp=${rpp}&termId=0`;
-    const [resp, body] = await this.get({url: req});
+    const [resp, body] = await this.get({ url: req });
 
     // Might bug out if internet connection is bad...
     try {
