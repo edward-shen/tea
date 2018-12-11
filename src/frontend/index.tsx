@@ -20,9 +20,9 @@ ReactDOM.render(
         <Route exact path="/"><CardView /></Route>
         <Route exact path="/about"><AboutView /></Route>
 
-        <Route path="/report/:id" component={ReportView}></Route>
-        <Route path="/class/:id"><ClassView /></Route>
-        <Route path="/prof/:id"><ProfessorView /></Route>
+        <Route path="/report/:id" component={ReportView} />
+        <Route path="/class/:id" component={ClassView} />
+        <Route path="/prof/:id" component={ProfessorView} />
       </Switch>
     </div>
   </BrowserRouter>, document.getElementById('app'));
