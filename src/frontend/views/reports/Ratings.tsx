@@ -8,13 +8,11 @@ interface Rating {
 
 // Colors were chosen here: https://www.colorhexa.com/d5f1fb
 enum BackgroundColors {
-  AMAZING = '#6dfcfc', // arbitrarily chosen
-  GREAT = '#d5f1fb',
+  GREAT = '#8ff4aa',
   GOOD = '#d5fbdf',
   NEUTRAL = 'inherit',
-  BAD = '#fbdfd5',
-  TERRIBLE = '#fbd5de',
-  HORRENDOUS = '#f48fa7', // arbitrarily chosen
+  BAD = '#fbd5de',
+  TERRIBLE = '#f7a6b9',
 }
 
 class Ratings extends React.Component<{ ratings: Rating[] }> {
@@ -23,10 +21,16 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
       this.props.ratings.map((rating) => {
         return (
           <section
-            className='rating rounded hover-shadow'
-            style={this.getBackgroundColor(rating.mean, rating.deptMean)}>
-            <h1>{rating.mean}</h1>
-            <p className='rating-small'>Dept. Avg: {rating.deptMean}</p>
+            className='rating rounded hover-shadow'>
+            <span>
+              <h1>{rating.mean}</h1>
+              <p className='rating-small'>Dept. Avg: {rating.deptMean}</p>
+              <p
+                style={this.getBackgroundColor(rating.mean, rating.deptMean)}
+                className='rating-difference'>
+                {this.getDifference(rating.mean, rating.deptMean)}
+              </p>
+            </span>
             <p>{rating.name}</p>
           </section>
         );
@@ -42,22 +46,31 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     const style = { backgroundColor: null };
 
     if (difference >= 3) {
-      style.backgroundColor = BackgroundColors.AMAZING;
-    } else if (difference >= 2) {
       style.backgroundColor = BackgroundColors.GREAT;
     } else if (difference >= 1) {
       style.backgroundColor = BackgroundColors.GOOD;
     } else if (difference >= 0) {
       style.backgroundColor = BackgroundColors.NEUTRAL;
-    } else if (difference >= -1) {
+    } else if (difference >= -3) {
       style.backgroundColor = BackgroundColors.BAD;
-    } else if (difference >= -2) {
-      style.backgroundColor = BackgroundColors.TERRIBLE;
     } else {
-      style.backgroundColor = BackgroundColors.HORRENDOUS;
+      style.backgroundColor = BackgroundColors.TERRIBLE;
+    }
+    return style;
+  }
+
+  private getDifference(mean: number, deptMean: number) {
+    const difference = (mean - deptMean).toFixed(1);
+
+    if (difference[0] === '-') {
+      return difference;
     }
 
-    return style;
+    if (difference === '0.0') {
+      return `±${difference}`;
+    }
+
+    return `+${difference}`;
   }
 }
 

@@ -8,12 +8,21 @@
   display: flex;
 
   h1 {
+    margin-top: 0.5em;
     margin-bottom: 0;
   }
 
   .rating-small {
     margin-top: 0;
     font-size: 0.75em;
+    margin-bottom: 16px;
+  }
+
+  .rating-difference {
+    display: inline-block;
+    border-radius: 16px;
+    min-width: 32px;
+    padding: 4px 12px;
   }
 }
 
