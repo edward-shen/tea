@@ -17,8 +17,8 @@ ReactDOM.render(
     <div>
       <Navbar />
       <Switch>
-        <Route exact path='/'><CardView /></Route>
-        <Route exact path='/about'><AboutView /></Route>
+        <Route exact path='/' component={CardView}></Route>
+        <Route exact path='/about' component={AboutView}></Route>
 
         <Route path='/report/:id' component={ReportView} />
         <Route path='/class/:id' component={ClassView} />
