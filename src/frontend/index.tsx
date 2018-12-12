@@ -7,7 +7,7 @@ import AboutView from './views/AboutView';
 import CardView from './views/CardView';
 import ClassView from './views/ClassView';
 import ProfessorView from './views/ProfessorView';
-import ReportView from './views/ReportView';
+import ReportView from './views/reports/ReportView';
 
 import './css/Base.scss';
 import './css/Common.scss';
