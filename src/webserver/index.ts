@@ -15,7 +15,7 @@ app.get('/api/report', async (req, res) => {
   MongoClient.get({ id: Number(req.query.id) })
     .then((result) => {
       if (result.length === 1) {
-        res.send(result);
+        res.send(result[0]);
       } else {
         res.send();
       }
