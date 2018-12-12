@@ -18,9 +18,9 @@ enum BackgroundColors {
 class Ratings extends React.Component<{ ratings: Rating[] }> {
   public render() {
     return (
-      this.props.ratings.map((rating) => {
+      this.props.ratings.map((rating, index) => {
         return (
-          <section
+          <section key={index} // Static data so this is ok.
             className='rating rounded hover-shadow'>
             <span>
               <span className='test'>
@@ -46,7 +46,6 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
   private getBackgroundColor(mean: number, deptMean: number) {
     // I was getting floating point errors so I converted them to integers.
     const difference = Math.round(10 * (mean - deptMean));
-    console.log(difference);
 
     const style = { backgroundColor: null };
 
