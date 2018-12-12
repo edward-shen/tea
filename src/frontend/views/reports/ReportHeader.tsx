@@ -2,14 +2,14 @@ import * as React from 'react';
 import Ratings, { Rating } from './Ratings';
 
 // Shouldn't I make an interface for this in the scraper...?
-interface ReportSummaryProps {
+interface ReportHeaderProps {
   subject: string;
   number: number;
   name: string;
   ratings: Rating[];
 }
 
-class ReportSummary extends React.Component<ReportSummaryProps> {
+class ReportHeader extends React.Component<ReportHeaderProps> {
   public constructor(props) {
     super(props);
     this.state = { data: {} };
@@ -28,4 +28,4 @@ class ReportSummary extends React.Component<ReportSummaryProps> {
   }
 }
 
-export default ReportSummary;
+export default ReportHeader;

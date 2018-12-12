@@ -1,18 +1,10 @@
 import * as React from 'react';
+import Colors from '../Colors';
 
 interface Rating {
   name: string;
   mean: number;
   deptMean: number;
-}
-
-// Colors were chosen here: https://www.colorhexa.com/d5f1fb
-enum BackgroundColors {
-  GREAT = '#8ff4aa',
-  GOOD = '#d5fbdf',
-  NEUTRAL = 'inherit',
-  BAD = '#fbd5de',
-  TERRIBLE = '#f7a6b9',
 }
 
 class Ratings extends React.Component<{ ratings: Rating[] }> {
@@ -50,15 +42,15 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     const style = { backgroundColor: null };
 
     if (difference >= 3) {
-      style.backgroundColor = BackgroundColors.GREAT;
+      style.backgroundColor = Colors.GREAT;
     } else if (difference >= 1) {
-      style.backgroundColor = BackgroundColors.GOOD;
+      style.backgroundColor = Colors.GOOD;
     } else if (difference >= 0) {
-      style.backgroundColor = BackgroundColors.NEUTRAL;
+      style.backgroundColor = Colors.NEUTRAL;
     } else if (difference >= -3) {
-      style.backgroundColor = BackgroundColors.BAD;
+      style.backgroundColor = Colors.BAD;
     } else {
-      style.backgroundColor = BackgroundColors.TERRIBLE;
+      style.backgroundColor = Colors.TERRIBLE;
     }
     return style;
   }

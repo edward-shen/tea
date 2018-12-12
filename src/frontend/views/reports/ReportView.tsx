@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Report from '../../../common/Report';
 import BaseProps from '../BaseProps';
-import ReportSummary from './ReportSummary';
+import ReportHeader from './ReportHeader';
 
 import '../../css/reports/ReportView.scss';
+import ReportBody from './ReportBody';
 interface ReportViewState {
   data: Report;
 }
@@ -33,13 +34,14 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
     ];
 
     return (
-      <main>
-        <ReportSummary
+      <main className='reportview'>
+        <ReportHeader
           subject={this.state.data.subject}
           number={this.state.data.number}
           name={this.state.data.name}
           ratings={ratingsToShow}
         />
+        <ReportBody data={this.state.data} />
       </main>);
   }
 }

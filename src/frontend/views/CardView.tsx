@@ -25,7 +25,7 @@ class CardView extends React.Component<{}, CardViewState> {
 
   public render() {
     return (
-    <main className='main-view'>
+    <main className='cardview'>
       { this.state.search.map((cardData) => {
         return <Card key={objectHash.MD5(cardData)} data={cardData}/>;
       }) }

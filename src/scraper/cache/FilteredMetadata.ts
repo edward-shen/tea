@@ -16,6 +16,8 @@ interface FilteredMetadata {
   sourceId: number;
   type: string;
   level: any;
+  responses: number;
+  declines: number;
 }
 
 export default FilteredMetadata;
