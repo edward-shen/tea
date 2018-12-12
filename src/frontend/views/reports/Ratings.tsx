@@ -24,17 +24,18 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
             className='rating rounded hover-shadow'>
             <span>
               <span className='test'>
-
-                <h1>{rating.mean}</h1>
-                <span
+                <h1>{rating.mean ? rating.mean.toFixed(1) : 'N/A' }</h1>
+                { rating.mean && <span
                   style={this.getBackgroundColor(rating.mean, rating.deptMean)}
                   className='rating-difference rounded'>
                   {this.getDifference(rating.mean, rating.deptMean)}
-                </span>
+                </span> }
               </span>
-              <p className='rating-small'>Dept. Avg: {rating.deptMean}</p>
+              <p className='rating-small'>
+                {rating.deptMean ? `Dept. Avg: ${rating.deptMean.toFixed(1)}` : 'No available data'}
+              </p>
 
-                    </span>
+            </span>
             <p>{rating.name}</p>
           </section>
         );
