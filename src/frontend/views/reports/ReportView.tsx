@@ -3,6 +3,7 @@ import Report from '../../../common/Report';
 import BaseProps from '../BaseProps';
 import ReportSummary from './ReportSummary';
 
+import '../../css/reports/ReportView.scss';
 interface ReportViewState {
   data: Report;
 }
@@ -24,19 +25,20 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
       return null;
     }
 
+    const ratingsToShow = [
+      { name: 'Class Rating', ...this.state.data.courseSum },
+      { name: 'Learnability', ...this.state.data.learningSum },
+      { name: 'Instructor Performance', ...this.state.data.instructorSum },
+      { name: 'Effectiveness', ...this.state.data.effectivenessSum },
+    ];
+
     return (
       <main>
         <ReportSummary
           subject={this.state.data.subject}
           number={this.state.data.number}
           name={this.state.data.name}
-          ratings={[
-            {
-              name: 'Class Rating',
-              mean: this.state.data.courseSum.mean,
-              deptMean: this.state.data.courseSum.deptMean,
-            },
-          ]}
+          ratings={ratingsToShow}
         />
       </main>);
   }
