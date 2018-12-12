@@ -8,11 +8,13 @@ interface Rating {
 
 // Colors were chosen here: https://www.colorhexa.com/d5f1fb
 enum BackgroundColors {
+  AMAZING = '#6dfcfc',
   GREAT = '#d5f1fb',
   GOOD = '#d5fbdf',
   NEUTRAL = 'inherit',
   BAD = '#fbdfd5',
   TERRIBLE = '#fbd5de',
+  HORRENDOUS = '#f48fa7',
 }
 
 class Ratings extends React.Component<{ ratings: Rating[] }> {
@@ -39,7 +41,9 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
 
     const style = { backgroundColor: null };
 
-    if (difference >= 2) {
+    if (difference >= 3) {
+      style.backgroundColor = BackgroundColors.AMAZING;
+    } else if (difference >= 2) {
       style.backgroundColor = BackgroundColors.GREAT;
     } else if (difference >= 1) {
       style.backgroundColor = BackgroundColors.GOOD;
@@ -47,8 +51,10 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
       style.backgroundColor = BackgroundColors.NEUTRAL;
     } else if (difference >= -1) {
       style.backgroundColor = BackgroundColors.BAD;
-    } else {
+    } else if (difference >= -2) {
       style.backgroundColor = BackgroundColors.TERRIBLE;
+    } else {
+      style.backgroundColor = BackgroundColors.HORRENDOUS;
     }
 
     return style;
