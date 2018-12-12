@@ -8,13 +8,13 @@ interface Rating {
 
 // Colors were chosen here: https://www.colorhexa.com/d5f1fb
 enum BackgroundColors {
-  AMAZING = '#6dfcfc',
+  AMAZING = '#6dfcfc', // arbitrarily chosen
   GREAT = '#d5f1fb',
   GOOD = '#d5fbdf',
   NEUTRAL = 'inherit',
   BAD = '#fbdfd5',
   TERRIBLE = '#fbd5de',
-  HORRENDOUS = '#f48fa7',
+  HORRENDOUS = '#f48fa7', // arbitrarily chosen
 }
 
 class Ratings extends React.Component<{ ratings: Rating[] }> {
