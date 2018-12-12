@@ -24,7 +24,7 @@ class AboutView extends React.Component<{}, {}> {
           as good when it gets lukewarm. I wouldn't suggest drinking lukewarm
           tea. More information can be found on {
             <a href='https://en.wikipedia.org/wiki/Tea'>Wikipedia</a>
-          }.
+          }... nah I'm just kidding.
         </p>
         <p>
           TEA is an attempt as a drop in replacement for everyone. Students and

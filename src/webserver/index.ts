@@ -6,8 +6,8 @@ import Cardify from './Cardify';
 
 const app = Express();
 
-app.get('/api/search', async (_, res) => {
-  MongoClient.get({})
+app.get('/api/search', async (req, res) => {
+  MongoClient.get({}, req.query.page)
     .then(results => res.send(Cardify(results)));
 });
 

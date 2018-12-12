@@ -1,36 +1,46 @@
 
 import * as objectHash from 'object-hash';
 import * as React from 'react';
+import * as InfiniteScroller from 'react-infinite-scroller';
 
 import Card, { CardData } from '../Card';
 
 import '../css/CardView.scss';
 
 interface CardViewState {
-  search: CardData[];
+  results: CardData[];
 }
 
 class CardView extends React.Component<{}, CardViewState> {
 
   public constructor(props) {
     super(props);
-    this.state = { search: [] };
-  }
-
-  public componentDidMount() {
-    fetch('api/search')
-      .then(res => res.json())
-      .then(res => this.setState({ search: res }));
+    this.state = { results: [] };
   }
 
   public render() {
     return (
-    <main className='cardview'>
-      { this.state.search.map((cardData) => {
-        return <Card key={objectHash.MD5(cardData)} data={cardData}/>;
-      }) }
-    </main>
+      <InfiniteScroller
+        className='cardview'
+        hasMore={true}
+        pageStart={0}
+        loader={<div className='loader' key={0}>Loading ...</div>}
+        loadMore={this.getMore.bind(this)}>
+        {this.state.results}
+      </InfiniteScroller>
     );
+  }
+
+  private async getMore(pageNo: number) {
+    const moreCards = await (await fetch(`/api/search?page=${pageNo}`)).json();
+    const newResults = [
+      ...this.state.results,
+      ...moreCards.map((cardData) => {
+        return <Card key={objectHash.MD5(cardData)} data={cardData}/>;
+      }),
+    ];
+
+    this.setState({ results: newResults });
   }
 }
 

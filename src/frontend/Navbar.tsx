@@ -10,13 +10,13 @@ class Navbar extends React.Component<{}, {}> {
           <Link to='/'>
             <p>Some logo</p>
           </Link>
-          <form className='hover-shadow rounded'
+          <form className='hover-shadow rounded button'
           onSubmit={() => alert('henlo')} action='javascript:void(0)'>
             <input
               type='text'
               name='search'
               autoComplete='off'
-              placeholder='Professors · Professors · Classes'/>
+              placeholder='Reports · Professors · Classes'/>
           </form>
         </div>
         <div className='nav-right'>
