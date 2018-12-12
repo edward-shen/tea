@@ -1,7 +1,23 @@
 nav {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   height: 75px;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.button {
+  padding: 1em;
+  p {
+    margin: 0;
+  }
+}
+
+.nav-left {
+  display: flex;
 
   form {
     display: inherit;
@@ -28,4 +44,8 @@ nav {
 
     }
   }
+}
+
+.nav-right {
+  justify-content: center;
 }

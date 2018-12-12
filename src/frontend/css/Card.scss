@@ -8,6 +8,9 @@
   flex-grow: 1;
   flex-direction: column;
 
+  a {
+    text-decoration: none;
+  }
 
   .card-top {
     padding: 10px;
