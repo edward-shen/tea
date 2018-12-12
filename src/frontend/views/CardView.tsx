@@ -1,5 +1,7 @@
 
+import * as objectHash from 'object-hash';
 import * as React from 'react';
+
 import Card, { CardData } from '../Card';
 
 import '../css/CardView.scss';
@@ -25,7 +27,7 @@ class CardView extends React.Component<{}, CardViewState> {
     return (
     <main className='main-view'>
       { this.state.search.map((cardData) => {
-        return <Card data={cardData}/>;
+        return <Card key={objectHash.MD5(cardData)} data={cardData}/>;
       }) }
     </main>
     );
