@@ -17,7 +17,14 @@ app.get('/api/report', async (req, res) => {
       if (result.length === 1) {
         res.send(result[0]);
       } else {
-        res.send();
+        console.log(result.map((a) => {
+          return {
+            instructorFirstName: a.instructorFirstName,
+            subject: a.subject,
+            number: a.number,
+          };
+        }));
+        res.send({ error: result.length });
       }
     });
 });

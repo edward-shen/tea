@@ -4,7 +4,7 @@
   "description": "TRACE Evaluation and Analysis",
   "main": "index.ts",
   "repository": "git@github.com:edward-shen/tea",
-  "author": "Edward Shen <6173958+edward-shen@users.noreply.github.com>",
+  "author": "Edward Shen <code@eddie.sh>",
   "license": "APGLv3",
   "private": true,
   "scripts": {

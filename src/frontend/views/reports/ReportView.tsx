@@ -16,8 +16,10 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
   }
 
   public async componentDidMount() {
+    const info = await (await fetch(`/api/report?id=${this.props.match.params.id}`)).json();
+    console.log(info);
     this.setState({
-      data: await (await fetch(`/api/report?id=${this.props.match.params.id}`)).json(),
+      data: info,
     });
   }
 
