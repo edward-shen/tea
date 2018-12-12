@@ -77,4 +77,4 @@ function parseExcel(excelBuffer) {
   return [questions, responseInclDeclines, declines];
 }
 
-export { parseExcel };
+export { parseExcel, TRACEQuestion };

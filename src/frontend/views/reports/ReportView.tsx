@@ -1,9 +1,10 @@
 import * as React from 'react';
+import Report from '../../../common/Report';
 import BaseProps from '../BaseProps';
 import ReportSummary from './ReportSummary';
 
 interface ReportViewState {
-  data: any;
+  data: Report;
 }
 
 class ReportView extends React.Component<BaseProps, ReportViewState> {
