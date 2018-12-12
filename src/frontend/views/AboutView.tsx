@@ -9,7 +9,7 @@ class AboutView extends React.Component<{}, {}> {
         <h1>Hello!</h1>
         <p>
           TRACE Evaluation Analysis (TEA) is brought to you by {
-            <a href="https://eddie.sh">Edward Shen</a>
+            <a href='https://eddie.sh'>Edward Shen</a>
           }, a
           student at Northeastern University. It is for other students so that
           they can better explore the vast data that Northeastern offers but

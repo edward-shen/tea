@@ -26,4 +26,4 @@ ReactDOM.render(
       </Switch>
     </div>
 </BrowserRouter>,
-document.getElementById('app'));
+document.getElementsByClassName('tea-app')[0]);
