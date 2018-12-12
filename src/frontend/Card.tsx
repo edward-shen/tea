@@ -15,18 +15,20 @@ interface CardData {
 class Card extends React.Component<{data: CardData}, {}> {
   public render() {
     return (
-      <Link className='card hover-shadow rounded' to={`/report/${this.props.data.classId}`}>
-        <header>
-          <h2>{this.props.data.header}</h2>
-          <h3>{this.props.data.subheader}</h3>
-        </header>
+      <section className='card hover-shadow rounded'>
+        <Link className='card-top' to={`/report/${this.props.data.classId}`}>
+          <header>
+            <h2>{this.props.data.header}</h2>
+            <h3>{this.props.data.subheader}</h3>
+          </header>
+        </Link>
         <footer>
           <Link to={`/prof/${this.props.data.instructorId}`}>
             <em>{this.props.data.instructor}</em>
           </Link>
           <p>{this.props.data.term}</p>
         </footer>
-      </Link>
+      </section>
     );
   }
 }
