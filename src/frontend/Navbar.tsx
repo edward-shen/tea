@@ -8,10 +8,12 @@ class Navbar extends React.Component<{}, {}> {
       <nav>
         <div className='nav-left'>
           <Link to='/'>
-            <p>Some logo</p>
+            <p>TEA</p>
           </Link>
-          <form className='hover-shadow rounded button'
-          onSubmit={() => alert('henlo')} action='javascript:void(0)'>
+          <form
+            className='hover-shadow rounded button'
+            onSubmit={() => alert('henlo')}
+            action='javascript:void(0)'>
             <input
               type='text'
               name='search'
