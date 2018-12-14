@@ -6,6 +6,7 @@
 
 .ratings {
   display: flex;
+  flex-wrap: wrap;
 
   h1 {
     margin: 0;
@@ -19,7 +20,7 @@
   }
   .rating-small {
     margin-top: 0;
-    font-size: 0.75em;
+    font-size: 0.75rem;
   }
 
   .rating-difference {
@@ -36,7 +37,8 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-left: 1em;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
   width: 175px;
   height: 175px;
 

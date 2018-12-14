@@ -3,7 +3,7 @@
   width: 15vw;
   min-height: 200px;
   max-height: 20vh;
-  margin: 1em;
+  margin: 1rem;
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -14,7 +14,9 @@
 
   .card-top {
     padding: 10px;
-    background-color: #4af3d1;
+    background: linear-gradient(45deg, rgba(179,179,255,1) 0%, rgba(0,212,255,1) 100%);
+    background-attachment: fixed;
+
     flex-grow: 1;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;

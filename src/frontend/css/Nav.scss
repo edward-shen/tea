@@ -1,5 +1,6 @@
 nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   height: 75px;
@@ -10,7 +11,7 @@ nav {
 }
 
 .button {
-  padding: 1em;
+  padding: 1rem;
   p {
     margin: 0;
   }
@@ -20,16 +21,16 @@ nav {
   display: flex;
 
   input {
-    font-size: 1em;
+    font-size: 1rem;
     outline: none;
     font-weight: 700;
     font-family: inherit;
-    width: 20em;
+    width: 20rem;
     transition: .3s;
     border: none;
 
     &:focus {
-      width: 30em;
+      width: 30rem;
       &::placeholder {
         color: transparent;
       }
