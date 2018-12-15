@@ -3,7 +3,7 @@ import * as objectHash from 'object-hash';
 import * as React from 'react';
 import * as InfiniteScroller from 'react-infinite-scroller';
 
-import CardType from '../../common/types/CardType';
+import CardType from '../../common/api/CardType';
 import Card from '../Card';
 
 import '../css/CardView.scss';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import CardType from '../common/types/CardType';
+import CardType from '../common/api/CardType';
 
 import './css/Card.scss';
 

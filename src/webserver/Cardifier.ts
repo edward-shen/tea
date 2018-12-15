@@ -1,5 +1,5 @@
 import Report from '../common/Report';
-import CardType from '../common/types/CardType';
+import CardType from '../common/api/CardType';
 
 function toReportCard(data: Report[]): CardType[] {
   return data.map((report: Report): CardType => {
