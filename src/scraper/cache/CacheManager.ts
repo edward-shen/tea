@@ -1,7 +1,8 @@
 import MongoClient from '../../common/MongoClient';
+import { PDFData } from '../../common/types/PDFTypes';
 import Driver from '../Driver';
 import { parseExcel } from '../parsers/excel';
-import { parsePdf, PDFData } from '../parsers/pdf';
+import { parsePdf } from '../parsers/pdf';
 import ProgressBar from '../ProgressBar';
 import CacheStatus from './CacheStatus';
 import MetaCache from './MetaCache';

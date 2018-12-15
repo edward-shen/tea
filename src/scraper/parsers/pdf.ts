@@ -1,31 +1,8 @@
 import * as pdf from 'pdf-parse';
 
+import { PDFData } from '../../common/types/PDFTypes';
 import { zip } from '../utils';
 import questionIDs from './questionIDs';
-
-interface PDFSummary {
-  mean: number;
-  deptMean: number;
-  univMean: number;
-  median: number;
-  deptMedian: number;
-  univMedian: number;
-  stdev: number;
-}
-
-interface PDFQuestion {
-  courseMean: number;
-  deptMean: number;
-  univMean: number;
-}
-
-interface PDFData {
-  courseSum: PDFSummary;
-  learningSum: PDFSummary;
-  instructorSum: PDFSummary;
-  effectivenessSum: PDFSummary;
-  [key: number]: PDFQuestion;
-}
 
 /**
  * Structures data from a PDF file. Returns an object containing a mapping from
@@ -96,9 +73,4 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
   return ret as PDFData;
 }
 
-export {
-  PDFSummary,
-  PDFQuestion,
-  PDFData,
-  parsePdf,
-};
+export { parsePdf };

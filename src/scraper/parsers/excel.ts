@@ -1,37 +1,7 @@
 import { read, utils } from 'xlsx';
 
+import { HoursQuestion, NAQuestion, Question } from '../../common/types/ExcelTypes';
 import { zip } from '../utils';
-
-interface Base {
-  id: number;
-  abbrev: string;
-  question: string;
-  respCount: number;
-}
-
-interface Question extends Base {
-  5: number;
-  4: number;
-  3: number;
-  2: number;
-  1: number;
-  mean: number;
-  median: number;
-  stdDev: number;
-  respRate: number;
-}
-
-interface TRACEQuestion extends Question {
-  '-1': number;
-}
-
-interface HoursQuestion extends Base {
-  '17-20': number;
-  '13-16': number;
-  '9-12': number;
-  '5-8': number;
-  '1-4': number;
-}
 
 const questionColIDs = [
   'id', 'abbrev', 'question',
@@ -72,9 +42,9 @@ function parseExcel(excelBuffer) {
       }
 
       return zip(hoursColIDs, row);
-    }) as Array<Question | TRACEQuestion | HoursQuestion>;
+    }) as Array<Question | NAQuestion | HoursQuestion>;
 
   return [questions, responseInclDeclines, declines];
 }
 
-export { parseExcel, TRACEQuestion };
+export { parseExcel, NAQuestion };

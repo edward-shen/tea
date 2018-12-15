@@ -1,6 +1,6 @@
+import { NAQuestion } from '../common/types/ExcelTypes';
+import { PDFData, PDFQuestion } from '../common/types/PDFTypes';
 import FilteredMetadata from '../scraper/cache/FilteredMetadata';
-import { TRACEQuestion } from '../scraper/parsers/excel';
-import { PDFData, PDFQuestion } from '../scraper/parsers/pdf';
 
 /**
  * Typing for a report object.
@@ -11,7 +11,7 @@ import { PDFData, PDFQuestion } from '../scraper/parsers/pdf';
  * 87: PDFQuestion & Question;
  */
 interface Report extends PDFData, FilteredMetadata {
-  [key: number]: PDFQuestion & TRACEQuestion;
+  [key: number]: PDFQuestion & NAQuestion;
 }
 
 export default Report;
