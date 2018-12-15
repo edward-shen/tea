@@ -6,12 +6,12 @@ import ExitCodes from './ExitCodes';
 /**
  * Interface with the MongoDB server.
  */
-class ClassCache {
+class MongoDBClient {
   private client;
   private db;
   private collection;
 
-  public constructor() {
+  public constructor(collection: string) {
     this.client = new MongoClient(`mongodb://${Config.mongodb.address}:${Config.mongodb.port}`, {
       useNewUrlParser: true,
     });
@@ -22,7 +22,7 @@ class ClassCache {
       }
 
       this.db = client.db('tea');
-      this.collection = this.db.collection('class');
+      this.collection = this.db.collection(collection);
     });
   }
 
@@ -47,4 +47,4 @@ class ClassCache {
   }
 }
 
-export default new ClassCache();
+export default MongoDBClient;

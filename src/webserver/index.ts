@@ -5,14 +5,15 @@ import MongoClient from '../common/MongoClient';
 import Cardify from './Cardify';
 
 const app = Express();
+const mongoClient = new MongoClient('raw');
 
 app.get('/api/search', async (req, res) => {
-  MongoClient.get({}, req.query.page)
+  mongoClient.get({}, req.query.page)
     .then(results => res.send(Cardify(results)));
 });
 
 app.get('/api/report', async (req, res) => {
-  MongoClient.get({ id: Number(req.query.id) })
+  mongoClient.get({ id: Number(req.query.id) })
     .then((result) => {
       if (result.length === 1) {
         res.send(result[0]);

@@ -8,6 +8,8 @@ import CacheStatus from './CacheStatus';
 import MetaCache from './MetaCache';
 import RequestPool from './RequestPool';
 
+const mongoClient = new MongoClient('raw');
+
 /**
  * Asynchronously update the metacache, if it's not up to date.
  */
@@ -54,7 +56,7 @@ async function updateMetaCache() {
  */
 async function updateClassCache() {
   const meta = await MetaCache.getReportData();
-  const classSize = await MongoClient.size();
+  const classSize = await mongoClient.size();
   const pool = new RequestPool();
 
   const numClasses = await Driver.latestSize();
@@ -104,7 +106,7 @@ async function updateClassCache() {
           }
 
           // Merge the remaining meta data into the final data.
-          MongoClient.put({
+          mongoClient.put({
             ...pdf,
             responses,
             declines,
@@ -129,7 +131,7 @@ async function updateClassCache() {
 }
 
 function cleanupDB() {
-  MongoClient.close();
+  mongoClient.close();
 }
 
 export { updateClassCache, updateMetaCache, cleanupDB };
