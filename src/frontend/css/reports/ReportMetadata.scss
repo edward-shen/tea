@@ -1,0 +1,29 @@
+.reportview-data {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  table {
+    display: inherit;
+    flex-wrap: inherit;
+    table-layout: fixed;
+  }
+
+  tr {
+    width: 50%;
+    flex-grow: 1;
+    td {
+    }
+    td:first-child {
+      font-weight: 700;
+    }
+  }
+
+  canvas {
+    max-width: 50%;
+  }
+}
+
+h2 {
+  min-width: 100%;
+}

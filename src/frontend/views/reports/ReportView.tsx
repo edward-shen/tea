@@ -43,7 +43,7 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
           name={this.state.data.name}
           ratings={ratingsToShow}
         />
-        <ReportBody data={this.state.data} />
+        <ReportBody {...this.state.data} />
       </main>);
   }
 }
