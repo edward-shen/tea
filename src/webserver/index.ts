@@ -2,14 +2,14 @@ import * as Express from 'express';
 
 import Config from '../common/Config';
 import MongoClient from '../common/MongoClient';
-import Cardify from './Cardify';
+import { toReportCard } from './Cardifier';
 
 const app = Express();
 const mongoClient = new MongoClient('raw');
 
 app.get('/api/search', async (req, res) => {
   mongoClient.get({}, req.query.page)
-    .then(results => res.send(Cardify(results)));
+    .then(results => res.send(toReportCard(results)));
 });
 
 app.get('/api/report', async (req, res) => {

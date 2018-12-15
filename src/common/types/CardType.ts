@@ -1,10 +1,11 @@
 interface CardType {
   header: string;
   subheader: string;
-  instructor: string;
-  term: string;
-  classId: number;
-  instructorId: number;
+  bodyLink?: string;
+  leftText?: string;
+  leftTextLink?: string;
+  rightText?: string;
+  rightTextLink?: string;
 }
 
 export default CardType;
