@@ -88,5 +88,5 @@ interface Metadata {
   subject: string;
   name: string;
   type: string;
-  level: any;
+  level: string;
 }
