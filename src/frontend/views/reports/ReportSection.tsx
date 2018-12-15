@@ -5,11 +5,16 @@ import { PDFSummary } from '../../../common/types/PDFTypes';
 interface ReportSectionProps {
   questions: Array<Question | NAQuestion>;
   summary: PDFSummary;
+  title: string;
 }
 
-abstract class ReportSection extends React.Component<ReportSectionProps> {
-  public constructor(props) {
-    super(props);
+class ReportSection extends React.Component<ReportSectionProps> {
+  public render() {
+    return (
+      <section id={this.props.title.toLowerCase().replace(' ', '-')}>
+        {this.props.title}
+      </section>
+    );
   }
 }
 

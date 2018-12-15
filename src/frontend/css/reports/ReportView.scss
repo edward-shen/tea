@@ -2,6 +2,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  a {
+    text-decoration: none;
+  }
 }
 
 .ratings {
@@ -12,12 +15,13 @@
     margin: 0;
   }
 
-  .test {
+  .rating-with-delta {
     display:flex;
     justify-content: center;
     align-items: center;
     margin-top: 1rem;
   }
+
   .rating-small {
     margin-top: 0;
     font-size: 0.75rem;

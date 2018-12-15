@@ -24,42 +24,44 @@ class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
       <section className='reportview-data'>
         <h2>Report Overview</h2>
         <table className='reportview-data-table'>
-          <tr>
-            <td>Professor</td>
-            <td>
-              <Link to={`/prof/${this.props.instructorId}`}>
-                {this.props.instructorFirstName} {this.props.instructorLastName}
-              </Link>
-            </td>
-          </tr>
-          <tr>
-            <td>Term</td>
-            <td>{this.props.termTitle}</td>
-          </tr>
-          <tr>
-            <td>Enrollment</td>
-            <td>{this.props.enrollment}</td>
-          </tr>
-          <tr>
-            <td>Responses</td>
-            <td>{this.props.responses}</td>
-          </tr>
-          <tr>
-            <td>Declines</td>
-            <td>{this.props.declines}</td>
-          </tr>
-          <tr>
-            <td>Abstains</td>
-            <td>{unanswered}</td>
-          </tr>
-          <tr>
-            <td>Type</td>
-            <td>{this.props.type}</td>
-          </tr>
-          <tr>
-            <td>Graduate Course</td>
-            <td>{this.props.enrollment && 'No'}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>Professor</td>
+              <td>
+                <Link to={`/prof/${this.props.instructorId}`}>
+                  {this.props.instructorFirstName} {this.props.instructorLastName}
+                </Link>
+              </td>
+            </tr>
+            <tr>
+              <td>Term</td>
+              <td>{this.props.termTitle}</td>
+            </tr>
+            <tr>
+              <td>Enrollment</td>
+              <td>{this.props.enrollment}</td>
+            </tr>
+            <tr>
+              <td>Responses</td>
+              <td>{this.props.responses}</td>
+            </tr>
+            <tr>
+              <td>Declines</td>
+              <td>{this.props.declines}</td>
+            </tr>
+            <tr>
+              <td>Abstains</td>
+              <td>{unanswered}</td>
+            </tr>
+            <tr>
+              <td>Type</td>
+              <td>{this.props.type}</td>
+            </tr>
+            <tr>
+              <td>Graduate Course</td>
+              <td>{this.props.enrollment && 'No'}</td>
+            </tr>
+          </tbody>
         </table>
         <Pie
           data={{

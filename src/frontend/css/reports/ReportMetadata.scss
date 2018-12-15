@@ -2,20 +2,25 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  justify-content: space-between;
 
-  table {
-    display: inherit;
-    flex-wrap: inherit;
-    table-layout: fixed;
+  tbody {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
   }
 
   tr {
+    display: flex;
     width: 50%;
-    flex-grow: 1;
     td {
-    }
-    td:first-child {
-      font-weight: 700;
+      width: 50%;
+
+      &:first-child {
+        font-weight: 700;
+        text-align: right;
+        margin-right: 1rem;
+      }
     }
   }
 

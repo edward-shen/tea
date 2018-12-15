@@ -1,8 +1,9 @@
 import * as React from 'react';
 import Colors from '../Colors';
+import SectionNames, { getLink } from './SectionNames';
 
 interface Rating {
-  name: string;
+  name: SectionNames;
   mean: number;
   deptMean: number;
 }
@@ -12,24 +13,23 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     return (
       this.props.ratings.map((rating, index) => {
         return (
-          <section key={index} // Static data so this is ok.
-            className='rating rounded hover-shadow'>
-            <span>
-              <span className='test'>
-                <h1>{rating.mean ? rating.mean.toFixed(1) : 'N/A' }</h1>
-                { rating.mean && <span
-                  style={this.getBackgroundColor(rating.mean, rating.deptMean)}
-                  className='rating-difference rounded'>
-                  {this.getDifference(rating.mean, rating.deptMean)}
-                </span> }
-              </span>
-              <p className='rating-small'>
-                {rating.deptMean ? `Dept. Avg: ${rating.deptMean.toFixed(1)}` : 'No available data'}
-              </p>
-
-            </span>
-            <p>{rating.name}</p>
-          </section>
+          <a href={`#${getLink(rating.name)}`} key={index}>
+            <section className='rating rounded hover-shadow'>
+                <span className='rating-with-delta'>
+                  <h1>{rating.mean ? rating.mean.toFixed(1) : 'N/A' }</h1>
+                  { rating.mean && <span
+                    style={this.getBackgroundColor(rating.mean, rating.deptMean)}
+                    className='rating-difference rounded'>
+                    {this.getDifference(rating.mean, rating.deptMean)}
+                  </span> }
+                </span>
+                <p className='rating-small'>
+                  {rating.deptMean ?
+                    `Dept. Avg: ${rating.deptMean.toFixed(1)}` : 'No available data'}
+                </p>
+              <p>{rating.name}</p>
+            </section>
+          </a>
         );
       })
     );
