@@ -1,6 +1,6 @@
-import { CardData } from '../frontend/Card';
+import CardType from '../common/types/CardType';
 
-function toCard(data): CardData {
+function toCard(data): CardType {
   return data.map((report) => {
     return {
       header: `${report.subject} ${report.number}`,

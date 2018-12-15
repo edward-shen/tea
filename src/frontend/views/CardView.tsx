@@ -3,12 +3,13 @@ import * as objectHash from 'object-hash';
 import * as React from 'react';
 import * as InfiniteScroller from 'react-infinite-scroller';
 
-import Card, { CardData } from '../Card';
+import CardType from '../../common/types/CardType';
+import Card from '../Card';
 
 import '../css/CardView.scss';
 
 interface CardViewState {
-  results: CardData[];
+  results: CardType[];
 }
 
 class CardView extends React.Component<{}, CardViewState> {
@@ -36,7 +37,7 @@ class CardView extends React.Component<{}, CardViewState> {
     const newResults = [
       ...this.state.results,
       ...moreCards.map((cardData) => {
-        return <Card key={objectHash.MD5(cardData)} data={cardData}/>;
+        return <Card key={objectHash.MD5(cardData)} {...cardData}/>;
       }),
     ];
 
