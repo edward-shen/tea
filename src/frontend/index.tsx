@@ -24,7 +24,7 @@ ReactDOM.render(
         <Route exact path='/class/' component={AllClassView} />
         <Route exact path='/prof/' component={AllProfessorView} />
 
-        <Route path='/report/:id' component={ReportView} />
+        <Route path='/report/:id/:prof' component={ReportView} />
         <Route path='/class/:id' component={ClassView} />
         <Route path='/prof/:id' component={ProfessorView} />
       </Switch>

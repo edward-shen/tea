@@ -13,7 +13,7 @@ app.get('/api/search', async (req, res) => {
 });
 
 app.get('/api/report', async (req, res) => {
-  mongoClient.get({ id: Number(req.query.id) })
+  mongoClient.get({ id: Number(req.query.id), instructorId: Number(req.query.prof) })
     .then((result) => {
       if (result.length === 1) {
         res.send(result[0]);
