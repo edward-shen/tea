@@ -208,6 +208,13 @@
     "@types/history" "*"
     "@types/react" "*"
 
+"@types/react-table@^6.7.20":
+  version "6.7.20"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-6.7.20.tgz#ebecd60194be637181dda92f9a3cdd78ce289eb6"
+  integrity sha512-nWLZYGV2WM+DKorC76sZp3yjVljjmIddDNAhdMhw6OCLhVsnM6oo0vPEDCKYaZCIW7C1hUfHg+yOiOCxhsI1dg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^16.7.13":
   version "16.7.17"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.17.tgz#3242e796a1ffbba4f49eae5915a67f4c079504e9"
@@ -1351,6 +1358,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@^2.2.5:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 clean-css@4.2.x:
   version "4.2.1"
@@ -5745,6 +5757,13 @@ react-router@^4.3.1:
     path-to-regexp "^1.7.0"
     prop-types "^15.6.1"
     warning "^4.0.1"
+
+react-table@^6.8.6:
+  version "6.8.6"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.8.6.tgz#a0ad8b4839319052d5befc012603fb161e52ede3"
+  integrity sha1-oK2LSDkxkFLVvvwBJgP7Fh5S7eM=
+  dependencies:
+    classnames "^2.2.5"
 
 react@^16.6.3:
   version "16.6.3"
