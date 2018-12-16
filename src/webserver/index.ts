@@ -5,7 +5,7 @@ import MongoClient from '../common/MongoClient';
 import { toReportCard } from './Cardifier';
 
 const app = Express();
-const mongoClient = new MongoClient('raw');
+const mongoClient = new MongoClient('report');
 
 app.get('/api/search', async (req, res) => {
   mongoClient.get({}, req.query.page)

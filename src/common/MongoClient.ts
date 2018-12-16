@@ -9,9 +9,9 @@ import ExitCodes from './ExitCodes';
 class MongoDBClient {
   private client;
   private db;
-  private collection;
+  private _collection;
 
-  public constructor(collection: string) {
+  public constructor(collection?: string) {
     this.client = new MongoClient(`mongodb://${Config.mongodb.address}:${Config.mongodb.port}`, {
       useNewUrlParser: true,
     });
@@ -22,15 +22,21 @@ class MongoDBClient {
       }
 
       this.db = client.db('tea');
-      this.collection = this.db.collection(collection);
+      if (collection) {
+        this.selectCollection(collection);
+      }
     });
   }
 
-  public async size() {
+  public get collection() {
+    return this._collection;
+  }
+
+  public async size(): Promise<number> {
     return await this.collection.countDocuments();
   }
 
-  public async put(doc) {
+  public async put(doc): Promise<void> {
     await this.collection.insertOne(doc);
   }
 
@@ -42,9 +48,14 @@ class MongoDBClient {
       .toArray();
   }
 
-  public close() {
+  public close(): void {
     this.client.close();
   }
+
+  private selectCollection(collection: string): void {
+    this._collection = this.db.collection(collection);
+  }
+
 }
 
 export default MongoDBClient;

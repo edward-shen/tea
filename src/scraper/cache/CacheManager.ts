@@ -8,7 +8,7 @@ import CacheStatus from './CacheStatus';
 import MetaCache from './MetaCache';
 import RequestPool from './RequestPool';
 
-const mongoClient = new MongoClient('raw');
+const mongoClient = new MongoClient('report');
 
 /**
  * Asynchronously update the metacache, if it's not up to date.
