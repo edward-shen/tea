@@ -9,8 +9,8 @@ class Card extends React.Component<CardType> {
   public render() {
     let header = (
       <header>
-        <h2>{this.props.header}</h2>
-        <h3>{this.props.subheader}</h3>
+        {this.props.header && <h2>{this.props.header}</h2>}
+        {this.props.subheader && <h3>{this.props.subheader}</h3>}
       </header>);
     let left = <em>{this.props.leftText}</em>;
     let right = <p>{this.props.rightText}</p>;
