@@ -19,6 +19,7 @@ nav {
 
 .nav-left {
   display: flex;
+  column-gap: 1rem;
 
   input {
     font-size: 1rem;
@@ -28,17 +29,18 @@ nav {
     width: 20rem;
     transition: .3s;
     border: none;
+    padding: 0;
 
     &:focus {
-      width: 30rem;
+      width: 25rem;
       &::placeholder {
         color: transparent;
       }
     }
+  }
 
-    // &::placeholder {
-
-    // }
+  form, a {
+    margin-right: 1rem;
   }
 }
 

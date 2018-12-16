@@ -20,16 +20,23 @@ class Navbar extends React.Component<{}, {}> {
               autoComplete='off'
               placeholder='Reports · Professors · Classes'/>
           </form>
+          {this.generateButton('/class', 'Classes')}
+          {this.generateButton('/prof', 'Professors')}
         </div>
         <div className='nav-right'>
-          <Link to='/about'>
-            <div className='hover-shadow rounded button'>
-              <p>About</p>
-            </div>
-          </Link>
+          {this.generateButton('/about', 'About')}
         </div>
       </nav>
     );
+  }
+
+  private generateButton(link: string, text: string) {
+    return (
+      <Link to={link}>
+        <div className='hover-shadow rounded button'>
+          <p>{text}</p>
+        </div>
+      </Link>);
   }
 }
 
