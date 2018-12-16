@@ -1,12 +1,12 @@
 import { ObjectID } from 'bson';
-import SectionNames from '../../frontend/views/reports/SectionNames';
+import Sections from '../../frontend/views/reports/Sections';
 
 interface ProfessorPeekType {
   _id: ObjectID;
   name: string;
   count: number;
   id: number;
-  ratings: Array<[SectionNames, number]>;
+  ratings: Array<[Sections, number]>;
 }
 
 export default ProfessorPeekType;

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Colors from '../Colors';
-import SectionNames, { getLink } from './SectionNames';
+import Sections, { getLink } from './Sections';
 
 interface Rating {
-  name: SectionNames;
+  name: Sections;
   mean: number;
   deptMean: number;
 }

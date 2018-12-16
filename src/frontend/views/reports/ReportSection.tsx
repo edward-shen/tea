@@ -1,9 +1,16 @@
 import * as React from 'react';
-import { NAQuestion, Question } from '../../../common/types/ExcelTypes';
 import { PDFSummary } from '../../../common/types/PDFTypes';
+import {
+  ClassQuestions,
+  EffectivenessQuestions,
+  InstructorQuestions,
+  LearnabilityQuestions,
+  WorkloadQuestion,
+} from '../../../common/types/Questions';
 
 interface ReportSectionProps {
-  questions: Array<Question | NAQuestion>;
+  data: ClassQuestions | EffectivenessQuestions | InstructorQuestions |
+    LearnabilityQuestions | WorkloadQuestion;
   summary: PDFSummary;
   title: string;
 }

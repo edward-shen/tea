@@ -1,8 +1,7 @@
 import { ObjectID } from 'bson';
-import ReportPeekType from '../common/api/ReportPeekType';
 import MongoClient from '../common/MongoClient';
 import Report from '../common/Report';
-import SectionNames from '../frontend/views/reports/SectionNames';
+import Sections from '../frontend/views/reports/Sections';
 
 const reportClient = new MongoClient('report');
 const classClient = new MongoClient('class');
@@ -41,10 +40,10 @@ class PostProcessor {
             term: report.termTitle,
             termID: report.termId,
             ratings: [
-              [SectionNames.CLASS, report.courseSum],
-              [SectionNames.EFFECTIVENESS, report.effectivenessSum],
-              [SectionNames.INSTRUCTOR, report.instructorSum],
-              [SectionNames.LEARNABILITY, report.learningSum],
+              [Sections.CLASS, report.courseSum],
+              [Sections.EFFECTIVENESS, report.effectivenessSum],
+              [Sections.INSTRUCTOR, report.instructorSum],
+              [Sections.LEARNABILITY, report.learningSum],
             ],
           },
         },

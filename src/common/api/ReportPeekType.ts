@@ -1,5 +1,5 @@
 import { ObjectID } from 'bson';
-import SectionNames from '../../frontend/views/reports/SectionNames';
+import Sections from '../../frontend/views/reports/Sections';
 
 interface ReportPeekType {
   _id: ObjectID;
@@ -7,7 +7,7 @@ interface ReportPeekType {
   professorID: number;
   term: string;
   termID: number;
-  ratings: Array<[SectionNames, number]>;
+  ratings: Array<[Sections, number]>;
 }
 
 export default ReportPeekType;

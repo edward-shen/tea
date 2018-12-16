@@ -5,7 +5,7 @@ import ReportHeader from './ReportHeader';
 
 import '../../css/reports/ReportView.scss';
 import ReportBody from './ReportBody';
-import SectionNames from './SectionNames';
+import Sections from './Sections';
 interface ReportViewState {
   data: Report;
 }
@@ -33,10 +33,10 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
     }
 
     const ratingsToShow = [
-      { name: SectionNames.CLASS, ...this.state.data.courseSum },
-      { name: SectionNames.LEARNABILITY, ...this.state.data.learningSum },
-      { name: SectionNames.INSTRUCTOR, ...this.state.data.instructorSum },
-      { name: SectionNames.EFFECTIVENESS, ...this.state.data.effectivenessSum },
+      { name: Sections.CLASS, ...this.state.data.courseSum },
+      { name: Sections.LEARNABILITY, ...this.state.data.learningSum },
+      { name: Sections.INSTRUCTOR, ...this.state.data.instructorSum },
+      { name: Sections.EFFECTIVENESS, ...this.state.data.effectivenessSum },
     ];
 
     return (
