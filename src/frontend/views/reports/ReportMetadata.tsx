@@ -66,10 +66,10 @@ class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
         <Pie
           data={{
             datasets: [{
-              data: [this.props.responses, this.props.declines, unanswered],
-              backgroundColor: [Colors.GREAT, Colors.TERRIBLE],
+              data: [this.props.responses, unanswered, this.props.declines],
+              backgroundColor: [Colors.GREAT, '#ccc', Colors.TERRIBLE],
             }],
-            labels: ['Responses', 'Declines', 'Abstains'],
+            labels: ['Responses', 'Abstains', 'Declines'],
           }}
           legend={{
             position: 'bottom',
