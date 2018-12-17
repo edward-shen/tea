@@ -1,5 +1,3 @@
-import Report from '../../../common/Report';
-
 enum SectionNames {
   CLASS = 'Class Rating',
   LEARNABILITY = 'Learnability',

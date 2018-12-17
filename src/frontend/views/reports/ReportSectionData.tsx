@@ -110,6 +110,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
         toReturn.push(
           <Warning
             level='info'
+            key='non-zero-na-resp'
             text={
               `${naCount} of all student responses have reported this question not applicable.`}
           />);
