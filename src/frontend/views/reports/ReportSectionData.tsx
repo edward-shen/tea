@@ -13,11 +13,13 @@ import {
 } from '../../../common/types/Questions';
 import { PRIMARY } from '../Colors';
 
-class ReportSectionData extends React.Component<ClassQuestions |
-  EffectivenessQuestions | InstructorQuestions | LearnabilityQuestions | WorkloadQuestions> {
+class ReportSectionData extends React.Component<{ responses: number } & (ClassQuestions |
+  EffectivenessQuestions | InstructorQuestions | LearnabilityQuestions | WorkloadQuestions)> {
   public render() {
+
+    const { responses, ...questions } = this.props;
     return <ReactTable
-      data={Object.values(this.props).map((row: Question) => {
+      data={Object.values(questions).map((row: Question) => {
         const newRow = row as any;
         newRow.stdDev = Number(row.stdDev).toFixed(2);
         if (newRow.courseMean === 0) {
@@ -67,20 +69,19 @@ class ReportSectionData extends React.Component<ClassQuestions |
         },
       ]}
       SubComponent={(row) => {
-        console.log(row);
-        const maxValue = row.original[1]
-          + row.original[2]
-          + row.original[3]
-          + row.original[4]
-          + row.original[5];
+        const totalCount = row.original[1]
+         + row.original[2]
+         + row.original[3]
+         + row.original[4]
+         + row.original[5];
 
-        if (maxValue) {
+        if (totalCount) {
           return (
             <Bar
               options={{
                 title: { display: true, text: 'Response breakdown', fontFamily: `'Montserrat'` },
                 scales: {
-                  yAxes: [{ ticks: { min: 0, stepSize: 1, max: maxValue } }],
+                  yAxes: [{ ticks: { min: 0, stepSize: 1, max: responses } }],
                 },
               }}
               legend={{ display: false }}
@@ -100,6 +101,8 @@ class ReportSectionData extends React.Component<ClassQuestions |
             />
           );
         }
+
+        return <em>Not applicable</em>;
       }}/>;
   }
 }

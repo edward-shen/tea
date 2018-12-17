@@ -17,6 +17,7 @@ class ReportBody extends React.Component<Report> {
             summary={this.props.courseSum}
             title={name}
             data={info}
+            responses={this.props.responses}
           />);
       }),
     ];

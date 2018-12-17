@@ -16,6 +16,7 @@ interface ReportSectionProps {
     LearnabilityQuestions | WorkloadQuestions;
   summary: PDFSummary;
   title: string;
+  responses: number;
 }
 
 class ReportSection extends React.Component<ReportSectionProps> {
@@ -23,7 +24,7 @@ class ReportSection extends React.Component<ReportSectionProps> {
     return (
       <section id={this.props.title.toLowerCase().replace(' ', '-')}>
         <h2>{this.props.title}</h2>
-        <ReportSectionData {...this.props.data} />
+        <ReportSectionData {...this.props.data} responses={this.props.responses} />
       </section>
     );
   }
