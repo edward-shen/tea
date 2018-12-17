@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { HorizontalBar } from 'react-chartjs-2';
 // tslint:disable-next-line:import-name
 import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 
 import { Question } from '../../../common/types/ExcelTypes';
 import { PDFQuestion } from '../../../common/types/PDFTypes';
@@ -117,7 +118,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
       }
 
       toReturn.push(
-        <Bar
+        <HorizontalBar
           key='breakdown'
           options={{
             title: { display: true, text: 'Response breakdown', fontFamily: `'Montserrat'` },

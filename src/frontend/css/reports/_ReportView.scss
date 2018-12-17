@@ -1,11 +1,16 @@
 @import 'ReportMetadata';
 
-.reportview-header {
+.reportview {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  a {
-    text-decoration: none;
+  flex-direction: column;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    a {
+      text-decoration: none;
+    }
   }
 }
 
@@ -55,9 +60,4 @@
   p {
     margin: auto;
   }
-}
-
-.reportview {
-  display: flex;
-  flex-direction: column;
 }

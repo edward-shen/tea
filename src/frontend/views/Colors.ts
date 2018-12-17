@@ -2,7 +2,7 @@
 enum BackgroundColors {
   GREAT = '#8ff4aa',
   GOOD = '#d5fbdf',
-  NEUTRAL = 'inherit',
+  NEUTRAL = '#fff',
   BAD = '#fbd5de',
   TERRIBLE = '#f7a6b9',
 }

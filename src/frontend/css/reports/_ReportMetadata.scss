@@ -1,9 +1,13 @@
 .reportview-data {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
 
+  table {
+    width: 100%;
+  }
   tbody {
     display: flex;
     flex-wrap: wrap;
@@ -23,9 +27,15 @@
       }
     }
   }
+}
 
+.reportview-data-graphs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
   canvas {
-    max-width: 50%;
+    max-width: 50rem;
   }
 }
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { PDFSummary } from '../../../common/types/PDFTypes';
 import {
   ClassQuestions,
@@ -8,7 +9,7 @@ import {
   WorkloadQuestions,
 } from '../../../common/types/Questions';
 
-import 'react-table/react-table.css';
+import { HoursQuestion } from '../../../common/types/ExcelTypes';
 import RatingBox from './RatingBox';
 import ReportSectionData from './ReportSectionData';
 
