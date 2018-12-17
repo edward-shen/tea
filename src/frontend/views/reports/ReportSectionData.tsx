@@ -61,7 +61,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
           accessor: 'courseMean',
           maxWidth: 128,
           style: {
-            'text-align': 'right',
+            textAlign: 'right',
           },
         },
         {
@@ -69,7 +69,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
           accessor: 'deptMean',
           maxWidth: 128,
           style: {
-            'text-align': 'right',
+            textAlign: 'right',
           },
         },
         {
@@ -77,7 +77,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
           accessor: 'univMean',
           maxWidth: 128,
           style: {
-            'text-align': 'right',
+            textAlign: 'right',
           },
         },
         {
@@ -85,7 +85,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
           accessor: 'stdDev',
           maxWidth: 196,
           style: {
-            'text-align': 'right',
+            textAlign: 'right',
           },
         },
       ]}
