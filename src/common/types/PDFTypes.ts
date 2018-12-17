@@ -41,7 +41,6 @@ interface PDFData {
   learningSum: PDFSummary;
   instructorSum: PDFSummary;
   effectivenessSum: PDFSummary;
-  [key: number]: PDFQuestion;
 }
 
 export { PDFData, PDFQuestion, PDFSummary };

@@ -20,5 +20,5 @@
     "__mocks__",
     "jest.config.js",
     "test"
-  ]
+  ],
 }

@@ -43,7 +43,7 @@ interface EffectivenessQuestions {
   87: Question & PDFQuestion;
 }
 
-interface WorkloadQuestion {
+interface WorkloadQuestions {
   9: HoursQuestion;
 }
 
@@ -52,5 +52,5 @@ export {
   LearnabilityQuestions,
   InstructorQuestions,
   EffectivenessQuestions,
-  WorkloadQuestion,
+  WorkloadQuestions,
 };
