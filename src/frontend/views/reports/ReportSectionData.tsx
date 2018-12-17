@@ -81,7 +81,7 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
               options={{
                 title: { display: true, text: 'Response breakdown', fontFamily: `'Montserrat'` },
                 scales: {
-                  yAxes: [{ ticks: { min: 0, stepSize: 1, max: responses } }],
+                  yAxes: [{ ticks: { min: 0, stepSize: [1, 2, 5], suggestedMax: responses } }],
                 },
               }}
               legend={{ display: false }}
