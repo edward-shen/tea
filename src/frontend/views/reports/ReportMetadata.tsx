@@ -77,10 +77,7 @@ class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
               },
               scales: {
                 xAxes: [{
-                  ticks: {
-                    beginAtZero: true,
-                    stepSize: 1,
-                  },
+                  ticks: { beginAtZero: true },
                   display: false,
                   stacked: true,
                 }],
@@ -98,7 +95,11 @@ class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
                 { backgroundColor: Colors.GOOD, label: '5-8', data: [this.props[9]['5-8']] },
                 { backgroundColor: '#dedede', label: '9-12', data: [this.props[9]['9-12']] },
                 { backgroundColor: Colors.BAD, label: '13-16', data: [this.props[9]['13-16']] },
-                { backgroundColor: Colors.TERRIBLE, label: '17-20', data: [this.props[9]['17-20']] },
+                {
+                  backgroundColor: Colors.TERRIBLE,
+                  label: '17-20',
+                  data: [this.props[9]['17-20']],
+                },
               ],
             }}
           />
