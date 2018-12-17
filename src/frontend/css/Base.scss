@@ -1,7 +1,13 @@
+// General application imports
 @import 'Main';
 @import 'Common';
+
+// Specific component imports
 @import 'Nav';
 @import 'Warning';
 @import 'Footer';
+
+// View imports
 @import 'reports/ReportView';
 @import 'cards/CardView';
+@import 'AboutView';
