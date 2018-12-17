@@ -11,9 +11,14 @@ import {
 /**
  * Typing for a report object.
  */
-interface Report extends ClassQuestions, LearnabilityQuestions,
-  InstructorQuestions, EffectivenessQuestions, WorkloadQuestions,
-  FilteredMetadata, PDFData {
+interface Report extends FilteredMetadata {
+  questions: {
+    class: ClassQuestions,
+    learning: LearnabilityQuestions,
+    instructor: InstructorQuestions,
+    effectiveness: EffectivenessQuestions,
+    workload: WorkloadQuestions,
+  };
 }
 
 export default Report;

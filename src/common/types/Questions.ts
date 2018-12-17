@@ -1,7 +1,10 @@
 import { HoursQuestion, NAQuestion, Question } from './ExcelTypes';
-import { PDFQuestion } from './PDFTypes';
+import { PDFQuestion, PDFSummary } from './PDFTypes';
 
-interface ClassQuestions {
+interface BaseQuestions {
+  summary: PDFSummary;
+}
+interface ClassQuestions extends BaseQuestions {
   1: NAQuestion & PDFQuestion;
   2: NAQuestion & PDFQuestion;
   3: NAQuestion & PDFQuestion;
@@ -16,14 +19,14 @@ interface ClassQuestions {
   8: NAQuestion & PDFQuestion;
 }
 
-interface LearnabilityQuestions {
+interface LearnabilityQuestions extends BaseQuestions {
   10: NAQuestion & PDFQuestion;
   11: NAQuestion & PDFQuestion;
   12: NAQuestion & PDFQuestion;
   13: NAQuestion & PDFQuestion;
 }
 
-interface InstructorQuestions {
+interface InstructorQuestions extends BaseQuestions {
   15: NAQuestion & PDFQuestion;
   16: NAQuestion & PDFQuestion;
   17: NAQuestion & PDFQuestion;
@@ -39,7 +42,7 @@ interface InstructorQuestions {
   27: NAQuestion & PDFQuestion;
 }
 
-interface EffectivenessQuestions {
+interface EffectivenessQuestions extends BaseQuestions {
   87: Question & PDFQuestion;
 }
 

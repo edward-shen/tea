@@ -31,10 +31,10 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
     }
 
     const ratingsToShow = [
-      { name: Sections.CLASS, ...this.state.data.courseSum },
-      { name: Sections.LEARNABILITY, ...this.state.data.learningSum },
-      { name: Sections.INSTRUCTOR, ...this.state.data.instructorSum },
-      { name: Sections.EFFECTIVENESS, ...this.state.data.effectivenessSum },
+      { name: Sections.CLASS, ...this.state.data.questions.learning.summary },
+      { name: Sections.LEARNABILITY, ...this.state.data.questions.learning.summary },
+      { name: Sections.INSTRUCTOR, ...this.state.data.questions.instructor.summary },
+      { name: Sections.EFFECTIVENESS, ...this.state.data.questions.effectiveness.summary },
     ];
 
     return (

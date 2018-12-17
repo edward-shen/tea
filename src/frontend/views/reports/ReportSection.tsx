@@ -14,8 +14,7 @@ import ReportSectionData from './ReportSectionData';
 
 interface ReportSectionProps {
   data: ClassQuestions | EffectivenessQuestions | InstructorQuestions |
-    LearnabilityQuestions | WorkloadQuestions;
-  summary: PDFSummary;
+    LearnabilityQuestions;
   title: string;
   responses: number;
 }
@@ -27,18 +26,19 @@ class ReportSection extends React.Component<ReportSectionProps> {
         <h2>{this.props.title}</h2>
         <div className='ratings'>
           <RatingBox
-            rating={this.props.summary.mean.toFixed(1)}
+            rating={this.props.data.summary.mean.toFixed(1)}
             subtext={
-              `Median: ${this.props.summary.median} | σ: ${this.props.summary.stdev.toFixed(1)}`
+              `Median: ${this.props.data.summary.median} | ` +
+              `σ: ${this.props.data.summary.stdev.toFixed(1)}`
             }
             desc='Section Mean'/>
           <RatingBox
-            rating={this.props.summary.deptMean.toFixed(1)}
-            subtext={`Median: ${this.props.summary.deptMedian}`}
+            rating={this.props.data.summary.deptMean.toFixed(1)}
+            subtext={`Median: ${this.props.data.summary.deptMedian}`}
             desc='Department Mean'/>
           <RatingBox
-            rating={this.props.summary.univMean.toFixed(1)}
-            subtext={`Median: ${this.props.summary.univMedian}`}
+            rating={this.props.data.summary.univMean.toFixed(1)}
+            subtext={`Median: ${this.props.data.summary.univMedian}`}
             desc='University Mean'/>
         </div>
         <ReportSectionData {...this.props.data} responses={this.props.responses} />

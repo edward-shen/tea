@@ -1,4 +1,5 @@
 import MongoClient from '../../common/MongoClient';
+import Report from '../../common/Report';
 import { PDFData } from '../../common/types/PDFTypes';
 import Driver from '../Driver';
 import { parseExcel } from '../parsers/excel';
@@ -110,7 +111,7 @@ async function updateClassCache() {
             declines,
             questions: restructureQuestionData(pdf),
             ...metaData,
-          });
+          } as Report);
         });
       });
 
@@ -172,6 +173,9 @@ function restructureQuestionData(questions) {
     effectiveness: {
       summary: questions.effectivenessSum,
       87: questions[87],
+    },
+    workload: {
+      9: questions[9],
     },
   };
 }

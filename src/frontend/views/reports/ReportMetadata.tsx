@@ -2,23 +2,10 @@ import * as React from 'react';
 import { HorizontalBar, Pie } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 
-import { HoursQuestion } from '../../../common/types/ExcelTypes';
+import Report from '../../../common/Report';
 import Colors from '../Colors';
 
-interface ReportMetadataProps {
-  responses: number;
-  declines: number;
-  enrollment: number;
-  instructorFirstName: string;
-  instructorLastName: string;
-  instructorId: number;
-  type: string;
-  level: string;
-  termTitle: string;
-  9: HoursQuestion;
-}
-
-class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
+class ReportMetadata extends React.Component<Report, {}> {
   public render() {
     const unanswered = this.props.enrollment - this.props.responses - this.props.declines;
     return (
@@ -91,10 +78,26 @@ class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
             legend={{ position: 'bottom' }}
             data={{
               datasets: [
-                { backgroundColor: Colors.GREAT, label: '1-4', data: [this.props[9]['1-4']] },
-                { backgroundColor: Colors.GOOD, label: '5-8', data: [this.props[9]['5-8']] },
-                { backgroundColor: '#dedede', label: '9-12', data: [this.props[9]['9-12']] },
-                { backgroundColor: Colors.BAD, label: '13-16', data: [this.props[9]['13-16']] },
+                {
+                  backgroundColor: Colors.GREAT,
+                  label: '1-4',
+                  data: [this.props.questions.workload[9]['1-4']],
+                },
+                {
+                  backgroundColor: Colors.GOOD,
+                  label: '5-8',
+                  data: [this.props.questions.workload[9]['5-8']],
+                },
+                {
+                  backgroundColor: '#dedede',
+                  label: '9-12',
+                  data: [this.props.questions.workload[9]['9-12']],
+                },
+                {
+                  backgroundColor: Colors.BAD,
+                  label: '13-16',
+                  data: [this.props.questions.workload[9]['13-16']],
+                },
                 {
                   backgroundColor: Colors.TERRIBLE,
                   label: '17-20',
