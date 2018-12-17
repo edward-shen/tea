@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { Database } from 'sqlite3';
 
 import { DATABASE_LOCATION } from '../utils';
+import FilteredMetadata from './FilteredMetadata';
 
 /**
  * Keeps track of metadata, storing information in a SQLite database. This was
@@ -54,8 +55,8 @@ class MetaCache {
   /**
    * Returns the necessary metadata needed for class fetching and caching.
    */
-  public async getReportData() {
-    return await this.all(`SELECT * from ${this.TABLE}`);
+  public async getReportData(): Promise<FilteredMetadata[]> {
+    return await this.all(`SELECT * from ${this.TABLE}`) as FilteredMetadata[];
   }
 
   /**

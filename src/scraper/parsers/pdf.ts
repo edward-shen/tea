@@ -27,8 +27,7 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
   const matched = pdfData.match(/(?<=%)[.\d]+/g); // The magic of regex <3
 
   if (!matched) {
-    // PDF regex did not match anything, apparently this is common.
-    // console.warn('PDF did not match anything!');
+    // It's possible for the PDF to be empty. If so, don't try to parse data.
     return null;
   }
 
