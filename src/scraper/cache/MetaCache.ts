@@ -29,6 +29,7 @@ class MetaCache {
     }
 
     this.db = new Database(`${DATABASE_LOCATION}/meta.db`, () => this.init());
+    this.db.parallelize();
   }
 
   /**
@@ -79,29 +80,27 @@ class MetaCache {
    * @param json Array of JSON metadata to add to our database.
    */
   public async addToCache(json: Metadata[]) {
-    this.db.parallelize(() => { // Kinda like a #pragma lmao
-      for (const report of json) {
-        const row = [
-          report.id,
-          report.instructorId,
-          report.termId,
-          report.subject,
-          Number(report.number),
-          report.termTitle,
-          report.name,
-          report.instructorFirstName,
-          report.instructorLastName,
-          report.termEndDate,
-          report.enrollment,
-          Number(report.sourceId),
-          report.type,
-          report.level,
-        ];
+    for (const report of json) {
+      const row = [
+        report.id,
+        report.instructorId,
+        report.termId,
+        report.subject,
+        Number(report.number),
+        report.termTitle,
+        report.name,
+        report.instructorFirstName,
+        report.instructorLastName,
+        report.termEndDate,
+        report.enrollment,
+        Number(report.sourceId),
+        report.type,
+        report.level,
+      ];
 
-        this.db.run(
-          `INSERT INTO ${this.TABLE} VALUES (${'?, '.repeat(row.length).slice(0, -2)})`, row);
-      }
-    });
+      this.db.run(
+        `INSERT INTO ${this.TABLE} VALUES (${'?, '.repeat(row.length).slice(0, -2)})`, row);
+    }
   }
 
   /**

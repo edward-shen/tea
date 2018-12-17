@@ -9,7 +9,7 @@ class ProgressBar {
   private readonly bar = new Bar({
     format: '{bar} {percentage}% '
       + `(${green('{value}')}/{total})`
-      + ` | {duration_formatted}}`,
+      + ` | {duration_formatted}`,
   }, Presets.shades_classic);
   private readonly maxValue;
 
@@ -21,8 +21,8 @@ class ProgressBar {
     this.bar.start(this.maxValue, initVal);
   }
 
-  public increment(): void {
-    this.bar.increment(1);
+  public increment(amt = 1): void {
+    this.bar.increment(amt);
   }
 
   public stop(): void {

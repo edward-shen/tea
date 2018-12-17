@@ -28,7 +28,7 @@ async function parsePdf(pdfBuffer): Promise<PDFData> {
 
   if (!matched) {
     // PDF regex did not match anything, apparently this is common.
-    console.warn('PDF did not match anything!');
+    // console.warn('PDF did not match anything!');
     return null;
   }
 

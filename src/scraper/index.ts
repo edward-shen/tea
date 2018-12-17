@@ -7,6 +7,9 @@ async function main() {
   await Driver.auth();
 
   await updateMetaCache();
+
+  await delay(1000);
+
   await updateClassCache();
 
   await PostProcessor.process();
