@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import Colors from '../Colors';
 
-import '../../css/reports/ReportMetadata.scss';
 interface ReportMetadataProps {
   responses: number;
   declines: number;

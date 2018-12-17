@@ -6,8 +6,6 @@ import * as InfiniteScroller from 'react-infinite-scroller';
 import CardType from '../../common/api/CardType';
 import Card from '../Card';
 
-import '../css/CardView.scss';
-
 interface CardViewState {
   results: CardType[];
 }

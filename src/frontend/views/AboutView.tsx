@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import '../css/AboutView.scss';
-
 class AboutView extends React.Component<{}, {}> {
   public render() {
     return (

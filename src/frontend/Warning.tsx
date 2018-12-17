@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import InfoIcon from './assets/InfoIcon';
 
-import './css/Warning.scss';
-
 interface WarningProps {
   text: string;
   level: 'info' | 'warning' | 'error';

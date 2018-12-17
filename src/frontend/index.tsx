@@ -12,7 +12,7 @@ import ProfessorView from './views/professor/ProfessorView';
 import ReportView from './views/reports/ReportView';
 
 import './css/Base.scss';
-import './css/Common.scss';
+import Footer from './Footer';
 
 ReactDOM.render(
 <BrowserRouter>
@@ -28,6 +28,7 @@ ReactDOM.render(
         <Route path='/class/:id' component={ClassView} />
         <Route path='/prof/:id' component={ProfessorView} />
       </Switch>
+      <Footer />
     </div>
 </BrowserRouter>,
 document.getElementsByClassName('tea-app')[0]);

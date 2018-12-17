@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 
 import CardType from '../common/api/CardType';
 
-import './css/Card.scss';
-
 class Card extends React.Component<CardType> {
   public render() {
     let header = (

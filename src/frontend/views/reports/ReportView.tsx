@@ -3,7 +3,6 @@ import Report from '../../../common/Report';
 import BaseProps from '../BaseProps';
 import ReportHeader from './ReportHeader';
 
-import '../../css/reports/ReportView.scss';
 import ReportBody from './ReportBody';
 import Sections from './Sections';
 interface ReportViewState {

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import Button from './Button';
-import './css/Nav.scss';
 
 class Navbar extends React.Component<{}, {}> {
   public render() {
