@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import Colors from '../Colors';
+import RatingBox from './RatingBox';
 import Sections, { getLink } from './Sections';
 
 interface Rating {
@@ -13,23 +15,14 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     return (
       this.props.ratings.map((rating, index) => {
         return (
-          <a href={`#${getLink(rating.name)}`} key={index}>
-            <section className='rating rounded hover-shadow'>
-                <span className='rating-with-delta'>
-                  <h1>{rating.mean ? rating.mean.toFixed(1) : 'N/A' }</h1>
-                  { rating.mean && <span
-                    style={this.getBackgroundColor(rating.mean, rating.deptMean)}
-                    className='rating-difference rounded'>
-                    {this.getDifference(rating.mean, rating.deptMean)}
-                  </span> }
-                </span>
-                <p className='rating-small'>
-                  {rating.deptMean ?
-                    `Dept. Avg: ${rating.deptMean.toFixed(1)}` : 'No available data'}
-                </p>
-              <p>{rating.name}</p>
-            </section>
-          </a>
+          <RatingBox
+            key={index}
+            rating={rating.mean.toFixed(1)}
+            href={`#${getLink(rating.name)}`}
+            desc={rating.name}
+            delta={this.getDifference(rating.mean, rating.deptMean)}
+            subtext={`Dept. Avg: ${rating.deptMean.toFixed(1)}`}
+            style={this.getBackgroundColor(rating.mean, rating.deptMean)}/>
         );
       })
     );
