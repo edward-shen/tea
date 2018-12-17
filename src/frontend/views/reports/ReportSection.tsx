@@ -9,7 +9,6 @@ import {
   WorkloadQuestions,
 } from '../../../common/types/Questions';
 
-import { HoursQuestion } from '../../../common/types/ExcelTypes';
 import RatingBox from './RatingBox';
 import ReportSectionData from './ReportSectionData';
 

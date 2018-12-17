@@ -120,8 +120,15 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
       toReturn.push(
         <Bar
           key='breakdown'
+          height={75}
           options={{
-            title: { display: true, text: 'Response breakdown', fontFamily: `'Montserrat'` },
+            title: {
+              display: true,
+              text: 'Response breakdown',
+              fontFamily: `'Montserrat'`,
+              fontSize: 16,
+              fontColor: '#000',
+            },
             scales: {
               yAxes: [{
                 ticks: { min: 0, stepSize: [1, 2, 5], suggestedMax: this.props.responses },
