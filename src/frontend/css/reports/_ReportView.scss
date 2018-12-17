@@ -25,7 +25,11 @@
   }
 
   .rating-small {
-    margin-top: 0;
+    margin: 0 auto;
+    &:last-child {
+      margin-bottom: auto;
+    }
+
     font-size: 0.75rem;
   }
 

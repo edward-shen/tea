@@ -4,17 +4,16 @@ import Report from '../../../common/Report';
 import ReportMetadata from './ReportMetadata';
 import ReportSection from './ReportSection';
 import Sections from './Sections';
-declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 class ReportBody extends React.Component<Report> {
   public render() {
     return [
       <ReportMetadata key={'metadata'} {...this.props}/>,
       this.splitReport().map((data) => {
-        const { name, ...info } = data;
+        const { name, summary, ...info } = data;
         return (
           <ReportSection
             key={name}
-            summary={this.props.courseSum}
+            summary={summary}
             title={name}
             data={info}
             responses={this.props.responses}
@@ -28,6 +27,7 @@ class ReportBody extends React.Component<Report> {
     // Parallel Data structure, this is a problem for the backend to solve.
     sections[0] = {
       name: Sections.CLASS,
+      summary: this.props.courseSum,
       1: this.props[1],
       2: this.props[2],
       3: this.props[3],
@@ -44,6 +44,7 @@ class ReportBody extends React.Component<Report> {
 
     sections[1] = {
       name: Sections.LEARNABILITY,
+      summary: this.props.learningSum,
       10: this.props[10],
       11: this.props[11],
       12: this.props[12],
@@ -52,6 +53,7 @@ class ReportBody extends React.Component<Report> {
 
     sections[2] = {
       name: Sections.INSTRUCTOR,
+      summary: this.props.instructorSum,
       15: this.props[15],
       16: this.props[16],
       17: this.props[17],
@@ -69,6 +71,7 @@ class ReportBody extends React.Component<Report> {
 
     sections[3] = {
       name: Sections.EFFECTIVENESS,
+      summary: this.props.effectivenessSum,
       87: this.props[87],
     };
 
