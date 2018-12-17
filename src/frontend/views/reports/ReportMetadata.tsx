@@ -80,7 +80,6 @@ class ReportMetadata extends React.Component<ReportMetadataProps, {}> {
                   ticks: {
                     beginAtZero: true,
                     stepSize: 1,
-                    suggestedMax: this.props.responses,
                   },
                   display: false,
                   stacked: true,
