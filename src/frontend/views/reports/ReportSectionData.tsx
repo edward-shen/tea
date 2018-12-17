@@ -4,6 +4,7 @@ import { Bar } from 'react-chartjs-2';
 import ReactTable from 'react-table';
 
 import { Question } from '../../../common/types/ExcelTypes';
+import { PDFQuestion } from '../../../common/types/PDFTypes';
 import {
   ClassQuestions,
   EffectivenessQuestions,
@@ -19,14 +20,18 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
 
     const { responses, ...questions } = this.props;
     return <ReactTable
-      data={Object.values(questions).map((row: Question) => {
+      data={Object.values(questions).map((row: Question & PDFQuestion) => {
         const newRow = row as any;
-        newRow.stdDev = Number(row.stdDev).toFixed(2);
         if (newRow.courseMean === 0) {
           newRow.courseMean = 'N/A';
           newRow.deptMean = null;
           newRow.univMean = null;
           newRow.stdDev = null;
+        } else {
+          newRow.courseMean = Number(row.courseMean).toFixed(1);
+          newRow.deptMean = Number(row.deptMean).toFixed(1);
+          newRow.univMean = Number(row.univMean).toFixed(1);
+          newRow.stdDev = Number(row.stdDev).toFixed(2);
         }
 
         return newRow;
@@ -52,20 +57,36 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
           sortable: false,
         },
         {
-          Header: 'Mean',
+          Header: 'Course Mean',
           accessor: 'courseMean',
+          maxWidth: 128,
+          style: {
+            'text-align': 'right',
+          },
         },
         {
           Header: 'Dept. Mean',
           accessor: 'deptMean',
+          maxWidth: 128,
+          style: {
+            'text-align': 'right',
+          },
         },
         {
           Header: 'Univ. Mean',
           accessor: 'univMean',
+          maxWidth: 128,
+          style: {
+            'text-align': 'right',
+          },
         },
         {
           Header: 'Standard Deviation',
           accessor: 'stdDev',
+          maxWidth: 196,
+          style: {
+            'text-align': 'right',
+          },
         },
       ]}
       SubComponent={(row) => {
