@@ -14,8 +14,8 @@ class RatingBox extends React.Component<RatingBoxProps> {
   public render() {
     let subTexts;
     if (this.props.subtext instanceof Array) {
-      subTexts = this.props.subtext.map((text) => {
-        return <p className='rating-small'>{text}</p>;
+      subTexts = this.props.subtext.map((text, i) => {
+        return <p key={i} className='rating-small'>{text}</p>;
       });
     } else {
       subTexts = <p className='rating-small'>{this.props.subtext}</p>;

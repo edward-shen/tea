@@ -28,9 +28,9 @@ class ReportSection extends React.Component<ReportSectionProps> {
         <div className='ratings'>
           <RatingBox
             rating={this.props.summary.mean.toFixed(1)}
-            subtext={[
-              `Median: ${this.props.summary.median} | σ: ${this.props.summary.stdev.toFixed(1)}`,
-            ]}
+            subtext={
+              `Median: ${this.props.summary.median} | σ: ${this.props.summary.stdev.toFixed(1)}`
+            }
             desc='Section Mean'/>
           <RatingBox
             rating={this.props.summary.deptMean.toFixed(1)}
