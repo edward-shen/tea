@@ -12,6 +12,7 @@ import {
   LearnabilityQuestions,
   WorkloadQuestions,
 } from '../../../common/types/Questions';
+import Warning from '../../Warning';
 import { PRIMARY } from '../Colors';
 
 class ReportSectionData extends React.Component<{ responses: number } & (ClassQuestions |
@@ -89,42 +90,67 @@ class ReportSectionData extends React.Component<{ responses: number } & (ClassQu
           },
         },
       ]}
-      SubComponent={(row) => {
-        const totalCount = row.original[1]
-         + row.original[2]
-         + row.original[3]
-         + row.original[4]
-         + row.original[5];
+      SubComponent={row => this.generateBreakdowns(row)}/>;
+  }
 
-        if (totalCount) {
-          return (
-            <Bar
-              options={{
-                title: { display: true, text: 'Response breakdown', fontFamily: `'Montserrat'` },
-                scales: {
-                  yAxes: [{ ticks: { min: 0, stepSize: [1, 2, 5], suggestedMax: responses } }],
-                },
-              }}
-              legend={{ display: false }}
-              data={{
-                labels: [1, 2, 3, 4, 5],
-                datasets: [{
-                  backgroundColor: PRIMARY,
-                  data: [
-                    row.original[1],
-                    row.original[2],
-                    row.original[3],
-                    row.original[4],
-                    row.original[5],
-                  ],
-                }],
-              }}
-            />
-          );
-        }
+  private generateBreakdowns(row) {
+    const totalCount = row.original[1]
+      + row.original[2]
+      + row.original[3]
+      + row.original[4]
+      + row.original[5];
 
-        return <em>Not applicable</em>;
-      }}/>;
+    if (totalCount) {
+
+      const toReturn = [];
+
+      const naCount = row.original[-1];
+
+      if (naCount) {
+        toReturn.push(
+          <Warning
+            level='info'
+            text={
+              `${naCount} of all student responses have reported this question not applicable.`}
+          />);
+      }
+
+      toReturn.push(
+        <Bar
+          key='breakdown'
+          options={{
+            title: { display: true, text: 'Response breakdown', fontFamily: `'Montserrat'` },
+            scales: {
+              yAxes: [{
+                ticks: { min: 0, stepSize: [1, 2, 5], suggestedMax: this.props.responses },
+              }],
+            },
+          }}
+          legend={{ display: false }}
+          data={{
+            labels: [1, 2, 3, 4, 5],
+            datasets: [{
+              backgroundColor: PRIMARY,
+              data: [
+                row.original[1],
+                row.original[2],
+                row.original[3],
+                row.original[4],
+                row.original[5],
+              ],
+            }],
+          }}
+        />);
+
+      return toReturn;
+    }
+
+    return (
+      <Warning
+        level='info'
+        text='All students reponses have reported this question not applicable.'
+      />);
+
   }
 }
 

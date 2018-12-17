@@ -1,0 +1,8 @@
+.warning {
+  display: flex;
+  align-items: center;
+  p {
+    margin-left: 1rem;
+    margin-top: auto; // This centers it and I don't know why.
+  }
+}

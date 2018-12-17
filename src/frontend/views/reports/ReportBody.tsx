@@ -67,6 +67,11 @@ class ReportBody extends React.Component<Report> {
       27: this.props[27],
     };
 
+    sections[3] = {
+      name: Sections.EFFECTIVENESS,
+      87: this.props[87],
+    };
+
     return sections;
   }
 }
