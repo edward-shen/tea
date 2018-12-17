@@ -10,8 +10,6 @@ import MetaCache from './cache/MetaCache';
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
 
-// TODO: Handle read timeouts
-
 /**
  * Controls the driver requesting web data. Currently this is implemented as a
  * Selenium webdriver, but later this should be best implemented without the
@@ -36,6 +34,9 @@ class Driver {
     this.password = Config.driver.password;
     this.jar = jar();
     this.request = defaults({
+      agentOptions: {
+        keepAlive: true,
+      },
       jar: this.jar,
       followAllRedirects: true,
       headers: {
@@ -220,17 +221,25 @@ class Driver {
 
   /**
    * Consequence of the DRY principle. Returns a Promise for the HTTP response
-   * and body, as a tuple.
+   * and body, as a tuple, retrying up to the specified count (or 5, by default).
+   *
+   * I'll be honest, I have no idea if this works, but it looks like it does?
+   * I've never written a currying recursive promise function before.
    *
    * @param fn The request operation to call.
    * @param options The options to pass to the request function.
+   * @param retry The number of attempts to retry before failing.
    */
-  private requestOperation(fn, options): Promise<[any, string]> {
-    return new Promise<[any, string]>((resolve, reject) => {
-      fn(options, (err, resp, body) => {
+  private async requestOperation(fn, options, retry = 5): Promise<[any, string]> {
+    return new Promise<[any, string]>((resolve) => {
+      fn(options, async (err, resp, body) => {
         if (err) {
-          console.log(err);
-          reject(err);
+          if (retry === 0) {
+            throw err;
+          } else {
+            console.warn('Socket error, retrying...');
+            resolve(await this.requestOperation(fn, options, retry - 1));
+          }
         } else {
           resolve([resp, body]);
         }
