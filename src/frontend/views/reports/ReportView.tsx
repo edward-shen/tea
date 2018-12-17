@@ -21,7 +21,6 @@ class ReportView extends React.Component<BaseProps, ReportViewState> {
       await fetch(
         `/api/report?id=${this.props.match.params.id}&prof=${this.props.match.params.prof}`))
         .json();
-    console.log(info);
     this.setState({
       data: info,
     });

@@ -20,7 +20,6 @@ interface ReportSectionProps {
 
 class ReportSection extends React.Component<ReportSectionProps> {
   public render() {
-    console.log(Object.values(this.props.data));
     return (
       <section id={this.props.title.toLowerCase().replace(' ', '-')}>
         <h2>{this.props.title}</h2>

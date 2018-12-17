@@ -7,4 +7,7 @@ enum BackgroundColors {
   TERRIBLE = '#f7a6b9',
 }
 
+const PRIMARY = '#d41b2c';
+
 export default BackgroundColors;
+export { PRIMARY };
