@@ -17,10 +17,9 @@ import Warning from '../../Warning';
 import { PRIMARY } from '../Colors';
 
 class ReportSectionData extends React.Component<{ responses: number } & (ClassQuestions |
-  EffectivenessQuestions | InstructorQuestions | LearnabilityQuestions | WorkloadQuestions)> {
+  EffectivenessQuestions | InstructorQuestions | LearnabilityQuestions)> {
   public render() {
-
-    const { responses, ...questions } = this.props;
+    const { responses, summary, ...questions } = this.props;
     return <ReactTable
       data={Object.values(questions).map((row: Question & PDFQuestion) => {
         const newRow = row as any;

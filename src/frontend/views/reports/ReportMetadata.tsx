@@ -101,7 +101,7 @@ class ReportMetadata extends React.Component<Report, {}> {
                 {
                   backgroundColor: Colors.TERRIBLE,
                   label: '17-20',
-                  data: [this.props[9]['17-20']],
+                  data: [this.props.questions.workload[9]['17-20']],
                 },
               ],
             }}
