@@ -3,9 +3,11 @@ import { XmlEntities } from 'html-entities';
 import { CookieJar, defaults, jar } from 'request';
 import CacheStatus from './cache/CacheStatus';
 
+import { promisify } from 'util';
 import Config from '../common/Config';
 import ExitCodes from '../common/ExitCodes';
 import MetaCache from './cache/MetaCache';
+import { delay } from './utils';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
@@ -42,7 +44,7 @@ class Driver {
       headers: {
         gzip: true,
         // This must be present for authentication to work.
-        'User-Agent': `Your servers shouldn't return 401 on empty user-agents.`,
+        'User-Agent': `Hello world!`,
       },
     });
   }
@@ -223,28 +225,22 @@ class Driver {
    * Consequence of the DRY principle. Returns a Promise for the HTTP response
    * and body, as a tuple, retrying up to the specified count (or 5, by default).
    *
-   * I'll be honest, I have no idea if this works, but it looks like it does?
-   * I've never written a currying recursive promise function before.
-   *
    * @param fn The request operation to call.
    * @param options The options to pass to the request function.
    * @param retry The number of attempts to retry before failing.
    */
   private async requestOperation(fn, options, retry = 5): Promise<[any, string]> {
-    return new Promise<[any, string]>((resolve) => {
-      fn(options, async (err, resp, body) => {
-        if (err) {
-          if (retry === 0) {
-            throw err;
-          } else {
-            console.warn('Socket error, retrying...');
-            resolve(await this.requestOperation(fn, options, retry - 1));
-          }
-        } else {
-          resolve([resp, body]);
-        }
-      });
-    });
+    const fnPromised = promisify(fn);
+    for (let i = 0; i < retry; i += 1) {
+      try {
+        const { resp, body } =  await fnPromised(options);
+        return [resp, body];
+      } catch (e) {
+        const delayAmt = 200 * Math.pow(2, i);
+        console.warn(`Socket error, retrying in ${delayAmt}ms`);
+        await delay(delayAmt);
+      }
+    }
   }
 
   /**
