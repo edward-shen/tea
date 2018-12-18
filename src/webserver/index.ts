@@ -1,3 +1,4 @@
+import { diff } from 'deep-object-diff';
 import * as Express from 'express';
 
 import Config from '../common/Config';
@@ -18,14 +19,23 @@ app.get('/api/report', async (req, res) => {
       if (result.length === 1) {
         res.send(result[0]);
       } else {
-        console.log(result.map((a) => {
-          return {
-            instructorFirstName: a.instructorFirstName,
-            subject: a.subject,
-            number: a.number,
-          };
-        }));
-        res.send({ error: result.length });
+        const difference = Object.keys(diff(result[0], result[1]));
+        if (difference.length === 1 && difference[0] === '_id') {
+          console.warn('Multiple results found for id/prof combo; corrupted metadata db?');
+          res.send(result[0]);
+        } else {
+          console.log(result.map((a) => {
+            return {
+              _id: a._id,
+              queryId: req.query.id,
+              instructorId: req.query.prof,
+              instructorFirstName: a.instructorFirstName,
+              subject: a.subject,
+              number: a.number,
+            };
+          }));
+          res.send({ error: result.length });
+        }
       }
     });
 });
