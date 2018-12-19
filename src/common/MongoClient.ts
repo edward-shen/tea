@@ -55,7 +55,6 @@ class MongoDBClient {
   private selectCollection(collection: string): void {
     this._collection = this.db.collection(collection);
   }
-
 }
 
 export default MongoDBClient;
