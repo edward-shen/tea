@@ -12,7 +12,7 @@ async function main() {
 
   await updateClassCache();
 
-  // await PostProcessor.process();
+  await PostProcessor.process();
 
   await delay(1000);
 
