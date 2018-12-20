@@ -10,6 +10,10 @@ interface Rating {
   deptMean: number;
 }
 
+/**
+ * Displays a list of ratings as a row of rating boxes. Will provide
+ * automatically colorize the delta values by an arbitrary value.
+ */
 class Ratings extends React.Component<{ ratings: Rating[] }> {
   public render() {
     return (
@@ -20,7 +24,7 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
             rating={rating.mean.toFixed(1)}
             href={`#${getLink(rating.name)}`}
             desc={rating.name}
-            delta={this.getDifference(rating.mean, rating.deptMean)}
+            delta={this.getDifferenceText(rating.mean, rating.deptMean)}
             subtext={`Dept. Avg: ${rating.deptMean.toFixed(1)}`}
             style={this.getBackgroundColor(rating.mean, rating.deptMean)}/>
         );
@@ -28,6 +32,7 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     );
   }
 
+  // Generates the background color given the difference
   private getBackgroundColor(mean: number, deptMean: number) {
     // I was getting floating point errors so I converted them to integers.
     const difference = Math.round(10 * (mean - deptMean));
@@ -48,8 +53,15 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     return style;
   }
 
-  private getDifference(mean: number, deptMean: number) {
-    const difference = (mean - deptMean).toFixed(1);
+  /**
+   * Generates text with (-, ±, or +) of the difference between two numbers,
+   * rounded to the tenth.
+   *
+   * @param center The value to use as the anchor point.
+   * @param value The value to find the difference of.
+   */
+  private getDifferenceText(center: number, value: number) {
+    const difference = (center - value).toFixed(1);
 
     if (difference[0] === '-') {
       return difference;

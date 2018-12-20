@@ -9,12 +9,11 @@ interface ReportHeaderProps {
   ratings: Rating[];
 }
 
+/**
+ * Contains logic for rendering the top row of the report, including the title
+ * and overall summaries of the sections.
+ */
 class ReportHeader extends React.Component<ReportHeaderProps> {
-  public constructor(props) {
-    super(props);
-    this.state = { data: {} };
-  }
-
   public render() {
     return (
       <header className='reportview-header'>

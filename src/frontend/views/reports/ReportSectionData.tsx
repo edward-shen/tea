@@ -6,18 +6,11 @@ import 'react-table/react-table.css';
 
 import { Question } from '../../../common/types/ExcelTypes';
 import { PDFQuestion } from '../../../common/types/PDFTypes';
-import {
-  ClassQuestions,
-  EffectivenessQuestions,
-  InstructorQuestions,
-  LearnabilityQuestions,
-  WorkloadQuestions,
-} from '../../../common/types/Questions';
+import { SectionQuestion } from '../../../common/types/Questions';
 import Warning from '../../Warning';
 import { PRIMARY } from '../Colors';
 
-class ReportSectionData extends React.Component<{ responses: number } & (ClassQuestions |
-  EffectivenessQuestions | InstructorQuestions | LearnabilityQuestions)> {
+class ReportSectionData extends React.Component<{ responses: number } & SectionQuestion> {
   public render() {
     const { responses, summary, ...questions } = this.props;
     return <ReactTable

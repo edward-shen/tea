@@ -1,24 +1,20 @@
 import * as React from 'react';
 
-import { PDFSummary } from '../../../common/types/PDFTypes';
-import {
-  ClassQuestions,
-  EffectivenessQuestions,
-  InstructorQuestions,
-  LearnabilityQuestions,
-  WorkloadQuestions,
-} from '../../../common/types/Questions';
+import { SectionQuestion } from '../../../common/types/Questions';
 
 import RatingBox from './RatingBox';
 import ReportSectionData from './ReportSectionData';
 
 interface ReportSectionProps {
-  data: ClassQuestions | EffectivenessQuestions | InstructorQuestions |
-    LearnabilityQuestions;
+  data: SectionQuestion;
   title: string;
   responses: number;
 }
 
+/**
+ * A single section of the report, containing the title, ratings, and the
+ * actual table of questions.
+ */
 class ReportSection extends React.Component<ReportSectionProps> {
   public render() {
     return (

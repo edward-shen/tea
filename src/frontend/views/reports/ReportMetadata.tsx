@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom';
 import Report from '../../../common/Report';
 import Colors from '../Colors';
 
-class ReportMetadata extends React.Component<Report, {}> {
+/**
+ * Generates the metadata section of the reports, including the repsonse pie
+ * chart and workload distribution chart.
+ */
+class ReportMetadata extends React.Component<Report> {
   public render() {
     const unanswered = this.props.enrollment - this.props.responses - this.props.declines;
     return (
@@ -114,9 +118,7 @@ class ReportMetadata extends React.Component<Report, {}> {
               }],
               labels: ['Responses', 'Abstains', 'Declines'],
             }}
-            legend={{
-              position: 'bottom',
-            }}
+            legend={{ position: 'bottom' }}
             options={{
               title: {
                 display: true,

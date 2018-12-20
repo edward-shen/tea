@@ -9,6 +9,11 @@ interface RatingBoxProps {
   style?: React.CSSProperties;
 }
 
+/**
+ * Represents a general-purpose box meant for use to display a numerical value,
+ * with an optional value `delta` to be rendered beside the primary number. A
+ * style may also be passed in to style the `delta` text.
+ */
 class RatingBox extends React.Component<RatingBoxProps> {
 
   public render() {
@@ -36,7 +41,7 @@ class RatingBox extends React.Component<RatingBoxProps> {
       </section>);
 
     if (this.props.href) {
-      return <a href={this.props.href} >{returnVal}</a>;
+      return <a href={this.props.href}>{returnVal}</a>;
     }
 
     return returnVal;

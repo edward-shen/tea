@@ -50,10 +50,14 @@ interface WorkloadQuestions {
   9: HoursQuestion;
 }
 
+type SectionQuestion =
+  ClassQuestions | LearnabilityQuestions | InstructorQuestions | EffectivenessQuestions;
+
 export {
   ClassQuestions,
   LearnabilityQuestions,
   InstructorQuestions,
   EffectivenessQuestions,
   WorkloadQuestions,
+  SectionQuestion,
 };

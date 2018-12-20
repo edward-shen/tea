@@ -16,9 +16,24 @@ This roadmap is completely subject to change and makes no guarantees.
     - [x] Mass downloading of memory
   - [x] Storing information received above into a database.
 - [ ] Frontend
-  - [ ] Setup basic webapp
-    - [ ] Implement express backend
-    - [ ] Implement basic react frontend
-  - [ ] TODO: Finish the rest
+  - [x] Setup basic webapp
+    - [x] Implement express backend
+    - [x] Implement basic react frontend
+  - [ ] Reports
+    - [ ] Drop in replacement for Reports
+    - [ ] Links to professors and classes
+  - [ ] Classes
+    - [ ] Historical Data
+    - [ ] Top professor
+    - [ ] Most common professor
+    - [ ] ???
+  - [ ] Professors
+    - [ ] Average rating
+    - [ ] Best class
+    - [ ] worst class
+    - [ ] ???
+- [ ] Move over to GraphQL
+  - [ ] Clean up APIs
+  - [ ] Remove unnecessary types
 - [ ] Run in production
   - [ ] Fix things in production because I have no idea how to run things in production,
