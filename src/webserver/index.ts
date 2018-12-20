@@ -1,12 +1,30 @@
 import { diff } from 'deep-object-diff';
 import * as Express from 'express';
+import * as graphqlHTTP from 'express-graphql';
 
 import Config from '../common/Config';
 import MongoClient from '../common/MongoClient';
 import { toReportCard } from './Cardifier';
+import schema from '../common/graphql/schema';
 
 const app = Express();
 const mongoClient = new MongoClient('report');
+
+const graphqlRoot = {
+  report: ({ id, instructorId }: { id: number, instructorId: number }) => {
+    if (instructorId) {
+      return mongoClient.get({ id, instructorId });
+    }
+
+    return mongoClient.get({ id });
+  },
+};
+
+app.use('/graphql', graphqlHTTP({
+  schema,
+  rootValue: graphqlRoot,
+  graphiql: true,
+}));
 
 app.get('/api/search', async (req, res) => {
   mongoClient.get({}, req.query.page)
