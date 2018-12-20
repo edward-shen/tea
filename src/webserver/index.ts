@@ -1,30 +1,29 @@
 import { diff } from 'deep-object-diff';
 import * as Express from 'express';
-import * as graphqlHTTP from 'express-graphql';
+import { ApolloServer } from 'apollo-server-express';
 
 import Config from '../common/Config';
 import MongoClient from '../common/MongoClient';
 import { toReportCard } from './Cardifier';
-import schema from '../common/graphql/schema';
+import typeDefs from '../common/graphql/typeDefs';
 
 const app = Express();
 const mongoClient = new MongoClient('report');
 
-const graphqlRoot = {
-  report: ({ id, instructorId }: { id: number, instructorId: number }) => {
-    if (instructorId) {
-      return mongoClient.get({ id, instructorId });
-    }
-
-    return mongoClient.get({ id });
+const resolvers = {
+  Query: {
+    report: (_, { id, instructorId }: { id: number, instructorId: number }) => {
+      if (instructorId) {
+        return mongoClient.get({ id, instructorId });
+      }
+      return mongoClient.get({ id });
+    },
   },
 };
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  rootValue: graphqlRoot,
-  graphiql: true,
-}));
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.applyMiddleware({ app });
 
 app.get('/api/search', async (req, res) => {
   mongoClient.get({}, req.query.page)
@@ -59,5 +58,5 @@ app.get('/api/report', async (req, res) => {
 });
 
 app.listen(Config.dev_server.express_port, () => {
-  console.log(`Server listening on port ${Config.dev_server.express_port}`);
+  console.log(`Server listening on port ${Config.dev_server.express_port}${server.graphqlPath}`);
 });

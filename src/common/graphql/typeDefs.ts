@@ -1,4 +1,6 @@
-export default `
+import { gql } from 'apollo-server-core';
+
+export default gql`
   type Report {
     "The TRACE id of the report"
     id: Int!
@@ -17,5 +19,19 @@ export default `
     level: String!
     responses: Int!
     declines: Int!
+  }
+
+  type Professor {
+    number: Int
+  }
+
+  type Class {
+    number: Int
+  }
+
+  type Query {
+    report(id: Int, professorId: Int, ): [Report]
+    professor(id: Int!): Professor
+    class(subject: String!, number: Int!): Class
   }
 `;
