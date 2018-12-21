@@ -16,13 +16,24 @@ class PostProcessor {
 
   public async process() {
     this.size = await reportClient.size();
+    const shouldUpdateClasses = await classClient.size() < this.size;
+    const shouldUpdateProfs = await profClient.size() < this.size;
 
-    console.log(`Generating Class Collections... This shouldn't take long.`);
-    await this.generateClassCollection();
-    console.log(`Generating Professor Collections... This shouldn't take long.`);
-    await this.generateProfessorCollection();
-    console.log(`Linking professor collection to class collections...`);
-    await this.linkClassToProfessor();
+    if (shouldUpdateClasses) {
+      console.log(`Generating Class Collections... This shouldn't take long.`);
+      await this.generateClassCollection();
+    }
+
+    if (shouldUpdateProfs) {
+      console.log(`Generating Professor Collections... This shouldn't take long.`);
+      await this.generateProfessorCollection();
+    }
+
+    if (shouldUpdateClasses && shouldUpdateProfs) {
+      console.log(`Linking professor collection to class collections...`);
+      await this.linkClassToProfessor();
+    }
+
     reportClient.close();
     classClient.close();
     profClient.close();
