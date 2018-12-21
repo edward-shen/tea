@@ -1,8 +1,12 @@
 node_modules/
 dist/
-/cache/
+cache/
 .vscode/
 coverage/
+
 config.toml
 yarn-error.log
 *.tar.gz
+
+class.json
+report.json
