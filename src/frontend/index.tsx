@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
 
 import Navbar from './Navbar';
 import AboutView from './views/AboutView';
@@ -16,7 +18,10 @@ import Footer from './Footer';
 
 ReactDOM.render(
 <BrowserRouter>
-    <div>
+    <ApolloProvider client={new ApolloClient({
+      link: new HttpLink(),
+      cache: new InMemoryCache(),
+    })}>
       <Navbar />
       <Switch>
         <Route exact path='/' component={CardView} />
@@ -29,6 +34,6 @@ ReactDOM.render(
         <Route path='/prof/:id' component={ProfessorView} />
       </Switch>
       <Footer />
-    </div>
+    </ApolloProvider>
 </BrowserRouter>,
 document.getElementsByClassName('tea-app')[0]);

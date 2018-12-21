@@ -13,8 +13,9 @@ module.exports = {
   devtool: "source-map",
 
   resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json", ".scss", ".css"]
+    // .mjs must appear before .js.
+    // https://github.com/graphql/graphql-js/issues/1272#issuecomment-377384574
+    extensions: [ ".mjs", ".ts", ".tsx", ".js", ".json", ".scss", ".css"]
   },
 
   module: {
