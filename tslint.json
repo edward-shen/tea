@@ -18,7 +18,8 @@
     "no-inferrable-types": true,
     "no-shadowed-variable": false,
     "prefer-array-literal": [true, { "allow-type-parameters": true }],
-    "align": [true, "elements", "members", "parameters", "statements"]
+    "align": [true, "elements", "members", "parameters", "statements"],
+    "import-name": false,
   },
   "rulesDirectory": []
 }

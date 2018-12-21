@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
-import CardType from '../common/api/CardType';
+import CardType from '../src/common/api/CardType';
 
 class Card extends React.Component<CardType> {
   public render() {
@@ -15,17 +15,17 @@ class Card extends React.Component<CardType> {
 
     if (this.props.bodyLink) {
       header = (
-        <Link className='card-top' to={this.props.bodyLink}>
-          {header}
+        <Link href={this.props.bodyLink}>
+          <a className='card-top'>{header}</a>
         </Link>);
     }
 
     if (this.props.leftTextLink) {
-      left = <Link to={this.props.leftTextLink}>{left}</Link>;
+      left = <Link href={this.props.leftTextLink}><a>{left}</a></Link>;
     }
 
     if (this.props.rightTextLink) {
-      right = <Link to={this.props.rightTextLink}>{right}</Link>;
+      right = <Link href={this.props.rightTextLink}><a>{right}</a></Link>;
     }
 
     return (

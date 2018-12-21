@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 import Button from './Button';
 
@@ -8,8 +8,8 @@ class Navbar extends React.Component<{}, {}> {
     return (
       <nav>
         <div className='nav-left'>
-          <Link to='/'>
-            <p>TEA</p>
+          <Link href='/'>
+            <a><p>TEA</p></a>
           </Link>
           <form
             className='hover-shadow rounded button'
