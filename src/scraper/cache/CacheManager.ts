@@ -27,20 +27,18 @@ async function updateMetaCache() {
      * limitations of the API.
      */
     // Might be better to work backwards.
-
     const start = await MetaCache.size();
     const remoteSize = await Driver.latestSize();
-    const toFetch: number = remoteSize - start;
     const rpp = 10; // 10 is more responsive than 100, but slower.
     const bar = new ProgressBar(remoteSize);
 
     bar.start(start);
     const pool = new RequestPool();
+    const loopStart = start === 0 ? 0 : start / rpp + 1;
 
-    // No need to ceil this
-    for (let i = 1; i <= toFetch / rpp; i += 1) {
+    for (let page = loopStart; page <= Math.ceil(remoteSize / rpp); page += 1) {
       const threadId = await pool.request();
-      Driver.getMetaPage(i, rpp).then((res) => {
+      Driver.getMetaPage(page, rpp).then((res) => {
         MetaCache.addToCache(res.data);
         bar.increment(res.data.length);
         pool.return(threadId);
