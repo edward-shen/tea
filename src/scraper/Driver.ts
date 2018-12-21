@@ -8,6 +8,8 @@ import Config from '../common/Config';
 import ExitCodes from '../common/ExitCodes';
 import MetaCache from './cache/MetaCache';
 import { delay } from './utils';
+import { existsSync, mkdirSync, readFileSync, writeFile } from 'fs';
+import { resolve } from 'path';
 
 const BASE_URL = 'https://www.applyweb.com/eval';
 const METADATA_ENDPOINT = '/new/reportbrowser/evaluatedCourses';
@@ -174,7 +176,8 @@ class Driver {
 
   /**
    * Hits the specified endpoint with the specified query params and returns the
-   * result as binary data.
+   * result as binary data, if the data was not cached. If the data was cached,
+   * read it from there instead.
    *
    * @param endpoint The endpoint to hit.
    * @param courseID The course number of the course to fetch.
@@ -185,9 +188,30 @@ class Driver {
     endpoint: string, courseID: number, instructorID: number, term: number) {
     this.checkStatus();
 
+    const fileName = `c${courseID}i${instructorID}t${term}`;
+
+    if (!existsSync(resolve(__dirname, `../../cache/${endpoint}`))) {
+      mkdirSync(resolve(__dirname, `../../cache/${endpoint}`));
+    }
+
+    const path = resolve(__dirname, `../../cache/${endpoint}/${fileName}`);
+    if (existsSync(path)) {
+      return readFileSync(path);
+    }
+
     const queryString = `r=2&c=${courseID}&i=${instructorID}&t=${term}&d=false`;
     const url = `${BASE_URL}/new/showreport/${endpoint}?${queryString}`;
-    return (await this.get({ url, encoding: null }))[1];
+    const result = (await this.get({ url, encoding: null }))[1];
+
+    writeFile(path, result, {
+      encoding: 'binary',
+    }, (err) => {
+      if (err) {
+        console.log(err);
+        process.exit(68);
+      }
+    });
+    return result;
   }
 
   /**
