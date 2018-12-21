@@ -10,5 +10,6 @@ conventions. A description of those conventions can be found [here][meanings].
 | 65 | `config.toml` parsing error. Please verify that it's correct. |
 | 66 | Could not connect to MongoDB server. |
 | 67 | Could not authenticate against NEU. |
+| 68 | Error while reading cached files. Try clearing `cache/`. |
 
 [meanings]: http://tldp.org/LDP/abs/html/exitcodes.html
