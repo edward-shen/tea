@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Bar } from 'react-chartjs-2';
-// tslint:disable-next-line:import-name
 import ReactTable from 'react-table';
-import 'react-table/react-table.css';
+// import 'react-table/react-table.css';
 
-import { Question } from '../../../common/types/ExcelTypes';
-import { PDFQuestion } from '../../../common/types/PDFTypes';
-import { SectionQuestion } from '../../../common/types/Questions';
+import { Question } from '../../../src/common/types/ExcelTypes';
+import { PDFQuestion } from '../../../src/common/types/PDFTypes';
+import { SectionQuestion } from '../../../src/common/types/Questions';
 import Warning from '../../Warning';
 import { PRIMARY } from '../Colors';
 

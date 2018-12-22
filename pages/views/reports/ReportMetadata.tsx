@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { HorizontalBar, Pie } from 'react-chartjs-2';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
-import Report from '../../../common/Report';
+import Report from '../../../src/common/Report';
 import Colors from '../Colors';
 
 /**
@@ -20,8 +20,8 @@ class ReportMetadata extends React.Component<Report> {
             <tr>
               <td>Professor</td>
               <td>
-                <Link to={`/prof/${this.props.instructorId}`}>
-                  {this.props.instructorFirstName} {this.props.instructorLastName}
+                <Link href={`/prof/${this.props.instructorId}`}>
+                  <a>{this.props.instructorFirstName} {this.props.instructorLastName}</a>
                 </Link>
               </td>
             </tr>

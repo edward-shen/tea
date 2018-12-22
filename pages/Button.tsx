@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface ButtonProps {
   link: string;
@@ -10,10 +10,12 @@ interface ButtonProps {
 class Button extends React.Component<ButtonProps> {
   public render() {
     return (
-      <Link to={this.props.link}>
-        <div className='hover-shadow rounded button'>
-          {this.props.inner || <p>{this.props.text}</p>}
-        </div>
+      <Link href={this.props.link}>
+        <a>
+          <div className='hover-shadow rounded button'>
+            {this.props.inner || <p>{this.props.text}</p>}
+          </div>
+        </a>
       </Link>);
   }
 }
