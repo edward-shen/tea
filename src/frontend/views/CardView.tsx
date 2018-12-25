@@ -25,7 +25,6 @@ class CardView extends React.Component<{}, CardViewState> {
         className='cardview'
         hasMore={true}
         pageStart={-1} // ??? InfiniteScroller dev wtf you doing, this needs to be -1 to start at 0
-        loader={<div className='loader' key={0}>Loading ...</div>}
         loadMore={this.getMore.bind(this)}>
         {this.state.results}
       </InfiniteScroller>
