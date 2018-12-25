@@ -1,28 +1,55 @@
 import * as React from 'react';
 
-import Report from '../../../common/Report';
 import ReportMetadata from './ReportMetadata';
 import ReportSection from './ReportSection';
 import Sections from './Sections';
+import ReportQueryProps from './ReportQueryProps';
+import { Query } from 'react-apollo';
+import ReportMetadataQuery from './queries/ReportMetadataQuery';
+import ReportSectionQuery from './queries/ReportSectionQuery';
 
 /**
  * Contains logic for rendering the non-header portion of the report. Generates
  * sections via hard-coded sections that I should really make dynamic.
  */
-class ReportBody extends React.Component<Report> {
+class ReportBody extends React.Component<ReportQueryProps> {
   public render() {
-    return [
-      <ReportMetadata key={'metadata'} {...this.props}/>,
-      this.getSections().map((data) => {
-        return (
-          <ReportSection
-            key={data.name}
-            title={data.name}
-            data={data.data}
-            responses={this.props.responses}
-          />);
-      }),
-    ];
+    return (
+      <>
+        <Query query={ReportMetadataQuery} variables={this.props.queryVars}>
+          {({ loading, error, data }) => {
+            if (loading) {
+              return <p>Loading report, please be patient!</p>;
+            }
+
+            if (error) {
+              return `Error: ${error.message}`;
+            }
+
+            return <ReportMetadata {...data.report[0]}/>;
+          }}
+        </Query>
+        <Query query={ReportSectionQuery} variables={this.props.queryVars}>
+          {({ loading, error, data }) => {
+
+            if (loading) {
+              return <p>Loading report, please be patient!</p>;
+            }
+
+            if (error) {
+              return `Error: ${error.message}`;
+            }
+
+            return this.getSections(data.report[0]).map((questionData) => {
+              return <ReportSection
+                key={questionData.name}
+                title={questionData.name}
+                {...{ responses: data.report[0].responses, ...questionData }}
+              />;
+            });
+          }}
+          </Query>
+      </>);
   }
 
   /**
@@ -32,23 +59,23 @@ class ReportBody extends React.Component<Report> {
    * TODO: shape data to not require this (Maybe a nonissue once GraphQL is
    * implemented?)
    */
-  private getSections() {
+  private getSections(data) {
     return [
       {
         name: Sections.CLASS,
-        data: this.props.questions.class,
+        data: data.questions.class,
       },
       {
         name: Sections.LEARNABILITY,
-        data: this.props.questions.learning,
+        data: data.questions.learning,
       },
       {
         name: Sections.INSTRUCTOR,
-        data: this.props.questions.instructor,
+        data: data.questions.instructor,
       },
       {
         name: Sections.EFFECTIVENESS,
-        data: this.props.questions.effectiveness,
+        data: data.questions.effectiveness,
       },
     ];
   }

@@ -34,14 +34,52 @@ function parseExcel(excelBuffer) {
     .filter(row => typeof row[0] === 'number')
     .map((row) => {
       if (row.length === 14) {
-        return zip(questionColIDs, row);
+        const {
+          '5': five,
+          '4': four,
+          '3': three,
+          '2': two,
+          '1': one,
+          '-1': NA,
+          ...rest
+        } = zip(questionColIDs, row) as any;
+
+        return {
+          ...rest,
+          ratings: [one, two, three, four, five],
+          NAs: NA,
+        };
       }
 
       if (row.length === 13) {
-        return zip(teacherColIDs, row);
+        const {
+          '5': five,
+          '4': four,
+          '3': three,
+          '2': two,
+          '1': one,
+          ...rest
+        } = zip(teacherColIDs, row) as any;
+
+        return {
+          ...rest,
+          ratings: [one, two, three, four, five],
+        };
       }
 
-      return zip(hoursColIDs, row);
+      const {
+        '17-20': seventeen,
+        '13-16': thirteen,
+        '9-12': nine,
+        '5-8': five,
+        '1-4': one,
+        ...rest
+      } = zip(hoursColIDs, row) as any;
+
+      return {
+        ...rest,
+        hours: [one, five, nine, thirteen, seventeen],
+      };
     }) as Array<Question | NAQuestion | HoursQuestion>;
 
   return [questions, responseInclDeclines, declines];

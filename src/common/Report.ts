@@ -1,11 +1,9 @@
 import { PDFData } from '../common/types/PDFTypes';
 import FilteredMetadata from '../scraper/cache/FilteredMetadata';
 import {
-  ClassQuestions,
+  SectionQuestions,
   EffectivenessQuestions,
-  InstructorQuestions,
-  LearnabilityQuestions,
-  WorkloadQuestions,
+  WorkloadQuestion,
 } from './types/Questions';
 
 /**
@@ -13,11 +11,11 @@ import {
  */
 interface Report extends FilteredMetadata {
   questions: {
-    class: ClassQuestions,
-    learning: LearnabilityQuestions,
-    instructor: InstructorQuestions,
+    class: SectionQuestions,
+    learning: SectionQuestions,
+    instructor: SectionQuestions,
     effectiveness: EffectivenessQuestions,
-    workload: WorkloadQuestions,
+    workload: WorkloadQuestion,
   };
 }
 

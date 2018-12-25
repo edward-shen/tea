@@ -1,52 +1,49 @@
 import * as React from 'react';
-import Report from '../../../common/Report';
+import { Query } from 'react-apollo';
+
 import BaseProps from '../BaseProps';
 import ReportHeader from './ReportHeader';
-
 import ReportBody from './ReportBody';
 import Sections from './Sections';
-interface ReportViewState {
-  data: Report;
-}
+import ReportSummaryQuery from './queries/ReportSummaryQuery';
 
-class ReportView extends React.Component<BaseProps, ReportViewState> {
-  public constructor(props) {
-    super(props);
-    this.state = { data: null };
-  }
-
-  public async componentDidMount() {
-    const info = await (
-      await fetch(
-        `/api/report?id=${this.props.match.params.id}&prof=${this.props.match.params.prof}`))
-        .json();
-    this.setState({
-      data: info,
-    });
-  }
-
+class ReportView extends React.Component<BaseProps> {
   public render() {
-    if (!this.state.data) {
-      return null;
-    }
+    const queryVars = {
+      id: Number(this.props.match.params.id),
+      professorId: Number(this.props.match.params.prof),
+    };
 
-    const ratingsToShow = [
-      { name: Sections.CLASS, ...this.state.data.questions.learning.summary },
-      { name: Sections.LEARNABILITY, ...this.state.data.questions.learning.summary },
-      { name: Sections.INSTRUCTOR, ...this.state.data.questions.instructor.summary },
-      { name: Sections.EFFECTIVENESS, ...this.state.data.questions.effectiveness.summary },
-    ];
+    return <Query query={ReportSummaryQuery} variables={queryVars}>
+      {({ loading, error, data }) => {
+        if (loading) {
+          return <p>Loading report, please be patient!</p>;
+        }
 
-    return (
-      <main className='reportview'>
-        <ReportHeader
-          subject={this.state.data.subject}
-          number={this.state.data.number}
-          name={this.state.data.name}
-          ratings={ratingsToShow}
-        />
-        <ReportBody {...this.state.data} />
-      </main>);
+        if (error) {
+          return `Error: ${error.message}`;
+        }
+
+        const ratingsToShow = [
+          { name: Sections.CLASS, ...data.report[0].questions.class.summary },
+          { name: Sections.LEARNABILITY, ...data.report[0].questions.learning.summary },
+          { name: Sections.INSTRUCTOR, ...data.report[0].questions.instructor.summary },
+          { name: Sections.EFFECTIVENESS, ...data.report[0].questions.effectiveness.summary },
+        ];
+
+        return (
+          <main className='reportview'>
+            <ReportHeader
+              subject={data.report[0].subject}
+              number={data.report[0].number}
+              name={data.report[0].name}
+              ratings={ratingsToShow}/>
+            <ReportBody queryVars={queryVars}/>
+          </main>
+        );
+
+      }}
+    </Query>;
   }
 }
 

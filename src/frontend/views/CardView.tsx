@@ -2,6 +2,8 @@
 import * as objectHash from 'object-hash';
 import * as React from 'react';
 import * as InfiniteScroller from 'react-infinite-scroller';
+import { Query } from 'react-apollo';
+import { gql } from 'apollo-boost';
 
 import CardType from '../../common/api/CardType';
 import Card from '../Card';

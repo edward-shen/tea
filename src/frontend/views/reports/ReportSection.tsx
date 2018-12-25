@@ -1,13 +1,11 @@
 import * as React from 'react';
 
-import { SectionQuestion } from '../../../common/types/Questions';
-
 import RatingBox from './RatingBox';
 import ReportSectionData from './ReportSectionData';
 
 interface ReportSectionProps {
-  data: SectionQuestion;
   title: string;
+  data: any;
   responses: number;
 }
 

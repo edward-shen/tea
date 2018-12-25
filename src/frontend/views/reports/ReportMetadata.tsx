@@ -2,8 +2,8 @@ import * as React from 'react';
 import { HorizontalBar, Pie } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 
-import Report from '../../../common/Report';
 import Colors from '../Colors';
+import Report from '../../../common/Report';
 
 /**
  * Generates the metadata section of the reports, including the repsonse pie
@@ -85,27 +85,27 @@ class ReportMetadata extends React.Component<Report> {
                 {
                   backgroundColor: Colors.GREAT,
                   label: '1-4',
-                  data: [this.props.questions.workload[9]['1-4']],
+                  data: [this.props.questions.workload.hours[0]],
                 },
                 {
                   backgroundColor: Colors.GOOD,
                   label: '5-8',
-                  data: [this.props.questions.workload[9]['5-8']],
+                  data: [this.props.questions.workload.hours[1]],
                 },
                 {
                   backgroundColor: '#dedede',
                   label: '9-12',
-                  data: [this.props.questions.workload[9]['9-12']],
+                  data: [this.props.questions.workload.hours[2]],
                 },
                 {
                   backgroundColor: Colors.BAD,
                   label: '13-16',
-                  data: [this.props.questions.workload[9]['13-16']],
+                  data: [this.props.questions.workload.hours[3]],
                 },
                 {
                   backgroundColor: Colors.TERRIBLE,
                   label: '17-20',
-                  data: [this.props.questions.workload[9]['17-20']],
+                  data: [this.props.questions.workload.hours[4]],
                 },
               ],
             }}

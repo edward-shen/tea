@@ -6,15 +6,15 @@ import 'react-table/react-table.css';
 
 import { Question } from '../../../common/types/ExcelTypes';
 import { PDFQuestion } from '../../../common/types/PDFTypes';
-import { SectionQuestion } from '../../../common/types/Questions';
+import { SectionQuestions, EffectivenessQuestions } from '../../../common/types/Questions';
 import Warning from '../../Warning';
 import { PRIMARY } from '../Colors';
 
-class ReportSectionData extends React.Component<{ responses: number } & SectionQuestion> {
+class ReportSectionData extends React.Component<{ responses: number }
+  & (SectionQuestions | EffectivenessQuestions)> {
   public render() {
-    const { responses, summary, ...questions } = this.props;
     return <ReactTable
-      data={Object.values(questions).map((row: Question & PDFQuestion) => {
+      data={Object.values(this.props.questions).map((row: Question & PDFQuestion) => {
         const newRow = row as any;
         if (newRow.courseMean === 0) {
           newRow.courseMean = 'N/A';
@@ -32,11 +32,9 @@ class ReportSectionData extends React.Component<{ responses: number } & SectionQ
       })}
       defaultSortMethod={(a, b) => {
         if (!Number(b) || Number(a) > Number(b)) {
-          console.log(a, b);
           return 1;
         }
         if (!Number(a) || Number(a) < Number(b)) {
-          console.log(a, b);
           return -1;
         }
 
@@ -87,17 +85,13 @@ class ReportSectionData extends React.Component<{ responses: number } & SectionQ
   }
 
   private generateBreakdowns(row) {
-    const totalCount = row.original[1]
-      + row.original[2]
-      + row.original[3]
-      + row.original[4]
-      + row.original[5];
+    const totalCount = row.original.ratings.reduce((a, b) => a + b, 0);
+
+    console.log(row.original);
 
     if (totalCount) {
-
       const toReturn = [];
-
-      const naCount = row.original[-1];
+      const naCount = row.original.NAs;
 
       if (naCount) {
         toReturn.push(
@@ -133,11 +127,11 @@ class ReportSectionData extends React.Component<{ responses: number } & SectionQ
             datasets: [{
               backgroundColor: PRIMARY,
               data: [
-                row.original[1],
-                row.original[2],
-                row.original[3],
-                row.original[4],
-                row.original[5],
+                row.original.ratings[1],
+                row.original.ratings[2],
+                row.original.ratings[3],
+                row.original.ratings[4],
+                row.original.ratings[5],
               ],
             }],
           }}
