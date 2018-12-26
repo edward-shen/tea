@@ -20,11 +20,11 @@ class ReportView extends React.Component<BaseProps> {
       <Query query={ReportSummaryQuery} variables={queryVars}>
         {({ loading, error, data }) => {
           if (loading) {
-            return <p>Loading report, please be patient!</p>;
+            return null;
           }
 
           if (error) {
-            return `Error: ${error.message}`;
+            throw error;
           }
 
           const ratingsToShow = [

@@ -19,11 +19,11 @@ class ReportBody extends React.Component<ReportQueryProps> {
         <Query query={ReportMetadataQuery} variables={this.props.queryVars}>
           {({ loading, error, data }) => {
             if (loading) {
-              return <p>Loading report, please be patient!</p>;
+              return null;
             }
 
             if (error) {
-              return `Error: ${error.message}`;
+              throw(error);
             }
 
             return <ReportMetadata {...data.report[0]}/>;
@@ -33,11 +33,11 @@ class ReportBody extends React.Component<ReportQueryProps> {
           {({ loading, error, data }) => {
 
             if (loading) {
-              return <p>Loading report, please be patient!</p>;
+              return null;
             }
 
             if (error) {
-              return `Error: ${error.message}`;
+              throw(error);
             }
 
             return this.getSections(data.report[0]).map((questionData) => {
