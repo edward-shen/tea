@@ -6,6 +6,7 @@ import ReportHeader from './ReportHeader';
 import ReportBody from './ReportBody';
 import Sections from './Sections';
 import ReportSummaryQuery from './queries/ReportSummaryQuery';
+import ErrorBoundary from '../../ErrorBoundary';
 
 class ReportView extends React.Component<BaseProps> {
   public render() {
@@ -14,36 +15,39 @@ class ReportView extends React.Component<BaseProps> {
       professorId: Number(this.props.match.params.prof),
     };
 
-    return <Query query={ReportSummaryQuery} variables={queryVars}>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <p>Loading report, please be patient!</p>;
-        }
+    return (
+    <ErrorBoundary>
+      <Query query={ReportSummaryQuery} variables={queryVars}>
+        {({ loading, error, data }) => {
+          if (loading) {
+            return <p>Loading report, please be patient!</p>;
+          }
 
-        if (error) {
-          return `Error: ${error.message}`;
-        }
+          if (error) {
+            return `Error: ${error.message}`;
+          }
 
-        const ratingsToShow = [
-          { name: Sections.CLASS, ...data.report[0].questions.class.summary },
-          { name: Sections.LEARNABILITY, ...data.report[0].questions.learning.summary },
-          { name: Sections.INSTRUCTOR, ...data.report[0].questions.instructor.summary },
-          { name: Sections.EFFECTIVENESS, ...data.report[0].questions.effectiveness.summary },
-        ];
+          const ratingsToShow = [
+            { name: Sections.CLASS, ...data.report[0].questions.class.summary },
+            { name: Sections.LEARNABILITY, ...data.report[0].questions.learning.summary },
+            { name: Sections.INSTRUCTOR, ...data.report[0].questions.instructor.summary },
+            { name: Sections.EFFECTIVENESS, ...data.report[0].questions.effectiveness.summary },
+          ];
 
-        return (
-          <main className='reportview'>
-            <ReportHeader
-              subject={data.report[0].subject}
-              number={data.report[0].number}
-              name={data.report[0].name}
-              ratings={ratingsToShow}/>
-            <ReportBody queryVars={queryVars}/>
-          </main>
-        );
+          return (
+            <main className='reportview'>
+              <ReportHeader
+                subject={data.report[0].subject}
+                number={data.report[0].number}
+                name={data.report[0].name}
+                ratings={ratingsToShow}/>
+              <ReportBody queryVars={queryVars}/>
+            </main>
+          );
 
-      }}
-    </Query>;
+        }}
+      </Query>
+    </ErrorBoundary>);
   }
 }
 
