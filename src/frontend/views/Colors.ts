@@ -10,7 +10,7 @@ enum BackgroundColors {
 enum ErrorColors {
   INFO = '#ccc',
   WARN = '#ffd280',
-  error = '#fbd5de', // Should be identical to BackgroundColors.BAD
+  ERROR = '#fbd5de', // Should be identical to BackgroundColors.BAD
 }
 const PRIMARY = '#d41b2c';
 
