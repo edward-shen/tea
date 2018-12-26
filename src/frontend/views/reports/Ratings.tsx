@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Colors from '../Colors';
+import { BackgroundColors } from '../Colors';
 import RatingBox from './RatingBox';
 import Sections, { getLink } from './Sections';
 
@@ -40,15 +40,15 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     const style = { backgroundColor: null };
 
     if (difference >= 3) {
-      style.backgroundColor = Colors.GREAT;
+      style.backgroundColor = BackgroundColors.GREAT;
     } else if (difference >= 1) {
-      style.backgroundColor = Colors.GOOD;
+      style.backgroundColor = BackgroundColors.GOOD;
     } else if (difference >= 0) {
-      style.backgroundColor = Colors.NEUTRAL;
+      style.backgroundColor = BackgroundColors.NEUTRAL;
     } else if (difference >= -3) {
-      style.backgroundColor = Colors.BAD;
+      style.backgroundColor = BackgroundColors.BAD;
     } else {
-      style.backgroundColor = Colors.TERRIBLE;
+      style.backgroundColor = BackgroundColors.TERRIBLE;
     }
     return style;
   }

@@ -7,7 +7,11 @@ enum BackgroundColors {
   TERRIBLE = '#f7a6b9',
 }
 
+enum ErrorColors {
+  INFO = '#ccc',
+  WARN = '#ffd280',
+  error = '#fbd5de', // Should be identical to BackgroundColors.BAD
+}
 const PRIMARY = '#d41b2c';
 
-export default BackgroundColors;
-export { PRIMARY };
+export { BackgroundColors, ErrorColors, PRIMARY };

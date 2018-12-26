@@ -2,8 +2,9 @@ import * as React from 'react';
 import { HorizontalBar, Pie } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 
-import Colors from '../Colors';
+import { BackgroundColors, ErrorColors } from '../Colors';
 import Report from '../../../common/Report';
+import Warning from '../../Warning';
 
 /**
  * Generates the metadata section of the reports, including the repsonse pie
@@ -15,7 +16,13 @@ class ReportMetadata extends React.Component<Report> {
     return (
       <section className='reportview-data'>
         <h2>Report Overview</h2>
-        <table className='reportview-data-table'>
+        { this.props.responses / this.props.enrollment < 0.5 &&
+          <Warning
+            button
+            level='warning'
+            text='This report has a low response rate. Take values with caution.'
+            />}
+        <table>
           <tbody>
             <tr>
               <td>Professor</td>
@@ -54,7 +61,7 @@ class ReportMetadata extends React.Component<Report> {
               <td>{this.props.enrollment && 'No'}</td>
             </tr>
           </tbody>
-        </table>,
+        </table>
         <div className='reportview-data-graphs'>
           <HorizontalBar
             key='hours'
@@ -83,27 +90,27 @@ class ReportMetadata extends React.Component<Report> {
             data={{
               datasets: [
                 {
-                  backgroundColor: Colors.GREAT,
+                  backgroundColor: BackgroundColors.GREAT,
                   label: '1-4',
                   data: [this.props.questions.workload.hours[0]],
                 },
                 {
-                  backgroundColor: Colors.GOOD,
+                  backgroundColor: BackgroundColors.GOOD,
                   label: '5-8',
                   data: [this.props.questions.workload.hours[1]],
                 },
                 {
-                  backgroundColor: '#dedede',
+                  backgroundColor: ErrorColors.INFO,
                   label: '9-12',
                   data: [this.props.questions.workload.hours[2]],
                 },
                 {
-                  backgroundColor: Colors.BAD,
+                  backgroundColor: BackgroundColors.BAD,
                   label: '13-16',
                   data: [this.props.questions.workload.hours[3]],
                 },
                 {
-                  backgroundColor: Colors.TERRIBLE,
+                  backgroundColor: BackgroundColors.TERRIBLE,
                   label: '17-20',
                   data: [this.props.questions.workload.hours[4]],
                 },
@@ -114,7 +121,11 @@ class ReportMetadata extends React.Component<Report> {
             data={{
               datasets: [{
                 data: [this.props.responses, unanswered, this.props.declines],
-                backgroundColor: [Colors.GREAT, '#ccc', Colors.TERRIBLE],
+                backgroundColor: [
+                  BackgroundColors.GREAT,
+                  ErrorColors.INFO,
+                  BackgroundColors.TERRIBLE,
+                ],
               }],
               labels: ['Responses', 'Abstains', 'Declines'],
             }}
