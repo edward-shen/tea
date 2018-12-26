@@ -1,4 +1,3 @@
-import { diff } from 'deep-object-diff';
 import * as Express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 
