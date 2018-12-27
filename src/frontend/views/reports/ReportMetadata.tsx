@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { BackgroundColors, ErrorColors } from '../Colors';
 import Report from '../../../common/Report';
-import Warning from '../../Warning';
 
 /**
  * Generates the metadata section of the reports, including the repsonse pie
@@ -16,12 +15,6 @@ class ReportMetadata extends React.Component<Report> {
     return (
       <section className='reportview-data'>
         <h2>Report Overview</h2>
-        { this.props.responses / this.props.enrollment < 0.5 &&
-          <Warning
-            button
-            level='warn'
-            text='This report has a low response rate. Take values with caution.'
-            />}
         <table>
           <tbody>
             <tr>

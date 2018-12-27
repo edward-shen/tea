@@ -40,7 +40,9 @@ class ReportView extends React.Component<BaseProps> {
                 subject={data.report[0].subject}
                 number={data.report[0].number}
                 name={data.report[0].name}
-                ratings={ratingsToShow}/>
+                ratings={ratingsToShow}
+                responses={data.report[0].responses}
+                enrollment={data.report[0].enrollment}/>
               <ReportBody queryVars={queryVars}/>
             </main>
           );
