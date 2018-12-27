@@ -16,11 +16,17 @@ class ReportSectionData extends React.Component<{ responses: number }
     return <ReactTable
       data={Object.values(this.props.questions).map((row: Question & PDFQuestion) => {
         const newRow = row as any;
+        console.log(newRow);
         if (newRow.courseMean === 0) {
           newRow.courseMean = 'N/A';
           newRow.deptMean = null;
           newRow.univMean = null;
           newRow.stdDev = null;
+        } else if (!newRow.courseMean) {
+          newRow.courseMean = '∅';
+          newRow.deptMean = '∅';
+          newRow.univMean = '∅';
+          newRow.stdDev = '∅';
         } else {
           newRow.courseMean = Number(row.courseMean).toFixed(1);
           newRow.deptMean = Number(row.deptMean).toFixed(1);
@@ -143,7 +149,7 @@ class ReportSectionData extends React.Component<{ responses: number }
     return (
       <Warning
         level='info'
-        text='All students reponses have reported this question not applicable.'
+        text='All students responses have reported this question not applicable.'
       />);
 
   }

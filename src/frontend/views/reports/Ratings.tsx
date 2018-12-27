@@ -21,11 +21,11 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
         return (
           <RatingBox
             key={index}
-            rating={rating.mean.toFixed(1)}
+            rating={rating.mean ? rating.mean.toFixed(1) : 'N/A' }
             href={`#${getLink(rating.name)}`}
             desc={rating.name}
-            delta={this.getDifferenceText(rating.mean, rating.deptMean)}
-            subtext={`Dept. Avg: ${rating.deptMean.toFixed(1)}`}
+            delta={rating.mean && this.getDifferenceText(rating.mean, rating.deptMean)}
+            subtext={rating.deptMean && `Dept. Avg: ${rating.deptMean.toFixed(1)}`}
             style={this.getBackgroundColor(rating.mean, rating.deptMean)}/>
         );
       })
@@ -37,7 +37,7 @@ class Ratings extends React.Component<{ ratings: Rating[] }> {
     // I was getting floating point errors so I converted them to integers.
     const difference = Math.round(10 * (mean - deptMean));
 
-    const style = { backgroundColor: null };
+    const style: { backgroundColor: BackgroundColors } = { backgroundColor: null };
 
     if (difference >= 3) {
       style.backgroundColor = BackgroundColors.GREAT;
