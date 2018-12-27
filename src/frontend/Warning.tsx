@@ -12,7 +12,7 @@ class Warning extends React.Component<WarningProps> {
     let className = 'button warning-box';
 
     if (this.props.button) {
-      className += ' hover-shadow';
+      className += ' hover-shadow rounded`';
     }
 
     const text = this.props.text ? <p>{this.props.text}</p> : this.props.children;
