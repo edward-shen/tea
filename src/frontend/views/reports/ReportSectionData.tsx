@@ -92,9 +92,11 @@ class ReportSectionData extends React.Component<{ responses: number }
       const naCount = row.original.NAs;
 
       if (naCount) {
+        const level = (naCount > totalCount / 2) ? 'warn' : 'info';
+
         toReturn.push(
           <Warning
-            level='info'
+            level={level}
             key='non-zero-na-resp'
             text={
               `${naCount} of all student responses have reported this question not applicable.`}

@@ -19,7 +19,7 @@ class ReportMetadata extends React.Component<Report> {
         { this.props.responses / this.props.enrollment < 0.5 &&
           <Warning
             button
-            level='warning'
+            level='warn'
             text='This report has a low response rate. Take values with caution.'
             />}
         <table>

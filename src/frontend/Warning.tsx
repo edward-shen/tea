@@ -3,7 +3,7 @@ import { ErrorColors } from './views/Colors';
 
 interface WarningProps {
   text?: string;
-  level: 'info' | 'warning' | 'error';
+  level: 'info' | 'warn' | 'error';
   button?: boolean;
 }
 
@@ -23,7 +23,7 @@ class Warning extends React.Component<WarningProps> {
             <div style={{ backgroundColor: ErrorColors.ERROR }}/>
             {text}
           </div>);
-      case 'warning':
+      case 'warn':
         return (
           <div className={className}>
             <div style={{ backgroundColor: ErrorColors.WARN }} />
