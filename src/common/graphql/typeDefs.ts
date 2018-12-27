@@ -14,9 +14,9 @@ export default gql`
     median: Float!
     stdDev: Float!
     respRate: Float!
-    courseMean: Float!
-    deptMean: Float!
-    univMean: Float!
+    courseMean: Float
+    deptMean: Float
+    univMean: Float
   }
 
   type QuestionWithNA {
@@ -27,9 +27,9 @@ export default gql`
     median: Float!
     stdDev: Float!
     respRate: Float!
-    courseMean: Float!
-    deptMean: Float!
-    univMean: Float!
+    courseMean: Float
+    deptMean: Float
+    univMean: Float
     NAs: Int!
   }
 
