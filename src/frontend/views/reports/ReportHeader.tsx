@@ -18,7 +18,6 @@ interface ReportHeaderProps {
  */
 class ReportHeader extends React.Component<ReportHeaderProps> {
   public render() {
-    console.log(this.props.enrollment, this.props.responses);
     return (
       <header className='reportview-header'>
         <div className='reportview-title'>
