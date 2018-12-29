@@ -62,6 +62,10 @@
     padding: 4px;
     padding-right: 8px;
   }
+
+  & > .rating:first-child {
+    margin-left: 0;
+  }
 }
 
 .rating {
