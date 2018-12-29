@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import RatingBox from './RatingBox';
 import ReportSectionData from './ReportSectionData';
+import Warning from '../../Warning';
 
 interface ReportSectionProps {
   title: string;
@@ -16,8 +17,14 @@ interface ReportSectionProps {
 class ReportSection extends React.Component<ReportSectionProps> {
   public render() {
     return (
-      <section id={this.props.title.toLowerCase().replace(' ', '-')}>
+      <section id={this.props.title.toLowerCase().replace(' ', '-')} className='reportview-section'>
         <h2>{this.props.title}</h2>
+        { !this.props.data.summary && <Warning button level='error'>
+          <p>
+            Some data is missing. Please report
+            this <a href='http://github.com/edward-shen/tea/issues/new'>here</a>.
+          </p>
+        </Warning>}
         <div className='ratings'>
           <RatingBox
             rating={this.props.data.summary ? this.props.data.summary.mean.toFixed(1) : 'N/A'}
