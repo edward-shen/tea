@@ -93,7 +93,7 @@ class ReportMetadata extends React.Component<Report> {
                   data: [this.props.questions.workload.hours[1]],
                 },
                 {
-                  backgroundColor: ErrorColors.INFO,
+                  backgroundColor: ErrorColors.WARN,
                   label: '9-12',
                   data: [this.props.questions.workload.hours[2]],
                 },

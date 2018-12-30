@@ -91,7 +91,7 @@ class ReportSectionData extends React.Component<{ responses: number }
   }
 
   private generateBreakdowns(row) {
-    const totalCount = row.original.ratings.reduce((a, b) => a + b, 0);
+    const totalCount = row.original.ratings.reduce((a: number, b: number) => a + b, 0);
 
     if (totalCount) {
       const toReturn = [];
