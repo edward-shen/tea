@@ -6,9 +6,12 @@ const errorMessages = [
   <p>Looks like the teapot cracked. {goHomeMsg}</p>,
   <p>Oh the humani-tea! {goHomeMsg}</p>,
   <p>Looks like someone spilled the tea... {goHomeMsg}</p>,
-  <p>Looks like the tea party is over. {goHomeMsg}</p>,
-  <p>Looks like some bugs got into our teabags... {goHomeMsg}</p>,
-  <p>The tea for you was thrown into the Boston Harbor! {goHomeMsg}</p>,
+  <p>Looks like the tea party is over... {goHomeMsg}</p>,
+  <p>Ew, some bugs got into our teabags! {goHomeMsg}</p>,
+  <p>How rude! The tea for you was thrown into the Boston Harbor! {goHomeMsg}</p>,
+  <p>Sorry, looks like we ran out of tea-p. {goHomeMsg}</p>,
+  <p>Ahhh! A tea-rex appeared! {goHomeMsg}</p>,
+  <p>Looks like we boiled the tea for too long... {goHomeMsg}</p>,
 ];
 
 class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
