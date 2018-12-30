@@ -10,8 +10,9 @@ const errorMessages = [
   <p>Ew, some bugs got into our teabags! {goHomeMsg}</p>,
   <p>How rude! The tea for you was thrown into the Boston Harbor! {goHomeMsg}</p>,
   <p>Sorry, looks like we ran out of tea-p. {goHomeMsg}</p>,
-  <p>Ahhh! A tea-rex appeared! {goHomeMsg}</p>,
+  <p>Ahhh! A tea-rex appeared! <Link to='/'>Get out</Link> of here!</p>,
   <p>Looks like we boiled the tea for too long... {goHomeMsg}</p>,
+  <p>We're out of the tea you're looking for... How about <Link to='/'>something else?</Link></p>,
 ];
 
 class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
