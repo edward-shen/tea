@@ -9,10 +9,10 @@ interface Config {
     username: string;
     password: string;
   };
-  database: {
+  metadata_db: {
     location: string;
   };
-  mongodb: {
+  class_db: {
     address: string;
     port: number;
   };

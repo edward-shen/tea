@@ -12,7 +12,7 @@ class MongoDBClient {
   private _collection;
 
   public constructor(collection?: string) {
-    this.client = new MongoClient(`mongodb://${Config.mongodb.address}:${Config.mongodb.port}`, {
+    this.client = new MongoClient(`mongodb://${Config.class_db.address}:${Config.class_db.port}`, {
       useNewUrlParser: true,
     });
     this.client.connect((err, client) => {
