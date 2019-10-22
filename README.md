@@ -1,4 +1,7 @@
 # TRACE Evaluation Anaylsis
+
+_With the rollout of 2FA, this repository no longer works, as the scraper is unable to function. There is no intent to resolve this issue, and this repo is no longer maintained. Please feel free to use this repo as reference or make an PR to fix this._
+
 ### Spilling the TEA
 
 TEA is a tool to help analyze ApplyWeb's TRACE reviews.
